@@ -1,3 +1,3 @@
-module github.com/mochahub/crypto-price-scraper
+module github.com/mochahub/coinprice-scraper
 
 go 1.15
