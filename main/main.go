@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/mochahub/crypto-price-server/main/app"
+	"github.com/mochahub/coinprice-scraper/main/app"
 )
 
 func main() {
