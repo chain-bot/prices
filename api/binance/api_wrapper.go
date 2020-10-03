@@ -15,7 +15,7 @@ func (apiClient *apiClient) GetOHLCMarketData(
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*api.OHLCMarketData, error) {
-	candleStickResponse, err := apiClient.GetCandleStickData(
+	candleStickResponse, err := apiClient.getCandleStickData(
 		baseSymbol,
 		quoteSymbol,
 		interval,

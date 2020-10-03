@@ -14,7 +14,7 @@ func TestApiClient_GetCandleStickData(t *testing.T) {
 	expectedLength := 480 * time.Minute
 	startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 	endTime := startTime.Add(expectedLength)
-	candleStickData, err := binanceAPIClient.GetCandleStickData(
+	candleStickData, err := binanceAPIClient.getCandleStickData(
 		"BTC",
 		"USDT",
 		MinuteInterval,

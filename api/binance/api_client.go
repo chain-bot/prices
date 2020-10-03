@@ -29,7 +29,7 @@ func NewBinanceAPIClient(
 }
 
 // Get CandleStick data from [startTime, endTime]
-func (apiClient *apiClient) GetCandleStickData(
+func (apiClient *apiClient) getCandleStickData(
 	baseSymbol string,
 	quoteSymbol string,
 	interval api.Interval,
