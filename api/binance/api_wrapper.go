@@ -1,6 +1,7 @@
 package binance
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -41,6 +42,42 @@ func (apiClient *apiClient) GetOHLCMarketData(
 		})
 	}
 	return ohlcMarketData, nil
+}
+
+func (apiClient *apiClient) GetAllOHLCMarketData(
+	baseSymbol string,
+	quoteSymbol string,
+	interval api.Interval,
+	startTime time.Time,
+	endTime time.Time,
+) ([]*api.OHLCMarketData, error) {
+	var durationFromInterval time.Duration
+	switch interval {
+	case api.BinanceDayInterval:
+		durationFromInterval = time.Hour * 24
+	case api.BinanceHourInterval:
+		durationFromInterval = time.Hour
+	case api.BinanceMinuteInterval:
+		durationFromInterval = time.Minute
+	default:
+		return nil, errors.New(fmt.Sprintf("unknown interval: %s", interval))
+	}
+	result := []*api.OHLCMarketData{}
+	for startTime.Before(endTime) || startTime.Equal(endTime) {
+		newEndTime := startTime.Add(maxLimit * durationFromInterval)
+		ohlcMarketData, err := apiClient.GetOHLCMarketData(
+			baseSymbol,
+			quoteSymbol,
+			interval,
+			startTime,
+			newEndTime)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, ohlcMarketData...)
+		startTime = newEndTime.Add(durationFromInterval)
+	}
+	return result, nil
 }
 
 func (apiClient *apiClient) GetRawMarketData() ([]*api.RawMarketData, error) {

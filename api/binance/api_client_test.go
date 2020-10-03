@@ -3,6 +3,8 @@ package binance
 import (
 	"testing"
 	"time"
+
+	"github.com/mochahub/coinprice-scraper/api"
 )
 
 func TestApiClient_GetCandleStickData(t *testing.T) {
@@ -13,14 +15,13 @@ func TestApiClient_GetCandleStickData(t *testing.T) {
 		1200)
 	expectedLength := 480 * time.Minute
 	startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
-	endTime := startTime.Add(expectedLength)
-	candleStickData, err := binanceAPIClient.getCandleStickData(
+	endTime := startTime.Add(expectedLength - time.Minute)
+	candleStickData, err := binanceAPIClient.GetOHLCMarketData(
 		"BTC",
 		"USDT",
-		MinuteInterval,
+		api.BinanceMinuteInterval,
 		startTime,
 		endTime,
-		0,
 	)
 	if err != nil {
 		t.Error(err)
@@ -28,7 +29,33 @@ func TestApiClient_GetCandleStickData(t *testing.T) {
 	if candleStickData == nil {
 		t.Error("empty Prices")
 	}
-	if float64(len(candleStickData)) != expectedLength.Minutes()+1 {
-		t.Errorf("expected %f got %d", expectedLength.Minutes(), len(candleStickData))
+	if len(candleStickData) != int(expectedLength.Minutes()) {
+		t.Errorf("expected %d got %d", int(expectedLength.Minutes()), len(candleStickData))
+	}
+}
+
+func TestApiClient_GetAllOHLCMarketData(t *testing.T) {
+	binanceAPIClient := NewBinanceAPIClient(
+		"ADD_API_KEY",
+		1,
+		1200)
+	expectedLength := 1001 * time.Minute
+	startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+	endTime := startTime.Add(expectedLength - time.Minute)
+	candleStickData, err := binanceAPIClient.GetAllOHLCMarketData(
+		"BTC",
+		"USDT",
+		api.BinanceMinuteInterval,
+		startTime,
+		endTime,
+	)
+	if err != nil {
+		t.Error(err)
+	}
+	if candleStickData == nil {
+		t.Error("empty Prices")
+	}
+	if len(candleStickData) != int(expectedLength.Minutes()) {
+		t.Errorf("expected %d got %d", int(expectedLength.Minutes()), len(candleStickData))
 	}
 }
