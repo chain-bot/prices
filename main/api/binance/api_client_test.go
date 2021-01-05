@@ -1,90 +1,60 @@
 package binance
 
 import (
-	"fmt"
-	"github.com/mochahub/coinprice-scraper/main/utils"
+	"github.com/mochahub/coinprice-scraper/main/api/common"
+	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
 	"time"
-
-	"github.com/mochahub/coinprice-scraper/main/api"
 )
 
-func TestApiClient_GetCandleStickData(t *testing.T) {
-	// TODO(Zahin): Use a config file for api key or a env variable
-	binanceAPIClient := NewBinanceAPIClient(
-		os.Getenv("BINANCE_API_KEY"),
-		1)
-	expectedLength := 480 * time.Minute
-	startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
-	endTime := startTime.Add(expectedLength - time.Minute)
-	candleStickData, err := binanceAPIClient.GetOHLCMarketData(
-		"BTC",
-		"USDT",
-		api.Minute,
-		startTime,
-		endTime,
-	)
-	if err != nil {
-		t.Error(err)
-	}
-	if candleStickData == nil {
-		t.Error("empty Prices")
-	}
-	if len(candleStickData) != int(expectedLength.Minutes()) {
-		t.Errorf("expected %d got %d", int(expectedLength.Minutes()), len(candleStickData))
-	}
-}
+func TestBinanceClient(t *testing.T) {
+	exchangeClient := NewBinanceAPIClient(os.Getenv("BINANCE_API_KEY"))
+	pass := true
+	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
+		expectedLength := 480 * time.Minute
+		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+		endTime := startTime.Add(expectedLength - time.Minute)
+		candleStickData, err := exchangeClient.GetOHLCMarketData(
+			"BTC",
+			"USDT",
+			common.Minute,
+			startTime,
+			endTime,
+		)
+		assert.NoError(t, err)
+		assert.NotEmpty(t, candleStickData)
+		assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData))
+	}) && pass
+	pass = t.Run("TestGetExchangeInfo", func(t *testing.T) {
+		exchangeInfo, err := exchangeClient.getExchangeInfo()
+		assert.NoError(t, err)
+		assert.NotNil(t, exchangeInfo)
+		//fmt.Print(utils.PrettyJSON(exchangeInfo))
+	}) && pass
+	// Interface Methods
+	// TODO(Zahin): Do we even need this? exhange_clients_test will test it as well...
+	pass = t.Run("TestGetAllOHLCMarketData", func(t *testing.T) {
+		expectedLength := 1000 * time.Minute
+		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+		endTime := startTime.Add(expectedLength - time.Minute)
+		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
+			"BTC",
+			"USDT",
+			common.Minute,
+			startTime,
+			endTime,
+		)
+		assert.NoError(t, err)
+		assert.NotEmpty(t, candleStickData)
+		assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData))
+	}) && pass
 
-func TestApiClient_GetAllOHLCMarketData(t *testing.T) {
-	binanceAPIClient := NewBinanceAPIClient(
-		os.Getenv("BINANCE_API_KEY"),
-		1)
-	expectedLength := 1000 * time.Minute
-	startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
-	endTime := startTime.Add(expectedLength - time.Minute)
-	candleStickData, err := binanceAPIClient.GetAllOHLCMarketData(
-		"BTC",
-		"USDT",
-		api.Minute,
-		startTime,
-		endTime,
-	)
-	if err != nil {
-		t.Error(err)
-	}
-	if candleStickData == nil {
-		t.Error("empty Prices")
-	}
-	if len(candleStickData) != int(expectedLength.Minutes()) {
-		t.Errorf("expected %d got %d", int(expectedLength.Minutes()), len(candleStickData))
-	}
-}
-
-func TestApiClient_GetExchangeInfo(t *testing.T) {
-	binanceAPIClient := NewBinanceAPIClient(
-		os.Getenv("BINANCE_API_KEY"),
-		1)
-	exchangeInfo, err := binanceAPIClient.getExchangeInfo()
-	if err != nil {
-		t.Error(err)
-	}
-	if exchangeInfo == nil {
-		t.Error("empty exchange info")
-	}
-	fmt.Print(utils.PrettyJSON(exchangeInfo))
-}
-
-func TestApiClient_GetSupportedPairs(t *testing.T) {
-	binanceAPIClient := NewBinanceAPIClient(
-		os.Getenv("BINANCE_API_KEY"),
-		1)
-	symbols, err := binanceAPIClient.GetSupportedPairs()
-	if err != nil {
-		t.Error(err)
-	}
-	if len(symbols) == 0 {
-		t.Error("empty exchange info")
-	}
-	fmt.Print(utils.PrettyJSON(symbols))
+	pass = t.Run("TestGetSupportedPairs", func(t *testing.T) {
+		symbols, err := exchangeClient.GetSupportedPairs()
+		assert.Nil(t, err)
+		assert.NotEmpty(t, symbols)
+		//fmt.Print(utils.PrettyJSON(symbols))
+	}) && pass
+	assert.Equal(t, true, pass)
 }

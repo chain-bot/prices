@@ -3,12 +3,12 @@ package binance
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mochahub/coinprice-scraper/main/api/common"
 	"io/ioutil"
 	"net/http"
 	"time"
 
 	"github.com/hashicorp/go-retryablehttp"
-	"github.com/mochahub/coinprice-scraper/main/api"
 )
 
 type apiClient struct {
@@ -18,11 +18,11 @@ type apiClient struct {
 
 func NewBinanceAPIClient(
 	apiKey string,
-	callsPerSecond int) *apiClient {
+) *apiClient {
 	return &apiClient{
-		Client: api.NewHTTPClient(
+		Client: common.NewHTTPClient(
 			maxRetries,
-			time.Duration(callsPerSecond)),
+			time.Duration(rateLimit)),
 		apiKey: apiKey,
 	}
 }
@@ -34,7 +34,7 @@ func (apiClient *apiClient) GetExchangeIdentifier() string {
 func (apiClient *apiClient) getCandleStickData(
 	baseSymbol string,
 	quoteSymbol string,
-	interval api.Interval,
+	interval common.Interval,
 	startTime time.Time,
 	endTime time.Time,
 ) (candleStickResponse []*CandleStickData, err error) {

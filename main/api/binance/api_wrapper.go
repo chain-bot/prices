@@ -2,32 +2,31 @@ package binance
 
 import (
 	"fmt"
+	"github.com/mochahub/coinprice-scraper/main/api/common"
 	"strings"
 	"time"
-
-	"github.com/mochahub/coinprice-scraper/main/api"
 )
 
 // Get CandleStick data from [startTime, endTime] with pagination
 func (apiClient *apiClient) GetAllOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
-	interval api.Interval,
+	interval common.Interval,
 	startTime time.Time,
 	endTime time.Time,
-) ([]*api.OHLCMarketData, error) {
+) ([]*common.OHLCMarketData, error) {
 	var durationFromInterval time.Duration
 	switch interval {
-	case api.Day:
+	case common.Day:
 		durationFromInterval = time.Hour * 24
-	case api.Hour:
+	case common.Hour:
 		durationFromInterval = time.Hour
-	case api.Minute:
+	case common.Minute:
 		durationFromInterval = time.Minute
 	default:
 		return nil, fmt.Errorf("unknown interval: %s", interval)
 	}
-	result := []*api.OHLCMarketData{}
+	result := []*common.OHLCMarketData{}
 	for startTime.Before(endTime) || startTime.Equal(endTime) {
 		newEndTime := startTime.Add(maxLimit * durationFromInterval)
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
@@ -45,14 +44,14 @@ func (apiClient *apiClient) GetAllOHLCMarketData(
 	return result, nil
 }
 
-func (apiClient *apiClient) GetSupportedPairs() ([]*api.Symbol, error) {
+func (apiClient *apiClient) GetSupportedPairs() ([]*common.Symbol, error) {
 	exchangeInfo, err := apiClient.getExchangeInfo()
 	if err != nil {
 		return nil, err
 	}
-	result := []*api.Symbol{}
+	result := []*common.Symbol{}
 	for _, symbol := range exchangeInfo.Symbols {
-		result = append(result, &api.Symbol{
+		result = append(result, &common.Symbol{
 			RawBase:         symbol.BaseAsset,
 			NormalizedBase:  strings.ToLower(symbol.BaseAsset),
 			RawQuote:        symbol.QuoteAsset,
@@ -62,7 +61,7 @@ func (apiClient *apiClient) GetSupportedPairs() ([]*api.Symbol, error) {
 	return result, nil
 }
 
-func (apiClient *apiClient) GetRawMarketData() ([]*api.RawMarketData, error) {
+func (apiClient *apiClient) GetRawMarketData() ([]*common.RawMarketData, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
@@ -74,10 +73,10 @@ func (apiClient *apiClient) GetRawMarketData() ([]*api.RawMarketData, error) {
 func (apiClient *apiClient) GetOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
-	interval api.Interval,
+	interval common.Interval,
 	startTime time.Time,
 	endTime time.Time,
-) ([]*api.OHLCMarketData, error) {
+) ([]*common.OHLCMarketData, error) {
 	candleStickResponse, err := apiClient.getCandleStickData(
 		baseSymbol,
 		quoteSymbol,
@@ -88,10 +87,10 @@ func (apiClient *apiClient) GetOHLCMarketData(
 	if err != nil {
 		return nil, err
 	}
-	ohlcMarketData := []*api.OHLCMarketData{}
+	ohlcMarketData := []*common.OHLCMarketData{}
 	for i := range candleStickResponse {
-		ohlcMarketData = append(ohlcMarketData, &api.OHLCMarketData{
-			MarketData: api.MarketData{
+		ohlcMarketData = append(ohlcMarketData, &common.OHLCMarketData{
+			MarketData: common.MarketData{
 				Source:        BINANCE,
 				BaseCurrency:  baseSymbol,
 				QuoteCurrency: quoteSymbol,
