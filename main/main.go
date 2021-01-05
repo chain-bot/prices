@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/mochahub/coinprice-scraper/main/api"
 	app "github.com/mochahub/coinprice-scraper/main/app"
 	"go.uber.org/fx"
 	"log"
@@ -11,8 +12,13 @@ import (
 func main() {
 	// TODO: Find a Better Logging Framework
 	log.Println("Scraper Config:")
-	// fx.provide the code for the influx connection
-	fxApp := fx.New(fx.Invoke(app.StartScraper))
-	_ = fxApp.Start(context.Background())
-	_ = fxApp.Done()
+	// TODO: fx.provide the code for the influx connection
+	fxApp := fx.New(
+		api.GetAPIProviders(),
+		fx.Invoke(app.StartScraper),
+	)
+	if err := fxApp.Start(context.Background()); err != nil {
+		log.Printf("ERROR STARTING APP: %s", err)
+	}
+	<-fxApp.Done()
 }

@@ -2,14 +2,14 @@ package binance
 
 import (
 	"github.com/mochahub/coinprice-scraper/main/api/common"
+	"github.com/mochahub/coinprice-scraper/main/config"
 	"github.com/stretchr/testify/assert"
-	"os"
 	"testing"
 	"time"
 )
 
 func TestBinanceClient(t *testing.T) {
-	exchangeClient := NewBinanceAPIClient(os.Getenv("BINANCE_API_KEY"))
+	exchangeClient := NewBinanceAPIClient(config.GetKeys().BinanceApiKey)
 	pass := true
 	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
 		expectedLength := 480 * time.Minute
@@ -51,10 +51,11 @@ func TestBinanceClient(t *testing.T) {
 	}) && pass
 
 	pass = t.Run("TestGetSupportedPairs", func(t *testing.T) {
-		symbols, err := exchangeClient.GetSupportedPairs()
+		pairs, err := exchangeClient.GetSupportedPairs()
 		assert.Nil(t, err)
-		assert.NotEmpty(t, symbols)
-		//fmt.Print(utils.PrettyJSON(symbols))
+		assert.NotEmpty(t, pairs)
+		//fmt.Print(utils.PrettyJSON(pairs))
+		assert.Equal(t, 9, len(pairs))
 	}) && pass
 	assert.Equal(t, true, pass)
 }

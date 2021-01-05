@@ -3,6 +3,7 @@ package binance
 import (
 	"fmt"
 	"github.com/mochahub/coinprice-scraper/main/api/common"
+	"github.com/mochahub/coinprice-scraper/main/config"
 	"strings"
 	"time"
 )
@@ -53,12 +54,12 @@ func (apiClient *apiClient) GetSupportedPairs() ([]*common.Symbol, error) {
 	for _, symbol := range exchangeInfo.Symbols {
 		result = append(result, &common.Symbol{
 			RawBase:         symbol.BaseAsset,
-			NormalizedBase:  strings.ToLower(symbol.BaseAsset),
+			NormalizedBase:  strings.ToUpper(symbol.BaseAsset),
 			RawQuote:        symbol.QuoteAsset,
-			NormalizedQuote: strings.ToLower(symbol.QuoteAsset),
+			NormalizedQuote: strings.ToUpper(symbol.QuoteAsset),
 		})
 	}
-	return result, nil
+	return filterSupportedAssets(result), nil
 }
 
 func (apiClient *apiClient) GetRawMarketData() ([]*common.RawMarketData, error) {
@@ -103,4 +104,22 @@ func (apiClient *apiClient) GetOHLCMarketData(
 		})
 	}
 	return ohlcMarketData, nil
+}
+
+func filterSupportedAssets(symbols []*common.Symbol) []*common.Symbol {
+	result := []*common.Symbol{}
+	supportedAssets := config.GetSupportedAssets()
+	for index := range symbols {
+		pair := symbols[index]
+		_, ok := supportedAssets[pair.NormalizedBase]
+		if !ok {
+			continue
+		}
+		_, ok = supportedAssets[pair.NormalizedQuote]
+		if !ok {
+			continue
+		}
+		result = append(result, pair)
+	}
+	return result
 }
