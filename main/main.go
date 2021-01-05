@@ -15,7 +15,7 @@ func main() {
 	// TODO: fx.provide the code for the influx connection
 	fxApp := fx.New(
 		api.GetAPIProviders(),
-		fx.Invoke(app.StartScraper),
+		fx.Invoke(app.StartScrapperCron),
 	)
 	if err := fxApp.Start(context.Background()); err != nil {
 		log.Printf("ERROR STARTING APP: %s", err)
