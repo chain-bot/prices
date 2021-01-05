@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// TODO(Zahin): No clue if this even works
+// TODO(Zahin): Replace with https://pkg.go.dev/golang.org/x/time/rate
 type RateLimiter struct {
 	throttle <-chan time.Time
 }
