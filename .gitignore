@@ -1,6 +1,7 @@
 .DS_Store
 .env
 coverage.out
+.docker/
 
 # https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
