@@ -4,8 +4,9 @@ import "time"
 
 // TODO(Zahin): Get a List of Supported Symbols
 type ExchangeAPIClient interface {
+	GetSupportedPairs() ([]*Symbol, error)
 	GetRawMarketData() ([]*RawMarketData, error)
-	GetOHLCMarketData(
+	GetAllOHLCMarketData(
 		baseSymbol string,
 		quoteSymbol string,
 		interval Interval,
@@ -19,6 +20,13 @@ type RawMarketData struct {
 	StartTime time.Time
 	Value     float64
 	Volume    float64
+}
+
+type Symbol struct {
+	RawBase         string
+	NormalizedBase  string
+	RawQuote        string
+	NormalizedQuote string
 }
 
 type OHLCMarketData struct {

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/go-retryablehttp"
-	"github.com/mochahub/coinprice-scraper/api"
+	"github.com/mochahub/coinprice-scraper/main/api"
 )
 
 type apiClient struct {
@@ -18,7 +18,6 @@ type apiClient struct {
 
 func NewBinanceAPIClient(
 	apiKey string,
-	maxRetries int,
 	callsPerSecond int) *apiClient {
 	return &apiClient{
 		Client: api.NewHTTPClient(
@@ -49,6 +48,30 @@ func (apiClient *apiClient) getCandleStickData(
 		endTime.UTC().Unix()*1000,
 		maxLimit,
 	)
+	httpReq, err := http.NewRequest("GET", urlString, nil)
+	if err != nil {
+		return nil, err
+	}
+	retryableRequest, err := retryablehttp.FromRequest(httpReq)
+	if err != nil {
+		return nil, err
+	}
+	retryableRequest.Header.Add("X-MBX-APIKEY", apiClient.apiKey)
+	httpResp, err := apiClient.Do(retryableRequest)
+	if err != nil {
+		return nil, err
+	}
+	defer httpResp.Body.Close()
+	body, err := ioutil.ReadAll(httpResp.Body)
+	if err = json.Unmarshal(body, &candleStickResponse); err != nil {
+		return nil, err
+	}
+	return candleStickResponse, nil
+}
+
+// Get CandleStick data from [startTime, endTime]
+func (apiClient *apiClient) getExchangeInfo() (candleStickResponse *ExchangeInfoResponse, err error) {
+	urlString := fmt.Sprintf("%s%s", baseUrl, getExchangeInfo)
 	httpReq, err := http.NewRequest("GET", urlString, nil)
 	if err != nil {
 		return nil, err

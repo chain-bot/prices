@@ -75,3 +75,26 @@ func (candleStickResponse *CandleStickData) UnmarshalJSON(
 	}
 	return nil
 }
+
+type ExchangeInfoResponse struct {
+	Timezone   string    `json:"timezone"`
+	ServerTime int64     `json:"serverTime"`
+	Symbols    []Symbols `json:"symbols"`
+}
+type Symbols struct {
+	Symbol                     string   `json:"symbol"`
+	Status                     string   `json:"status"`
+	BaseAsset                  string   `json:"baseAsset"`
+	BaseAssetPrecision         int      `json:"baseAssetPrecision"`
+	QuoteAsset                 string   `json:"quoteAsset"`
+	QuoteAssetPrecision        int      `json:"quoteAssetPrecision"`
+	BaseCommissionPrecision    int      `json:"baseCommissionPrecision"`
+	QuoteCommissionPrecision   int      `json:"quoteCommissionPrecision"`
+	OrderTypes                 []string `json:"orderTypes"`
+	IcebergAllowed             bool     `json:"icebergAllowed"`
+	OcoAllowed                 bool     `json:"ocoAllowed"`
+	QuoteOrderQtyMarketAllowed bool     `json:"quoteOrderQtyMarketAllowed"`
+	IsSpotTradingAllowed       bool     `json:"isSpotTradingAllowed"`
+	IsMarginTradingAllowed     bool     `json:"isMarginTradingAllowed"`
+	Permissions                []string `json:"permissions"`
+}

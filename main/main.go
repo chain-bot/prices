@@ -1,13 +1,15 @@
 package main
 
 import (
+	"context"
+	"go.uber.org/fx"
 	"log"
-
-	"github.com/mochahub/coinprice-scraper/main/app"
 )
 
 func main() {
 	// TODO: Find a Better Logging Framework
 	log.Println("Scraper Config:")
-	app.StartScraper()
+	//app.StartScraper()
+	app := fx.New()
+	_ = app.Start(context.Background())
 }
