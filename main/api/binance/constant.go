@@ -3,9 +3,9 @@ package binance
 type Interval string
 
 const (
-	InstitutionIdentifier = "BINANCE"
-	maxRetries            = 3
-	maxLimit              = 500
+	BINANCE    = "BINANCE"
+	maxRetries = 3
+	maxLimit   = 500
 
 	baseUrl = "https://api.binance.com"
 	// Endpoints

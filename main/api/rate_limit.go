@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// TODO(Zahin): No clue if this even works
 type RateLimiter struct {
 	throttle <-chan time.Time
 }

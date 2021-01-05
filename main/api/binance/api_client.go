@@ -26,6 +26,9 @@ func NewBinanceAPIClient(
 		apiKey: apiKey,
 	}
 }
+func (apiClient *apiClient) GetExchangeIdentifier() string {
+	return BINANCE
+}
 
 // Get CandleStick data from [startTime, endTime]
 func (apiClient *apiClient) getCandleStickData(

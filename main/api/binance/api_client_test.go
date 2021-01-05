@@ -2,7 +2,7 @@ package binance
 
 import (
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/utils"
+	"github.com/mochahub/coinprice-scraper/main/utils"
 	"os"
 	"testing"
 	"time"

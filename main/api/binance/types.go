@@ -5,7 +5,9 @@ import (
 	"strconv"
 )
 
-// https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#klinecandlestick-data
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#klinecandlestick-data
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 type CandleStickData struct {
 	OpenTime                 float64
 	OpenPrice                float64
@@ -76,6 +78,9 @@ func (candleStickResponse *CandleStickData) UnmarshalJSON(
 	return nil
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 type ExchangeInfoResponse struct {
 	Timezone   string    `json:"timezone"`
 	ServerTime int64     `json:"serverTime"`

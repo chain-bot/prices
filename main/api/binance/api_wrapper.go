@@ -8,6 +8,7 @@ import (
 	"github.com/mochahub/coinprice-scraper/main/api"
 )
 
+// Get CandleStick data from [startTime, endTime] with pagination
 func (apiClient *apiClient) GetAllOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
@@ -91,7 +92,7 @@ func (apiClient *apiClient) GetOHLCMarketData(
 	for i := range candleStickResponse {
 		ohlcMarketData = append(ohlcMarketData, &api.OHLCMarketData{
 			MarketData: api.MarketData{
-				Source:        InstitutionIdentifier,
+				Source:        BINANCE,
 				BaseCurrency:  baseSymbol,
 				QuoteCurrency: quoteSymbol,
 			},
