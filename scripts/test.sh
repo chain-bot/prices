@@ -1,4 +1,4 @@
-source ./.env
+#source ./.env
 #godotenv -f ./.env go test $(go list ./... | grep -v /vendor/) -v -coverprofile cover.out . fmt
 #go tool cover -html=cover.out -o cover.html
 #gobadge -filename=cover.out
@@ -8,5 +8,7 @@ source ./.env
 #  open cover.html
 #fi
 
+cd ../
 godotenv -f ./.env gopherbadger -md="README.md"
+rm coverage.out
 
