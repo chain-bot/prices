@@ -12,6 +12,7 @@ services:
     image: postgres
     container_name: postgres
     environment:
+      POSTGRES_DB: coinprice
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:

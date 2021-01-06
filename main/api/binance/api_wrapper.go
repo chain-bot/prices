@@ -27,6 +27,9 @@ func (apiClient *apiClient) GetAllOHLCMarketData(
 	default:
 		return nil, fmt.Errorf("unknown interval: %s", interval)
 	}
+	if endTime.IsZero() {
+		endTime = time.Now()
+	}
 	result := []*common.OHLCMarketData{}
 	for startTime.Before(endTime) || startTime.Equal(endTime) {
 		newEndTime := startTime.Add(maxLimit * durationFromInterval)

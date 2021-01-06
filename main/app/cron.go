@@ -5,8 +5,12 @@ import (
 	"github.com/robfig/cron"
 )
 
-func StartScrapperCron() {
+func StartScrapperCron() (*cron.Cron, error) {
 	c := cron.New()
-	_ = c.AddFunc("@every 1m", func() { fmt.Println("Every minute") })
+	err := c.AddFunc("@every 1m", func() { fmt.Println("Every minute") })
+	if err != nil {
+		return nil, err
+	}
 	c.Start()
+	return c, nil
 }

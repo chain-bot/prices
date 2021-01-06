@@ -5,6 +5,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/mochahub/coinprice-scraper/main/api"
 	app "github.com/mochahub/coinprice-scraper/main/app"
+	"github.com/mochahub/coinprice-scraper/main/config"
 	"github.com/mochahub/coinprice-scraper/main/database"
 	"go.uber.org/fx"
 	"log"
@@ -16,6 +17,7 @@ func main() {
 	// TODO: fx.provide the code for the influx connection
 	fxApp := fx.New(
 		api.GetAPIProviders(),
+		fx.Provide(config.GetSecrets),
 		fx.Provide(database.NewDatabase),
 		fx.Invoke(
 			database.RunMigrations,

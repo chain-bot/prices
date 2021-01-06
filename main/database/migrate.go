@@ -6,16 +6,17 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jmoiron/sqlx"
 	"github.com/mochahub/coinprice-scraper/main/config"
 	"log"
 )
 
-func RunMigrations(database *Database) error {
+func RunMigrations(db *sqlx.DB) error {
 	secrets := config.GetSecrets()
-	if err := database.DB.Ping(); err != nil {
+	if err := db.Ping(); err != nil {
 		log.Fatalf("could not ping DB... %v", err)
 	}
-	driver, err := postgres.WithInstance(database.DB.DB, &postgres.Config{DatabaseName: secrets.DBName})
+	driver, err := postgres.WithInstance(db.DB, &postgres.Config{DatabaseName: secrets.DBName})
 	if err != nil {
 		log.Fatalf("could not start sql migration... %v", err)
 	}
