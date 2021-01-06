@@ -9,7 +9,7 @@ import (
 )
 
 func TestBinanceClient(t *testing.T) {
-	exchangeClient := NewBinanceAPIClient(config.GetKeys().BinanceApiKey)
+	exchangeClient := NewBinanceAPIClient(config.GetSecrets().BinanceApiKey)
 	pass := true
 	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
 		expectedLength := 480 * time.Minute

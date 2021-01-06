@@ -1,13 +1,25 @@
 version: '3.7'
 services:
-  influxdb:
-    # https://hub.docker.com/r/bitnami/influxdb/
-    image: docker.io/bitnami/influxdb:1-debian-10
+#  influxdb:
+#    # https://hub.docker.com/r/bitnami/influxdb/
+#    image: docker.io/bitnami/influxdb:1-debian-10
+#    ports:
+#      - 8086:8086
+#      - 8088:8088
+#    volumes:
+#      - ./.docker/influxdb_data:/bitnami/influxdb
+  psql:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - 8086:8086
-      - 8088:8088
+      - 5432:5432
     volumes:
-      - ./docker/influxdb_data:/bitnami/influxdb
+      - psql_data:/var/lib/postgresql/data
 volumes:
   influxdb_data:
+    driver: local
+  psql_data:
     driver: local
