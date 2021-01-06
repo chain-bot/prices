@@ -1,4 +1,4 @@
-output   = "models/generated"
+output   = "main/models/generated"
 wipe     = true
 no-tests = true
 

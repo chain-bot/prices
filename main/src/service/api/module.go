@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/mochahub/coinprice-scraper/main/api/binance"
-	"github.com/mochahub/coinprice-scraper/main/config"
+	"github.com/mochahub/coinprice-scraper/config"
+	"github.com/mochahub/coinprice-scraper/main/src/service/api/binance"
 	"go.uber.org/fx"
 )
 

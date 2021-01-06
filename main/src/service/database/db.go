@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/mochahub/coinprice-scraper/main/config"
+	"github.com/mochahub/coinprice-scraper/config"
 )
 
 func NewDatabase() (*sqlx.DB, error) {

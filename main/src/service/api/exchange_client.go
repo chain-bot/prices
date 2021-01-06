@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/mochahub/coinprice-scraper/main/api/common"
+	"github.com/mochahub/coinprice-scraper/main/src/service/api/common"
 	"time"
 )
 

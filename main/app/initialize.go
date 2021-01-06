@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 	"github.com/jmoiron/sqlx"
-	"github.com/mochahub/coinprice-scraper/main/api"
+	"github.com/mochahub/coinprice-scraper/main/src/service/api"
 	cron "github.com/robfig/cron"
 	"go.uber.org/fx"
 )

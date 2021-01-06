@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/mochahub/coinprice-scraper/main/api"
+	"github.com/mochahub/coinprice-scraper/config"
 	app "github.com/mochahub/coinprice-scraper/main/app"
-	"github.com/mochahub/coinprice-scraper/main/config"
-	"github.com/mochahub/coinprice-scraper/main/database"
+	"github.com/mochahub/coinprice-scraper/main/src/service/api"
+	"github.com/mochahub/coinprice-scraper/main/src/service/database"
 	"go.uber.org/fx"
 	"log"
 )

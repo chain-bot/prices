@@ -1,8 +1,8 @@
 package binance
 
 import (
-	"github.com/mochahub/coinprice-scraper/main/api/common"
-	"github.com/mochahub/coinprice-scraper/main/config"
+	"github.com/mochahub/coinprice-scraper/config"
+	"github.com/mochahub/coinprice-scraper/main/src/service/api/common"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

@@ -3,7 +3,7 @@ package binance
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/main/api/common"
+	"github.com/mochahub/coinprice-scraper/main/src/service/api/common"
 	"io/ioutil"
 	"net/http"
 	"time"

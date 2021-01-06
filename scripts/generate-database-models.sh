@@ -1,0 +1,2 @@
+cd ../
+sqlboiler psql

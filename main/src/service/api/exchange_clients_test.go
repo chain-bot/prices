@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/mochahub/coinprice-scraper/main/api/binance"
-	"github.com/mochahub/coinprice-scraper/main/api/common"
+	"github.com/mochahub/coinprice-scraper/main/src/service/api/binance"
+	"github.com/mochahub/coinprice-scraper/main/src/service/api/common"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
