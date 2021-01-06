@@ -1,6 +1,6 @@
 .DS_Store
 .env
-coverage.out
+cover.out
 .docker/
 
 # https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
