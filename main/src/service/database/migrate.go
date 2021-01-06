@@ -11,7 +11,9 @@ import (
 	"log"
 )
 
-func RunMigrations(db *sqlx.DB) error {
+func RunMigrations(
+	db *sqlx.DB,
+) error {
 	secrets := config.GetSecrets()
 	if err := db.Ping(); err != nil {
 		log.Fatalf("could not ping DB... %v", err)
