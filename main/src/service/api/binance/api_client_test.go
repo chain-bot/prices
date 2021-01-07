@@ -3,13 +3,17 @@ package binance
 import (
 	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/main/src/service/api/common"
+	"github.com/mochahub/coinprice-scraper/main/src/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
 
 func TestBinanceClient(t *testing.T) {
-	exchangeClient := NewBinanceAPIClient(config.GetSecrets().BinanceApiKey)
+	// TODO: Use DI instead of calling GetSecrets directly
+	utils.LoadEnv()
+	secret, _ := config.GetSecrets()
+	exchangeClient := NewBinanceAPIClient(secret.APIKeys.BinanceApiKey)
 	pass := true
 	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
 		expectedLength := 480 * time.Minute

@@ -99,11 +99,13 @@ func (apiClient *apiClient) GetOHLCMarketData(
 				BaseCurrency:  baseSymbol,
 				QuoteCurrency: quoteSymbol,
 			},
-			StartTime: time.Unix(int64(candleStickResponse[i].OpenTime/1000), 0),
-			EndTime:   time.Unix(int64(candleStickResponse[i].CloseTime/1000), 0),
-			HighPrice: candleStickResponse[i].HighPrice,
-			LowPrice:  candleStickResponse[i].LowPrice,
-			Volume:    candleStickResponse[i].Volume,
+			StartTime:  time.Unix(int64(candleStickResponse[i].OpenTime/1000), 0),
+			EndTime:    time.Unix(int64(candleStickResponse[i].CloseTime/1000), 0),
+			OpenPrice:  candleStickResponse[i].OpenPrice,
+			HighPrice:  candleStickResponse[i].HighPrice,
+			LowPrice:   candleStickResponse[i].LowPrice,
+			ClosePrice: candleStickResponse[i].ClosePrice,
+			Volume:     candleStickResponse[i].Volume,
 		})
 	}
 	return ohlcMarketData, nil

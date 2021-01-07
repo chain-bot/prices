@@ -13,8 +13,8 @@ import (
 
 func RunMigrations(
 	db *sqlx.DB,
+	secrets *config.Secrets,
 ) error {
-	secrets := config.GetSecrets()
 	if err := db.Ping(); err != nil {
 		log.Fatalf("could not ping DB... %v", err)
 	}
@@ -23,7 +23,6 @@ func RunMigrations(
 		log.Fatalf("could not start sql migration... %v", err)
 	}
 	sourceURL := fmt.Sprintf("file://%s", migrationDir)
-	println(sourceURL)
 	m, err := migrate.NewWithDatabaseInstance(
 		sourceURL, // file://path/to/directory
 		secrets.DatabaseCredentials.DBName, driver)

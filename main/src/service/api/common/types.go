@@ -29,11 +29,13 @@ type Symbol struct {
 
 type OHLCMarketData struct {
 	MarketData
-	StartTime time.Time
-	EndTime   time.Time
-	HighPrice float64
-	LowPrice  float64
-	Volume    float64
+	StartTime  time.Time
+	EndTime    time.Time
+	OpenPrice  float64
+	HighPrice  float64
+	LowPrice   float64
+	ClosePrice float64
+	Volume     float64
 }
 
 type MarketData struct {

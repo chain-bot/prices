@@ -6,6 +6,8 @@ import (
 	"github.com/mochahub/coinprice-scraper/main/src/service/api/common"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/hashicorp/go-retryablehttp"
@@ -20,9 +22,7 @@ func NewBinanceAPIClient(
 	apiKey string,
 ) *apiClient {
 	return &apiClient{
-		Client: common.NewHTTPClient(
-			maxRetries,
-			time.Duration(rateLimit)),
+		Client: common.NewHTTPClient(maxRetries, time.Duration(rateLimit)),
 		apiKey: apiKey,
 	}
 }
@@ -41,40 +41,43 @@ func (apiClient *apiClient) getCandleStickData(
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
-	urlString := fmt.Sprintf("%s%s?symbol=%s%s&interval=%s&startTime=%d&endTime=%d&limit=%d",
-		baseUrl,
-		getCandleStick,
-		baseSymbol,
-		quoteSymbol,
-		interval,
-		startTime.UTC().Unix()*1000,
-		endTime.UTC().Unix()*1000,
-		maxLimit,
-	)
-	httpReq, err := http.NewRequest("GET", urlString, nil)
+	params := url.Values{}
+	params.Add("symbol", baseSymbol+quoteSymbol)
+	params.Add("interval", string(interval))
+	params.Add("startTime", strconv.FormatInt(UnixMillis(startTime), 10))
+	params.Add("endTime", strconv.FormatInt(UnixMillis(endTime), 10))
+	params.Add("limit", strconv.Itoa(maxLimit))
+	urlString := fmt.Sprintf("%s%s?%s", baseUrl, getCandleStick, params.Encode())
+	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
 	if err != nil {
 		return nil, err
 	}
-	retryableRequest, err := retryablehttp.FromRequest(httpReq)
-	if err != nil {
-		return nil, err
-	}
-	retryableRequest.Header.Add("X-MBX-APIKEY", apiClient.apiKey)
-	httpResp, err := apiClient.Do(retryableRequest)
-	if err != nil {
-		return nil, err
-	}
-	defer httpResp.Body.Close()
-	body, err := ioutil.ReadAll(httpResp.Body)
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
 	if err = json.Unmarshal(body, &candleStickResponse); err != nil {
 		return nil, err
 	}
 	return candleStickResponse, nil
 }
 
-// Get CandleStick data from [startTime, endTime]
-func (apiClient *apiClient) getExchangeInfo() (candleStickResponse *ExchangeInfoResponse, err error) {
+// Get ExchangeInfo (supported pairs, percision, etc)
+func (apiClient *apiClient) getExchangeInfo() (exchangeInfoResponse *ExchangeInfoResponse, err error) {
 	urlString := fmt.Sprintf("%s%s", baseUrl, getExchangeInfo)
+	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err = json.Unmarshal(body, &exchangeInfoResponse); err != nil {
+		return nil, err
+	}
+	return exchangeInfoResponse, nil
+}
+
+func (apiClient *apiClient) sendAPIKeyAuthenticatedGetRequest(
+	urlString string,
+) (*http.Response, error) {
 	httpReq, err := http.NewRequest("GET", urlString, nil)
 	if err != nil {
 		return nil, err
@@ -84,14 +87,5 @@ func (apiClient *apiClient) getExchangeInfo() (candleStickResponse *ExchangeInfo
 		return nil, err
 	}
 	retryableRequest.Header.Add("X-MBX-APIKEY", apiClient.apiKey)
-	httpResp, err := apiClient.Do(retryableRequest)
-	if err != nil {
-		return nil, err
-	}
-	defer httpResp.Body.Close()
-	body, err := ioutil.ReadAll(httpResp.Body)
-	if err = json.Unmarshal(body, &candleStickResponse); err != nil {
-		return nil, err
-	}
-	return candleStickResponse, nil
+	return apiClient.Do(retryableRequest)
 }
