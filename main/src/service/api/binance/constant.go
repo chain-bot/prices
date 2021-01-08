@@ -5,7 +5,7 @@ type Interval string
 const (
 	BINANCE    = "BINANCE"
 	maxRetries = 3
-	maxLimit   = 500
+	maxLimit   = 1000
 	// calls per second
 	rateLimit = 10
 

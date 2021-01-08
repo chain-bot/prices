@@ -26,7 +26,3 @@ func StartScrapperCron(
 	c.Start()
 	return c, nil
 }
-
-func StartScraperWrapper() {
-
-}

@@ -47,8 +47,8 @@ func ScrapeExchange(
 	if err != nil {
 		return err
 	}
-	// Default Time if pair was never synced: Thursday, December 31, 2015 7:00:00 PM GMT-05:00
-	startTime := time.Unix(1451606400, 0)
+	// Default Time if pair was never synced: Friday, July 1, 2016 12:00:00 AM
+	startTime := time.Unix(1467331200, 0)
 	endTime := time.Now()
 	for index := range pairs {
 		pair := pairs[index]
