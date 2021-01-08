@@ -1,4 +1,3 @@
-cd ../
 godotenv -f ./.env gopherbadger -md="README.md"
 rm coverage.out
 #source ./.env

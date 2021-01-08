@@ -1,2 +1,2 @@
-cd ../
+source ./.env
 sqlboiler psql
