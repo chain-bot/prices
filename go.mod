@@ -19,5 +19,6 @@ require (
 	github.com/volatiletech/strmangle v0.0.1
 	go.uber.org/fx v1.13.1
 	golang.org/x/mod v0.4.0 // indirect
+	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 	golang.org/x/tools v0.0.0-20210105210202-9ed45478a130 // indirect
 )

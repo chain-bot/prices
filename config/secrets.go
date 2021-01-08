@@ -7,9 +7,12 @@ import (
 )
 
 type APIKeys struct {
-	BinanceApiKey string
-	KrakenApiKey  string
-	KucoinApiKey  string
+	BinanceApiKey            string
+	CoinbaseProApiKey        string
+	CoinbaseProApiSecret     string
+	CoinbaseProApiPassphrase string
+	KrakenApiKey             string
+	KucoinApiKey             string
 }
 type DatabaseCredentials struct {
 	User     string
@@ -46,7 +49,10 @@ func GetSecrets() (*Secrets, error) {
 	}
 	return &Secrets{
 		APIKeys: APIKeys{
-			BinanceApiKey: os.Getenv("BINANCE_API_KEY"),
+			BinanceApiKey:            os.Getenv("BINANCE_API_KEY"),
+			CoinbaseProApiKey:        os.Getenv("COINBASE_PRO_API_KEY"),
+			CoinbaseProApiSecret:     os.Getenv("COINBASE_PRO_API_SECRET"),
+			CoinbaseProApiPassphrase: os.Getenv("COINBASE_PRO_API_KEY_PASSPHRASE"),
 		},
 		DatabaseCredentials: DatabaseCredentials{
 			User:     os.Getenv("POSTGRES_USERNAME"),

@@ -2,7 +2,6 @@ package binance
 
 import (
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/main/src/service/api/common"
 	"strings"
 	"time"
@@ -31,8 +30,11 @@ func (apiClient *apiClient) GetAllOHLCMarketData(
 		endTime = time.Now()
 	}
 	result := []*common.OHLCMarketData{}
-	for startTime.Before(endTime) || startTime.Equal(endTime) {
+	for startTime.Before(endTime) {
 		newEndTime := startTime.Add(maxLimit * durationFromInterval)
+		if newEndTime.After(endTime) {
+			newEndTime = endTime
+		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
 			baseSymbol,
 			quoteSymbol,
@@ -43,7 +45,7 @@ func (apiClient *apiClient) GetAllOHLCMarketData(
 			return nil, err
 		}
 		result = append(result, ohlcMarketData...)
-		startTime = newEndTime.Add(durationFromInterval)
+		startTime = newEndTime
 	}
 	return result, nil
 }
@@ -62,7 +64,7 @@ func (apiClient *apiClient) GetSupportedPairs() ([]*common.Symbol, error) {
 			NormalizedQuote: strings.ToUpper(symbol.QuoteAsset),
 		})
 	}
-	return filterSupportedAssets(result), nil
+	return common.FilterSupportedAssets(result), nil
 }
 
 func (apiClient *apiClient) GetRawMarketData() ([]*common.RawMarketData, error) {
@@ -92,6 +94,7 @@ func (apiClient *apiClient) GetOHLCMarketData(
 		return nil, err
 	}
 	ohlcMarketData := []*common.OHLCMarketData{}
+
 	for i := range candleStickResponse {
 		ohlcMarketData = append(ohlcMarketData, &common.OHLCMarketData{
 			MarketData: common.MarketData{
@@ -109,22 +112,4 @@ func (apiClient *apiClient) GetOHLCMarketData(
 		})
 	}
 	return ohlcMarketData, nil
-}
-
-func filterSupportedAssets(symbols []*common.Symbol) []*common.Symbol {
-	result := []*common.Symbol{}
-	supportedAssets := config.GetSupportedAssets()
-	for index := range symbols {
-		pair := symbols[index]
-		_, ok := supportedAssets[pair.NormalizedBase]
-		if !ok {
-			continue
-		}
-		_, ok = supportedAssets[pair.NormalizedQuote]
-		if !ok {
-			continue
-		}
-		result = append(result, pair)
-	}
-	return result
 }

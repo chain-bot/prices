@@ -13,6 +13,7 @@ type ExchangeAPIClient interface {
 	GetAllOHLCMarketData(
 		baseSymbol string,
 		quoteSymbol string,
+		// TODO(Zahin): Makes more sense to make this a duration
 		interval common.Interval,
 		startTime time.Time,
 		endTime time.Time,

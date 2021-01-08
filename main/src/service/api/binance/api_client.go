@@ -1,10 +1,13 @@
 package binance
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/mochahub/coinprice-scraper/main/src/service/api/common"
+	"golang.org/x/time/rate"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,17 +18,33 @@ import (
 
 type apiClient struct {
 	*retryablehttp.Client
+	*rate.Limiter
 	apiKey string
 }
 
 func NewBinanceAPIClient(
 	apiKey string,
 ) *apiClient {
-	return &apiClient{
-		Client: common.NewHTTPClient(maxRetries, time.Duration(rateLimit)),
-		apiKey: apiKey,
+	// 1200 callsPerMinute:(60*1000)/1200
+	rateLimiter := rate.NewLimiter(rate.Every(50*time.Millisecond), 2)
+	httpClient := retryablehttp.NewClient()
+	httpClient.CheckRetry = common.DefaultCheckRetry
+	httpClient.RetryWaitMin = common.DefaultRetryMin
+	httpClient.RetryMax = common.MaxRetries
+	apiClient := apiClient{
+		Client:  httpClient,
+		Limiter: rateLimiter,
+		apiKey:  apiKey,
 	}
+	apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) {
+		if err := apiClient.Limiter.Wait(context.Background()); err != nil {
+			log.Printf("ERROR WAITING FOR LIMIT: %s\n", err.Error())
+			return
+		}
+	}
+	return &apiClient
 }
+
 func (apiClient *apiClient) GetExchangeIdentifier() string {
 	return BINANCE
 }
@@ -41,6 +60,7 @@ func (apiClient *apiClient) getCandleStickData(
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
+	log.Println(startTime.String())
 	params := url.Values{}
 	params.Add("symbol", baseSymbol+quoteSymbol)
 	params.Add("interval", string(interval))

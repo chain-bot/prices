@@ -1,17 +1,27 @@
 package api
 
 import (
+	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/main/src/service/api/binance"
+	"github.com/mochahub/coinprice-scraper/main/src/service/api/coinbasepro"
 	"github.com/mochahub/coinprice-scraper/main/src/service/api/common"
+	"github.com/mochahub/coinprice-scraper/main/src/utils"
 	"github.com/stretchr/testify/assert"
-	"os"
 	"testing"
 	"time"
 )
 
 func TestBinanceClient(t *testing.T) {
+	// TODO: Use DI instead of calling GetSecrets directly
+	utils.LoadEnv()
+	secrets, err := config.GetSecrets()
+	assert.NoError(t, err)
 	clients := []ExchangeAPIClient{
-		binance.NewBinanceAPIClient(os.Getenv("BINANCE_API_KEY")),
+		binance.NewBinanceAPIClient(secrets.APIKeys.BinanceApiKey),
+		coinbasepro.NewCoinbaseProAPIClient(
+			secrets.APIKeys.CoinbaseProApiKey,
+			secrets.APIKeys.CoinbaseProApiSecret,
+			secrets.APIKeys.CoinbaseProApiPassphrase),
 	}
 	for _, exchangeClient := range clients {
 		pass := true
