@@ -20,6 +20,7 @@ type ExchangeClients struct {
 func GetAPIProviders() fx.Option {
 	return fx.Options(
 		fx.Provide(NewBinanaceAPIClient),
+		// Coinbase PR
 		fx.Provide(NewCoinbaseProAPIClient),
 	)
 }
@@ -36,11 +37,3 @@ func NewCoinbaseProAPIClient(secrets *config.Secrets) ExchangeClientResult {
 			secrets.CoinbaseProApiKey, secrets.CoinbaseProApiSecret, secrets.CoinbaseProApiPassphrase),
 	}
 }
-
-//func NewServer(p ServerParams) *Server {
-//	server := newServer()
-//	for _, h := range p.Handlers {
-//		server.Register(h)
-//	}
-//	return server
-//}

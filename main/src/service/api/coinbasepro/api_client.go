@@ -31,7 +31,7 @@ func NewCoinbaseProAPIClient(
 	apiKey, apiSecret, apiPassPhrase string,
 ) *apiClient {
 	// 3 callsPerSecond
-	rateLimiter := rate.NewLimiter(rate.Every(3*time.Second), 6)
+	rateLimiter := rate.NewLimiter(rate.Every(time.Second/3), 6)
 	httpClient := retryablehttp.NewClient()
 	httpClient.CheckRetry = common.DefaultCheckRetry
 	httpClient.RetryWaitMin = common.DefaultRetryMin

@@ -27,18 +27,19 @@ func StartScraper(
 	defer log.Println("Stopping Scraper")
 	var waitGroup sync.WaitGroup
 
-	for i := range clients {
+	for index := range clients {
+		client := clients[index]
 		// TODO(Zahin): Handle Errors
 		waitGroup.Add(1)
 		go func(wg *sync.WaitGroup) {
 			// Decrement the counter when the goroutine completes.
 			defer wg.Done()
-			err := ScrapeExchange(ctx, secrets, db, influxDBClient, clients[i])
+			err := ScrapeExchange(ctx, secrets, db, influxDBClient, client)
 			if err != nil {
-				log.Printf("ERROR SCRAPING %s\n", clients[i].GetExchangeIdentifier())
+				log.Printf("ERROR SCRAPING %s\n", client.GetExchangeIdentifier())
 			}
 		}(&waitGroup)
-		go ScrapeExchange(ctx, secrets, db, influxDBClient, clients[i])
+		//go ScrapeExchange(ctx, secrets, db, influxDBClient, clients[i])
 	}
 	waitGroup.Wait()
 	return nil
@@ -55,16 +56,12 @@ func ScrapeExchange(
 	if err != nil {
 		return err
 	}
-	tx, err := db.BeginTx(ctx, nil)
-	if err != nil {
-		return err
-	}
 	// Default Time if pair was never synced: Friday, July 1, 2016 12:00:00 AM
 	startTime := time.Unix(1467331200, 0)
 	endTime := time.Now()
 	for index := range pairs {
 		pair := pairs[index]
-		lastSync, err := models.FindLastSync(ctx, tx, pair.NormalizedBase, pair.NormalizedQuote, client.GetExchangeIdentifier())
+		lastSync, err := models.FindLastSync(ctx, db, pair.NormalizedBase, pair.NormalizedQuote, client.GetExchangeIdentifier())
 		if err != nil && err != sql.ErrNoRows {
 			return err
 		}
@@ -79,8 +76,16 @@ func ScrapeExchange(
 		if len(ohlcData) == 0 {
 			continue
 		}
+		tx, err := db.BeginTx(ctx, nil)
+		if err != nil {
+			return err
+		}
 		lastSyncTime := ohlcData[len(ohlcData)-1].StartTime
 		if err = upsertLastSyncWithTx(ctx, tx, pair, client.GetExchangeIdentifier(), lastSyncTime); err != nil {
+			_ = tx.Rollback()
+			return err
+		}
+		if err = tx.Commit(); err != nil {
 			return err
 		}
 		go upsertOHLCData(
@@ -92,7 +97,7 @@ func ScrapeExchange(
 			pair.NormalizedQuote,
 			client.GetExchangeIdentifier())
 	}
-	return tx.Commit()
+	return nil
 }
 
 func upsertLastSyncWithTx(
@@ -112,7 +117,6 @@ func upsertLastSyncWithTx(
 		[]string{models.LastSyncColumns.BaseAsset, models.LastSyncColumns.QuoteAsset, models.LastSyncColumns.Exchange},
 		boil.Whitelist(models.LastSyncColumns.LastSync),
 		boil.Infer()); err != nil {
-		_ = tx.Rollback()
 		return err
 	}
 	return nil
