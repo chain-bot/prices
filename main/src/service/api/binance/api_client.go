@@ -60,7 +60,6 @@ func (apiClient *apiClient) getCandleStickData(
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
-	log.Println(startTime.String())
 	params := url.Values{}
 	params.Add("symbol", baseSymbol+quoteSymbol)
 	params.Add("interval", string(interval))

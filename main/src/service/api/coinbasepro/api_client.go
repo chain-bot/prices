@@ -64,7 +64,6 @@ func (apiClient *apiClient) getCandleStickData(
 	productID string,
 ) (candleStickResponse []*CandleStickData, err error) {
 	params := url.Values{}
-	log.Println(startTime.String())
 	params.Add("start", startTime.Format(time.RFC3339))
 	params.Add("end", endTime.Format(time.RFC3339))
 	params.Add("granularity", strconv.Itoa(granularity))
@@ -84,8 +83,8 @@ func (apiClient *apiClient) getCandleStickData(
 }
 
 func (apiClient *apiClient) getProducts() (productsResponse ProductsResponse, err error) {
-	url := fmt.Sprintf("%s%s", baseURL, getExchangeProducts)
-	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(url)
+	urlString := fmt.Sprintf("%s%s", baseURL, getExchangeProducts)
+	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
 	if err != nil {
 		return nil, err
 	}
