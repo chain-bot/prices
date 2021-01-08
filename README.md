@@ -5,6 +5,14 @@
 
 Web-Scraper for crypto prices built in Go
 
+1 Minute candle-stick data is scraped and stored in influxdb.
+
+Supported Exchanges:
+- [x] Binance
+- [x] CoinbasePro
+- [ ] Binance.US
+- [ ] Kraken
+
 ## Database Migrations and Models
 - App [models](./main/models/generated) are generated using the database schema
 - [sqlboiler](https://github.com/volatiletech/sqlboiler) introspects the database schema and creates the model files
