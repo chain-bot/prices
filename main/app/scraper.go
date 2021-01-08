@@ -12,6 +12,7 @@ import (
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -24,11 +25,22 @@ func StartScraper(
 	clients []api.ExchangeAPIClient) error {
 	log.Println("Starting Scraper")
 	defer log.Println("Stopping Scraper")
+	var waitGroup sync.WaitGroup
 
 	for i := range clients {
 		// TODO(Zahin): Handle Errors
+		waitGroup.Add(1)
+		go func(wg *sync.WaitGroup) {
+			// Decrement the counter when the goroutine completes.
+			defer wg.Done()
+			err := ScrapeExchange(ctx, secrets, db, influxDBClient, clients[i])
+			if err != nil {
+				log.Printf("ERROR SCRAPING %s\n", clients[i].GetExchangeIdentifier())
+			}
+		}(&waitGroup)
 		go ScrapeExchange(ctx, secrets, db, influxDBClient, clients[i])
 	}
+	waitGroup.Wait()
 	return nil
 }
 
