@@ -4,10 +4,9 @@ import (
 	"fmt"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/mochahub/coinprice-scraper/config"
-	"go.uber.org/fx"
 )
 
-func NewInfluxDBClient(lc fx.Lifecycle, secrets *config.Secrets) (*influxdb2.Client, error) {
+func NewInfluxDBClient(secrets *config.Secrets) (*influxdb2.Client, error) {
 	influxDBURL := fmt.Sprintf("http://%s:%d", secrets.InfluxDbCredentials.Host, secrets.InfluxDbCredentials.Port)
 	client := influxdb2.NewClient(influxDBURL, secrets.InfluxDbCredentials.Token)
 	// Turn this into a command line script to generate the token

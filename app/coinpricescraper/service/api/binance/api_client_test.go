@@ -2,7 +2,7 @@ package binance
 
 import (
 	"github.com/mochahub/coinprice-scraper/app/coinpricescraper/service/api/common"
-	"github.com/mochahub/coinprice-scraper/app/coinpricescraper/utils"
+	"github.com/mochahub/coinprice-scraper/app/utils"
 	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/stretchr/testify/assert"
 	"log"
@@ -62,7 +62,7 @@ func TestBinanceClient(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotEmpty(t, pairs)
 		//fmt.Print(utils.PrettyJSON(pairs))
-		assert.Equal(t, 9, len(pairs))
+		assert.Equal(t, 3, len(pairs))
 	}) && pass
 	assert.Equal(t, true, pass)
 }

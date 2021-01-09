@@ -1,7 +1,6 @@
 package coinbasepro
 
 import (
-	"fmt"
 	"github.com/mochahub/coinprice-scraper/app/coinpricescraper/service/api/common"
 	"github.com/mochahub/coinprice-scraper/app/utils"
 	"github.com/mochahub/coinprice-scraper/config"
@@ -38,7 +37,7 @@ func TestCoinbaseProClient(t *testing.T) {
 		exchangeInfo, err := exchangeClient.getProducts()
 		assert.NoError(t, err)
 		assert.NotNil(t, exchangeInfo)
-		fmt.Print(utils.PrettyJSON(exchangeInfo))
+		//fmt.Print(utils.PrettyJSON(exchangeInfo))
 	}) && pass
 	// Interface Methods
 	// TODO(Zahin): Do we even need this? exhange_clients_test will test it as well...
@@ -65,7 +64,7 @@ func TestCoinbaseProClient(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotEmpty(t, pairs)
 		//fmt.Print(utils.PrettyJSON(pairs))
-		assert.Equal(t, 7, len(pairs))
+		assert.Equal(t, 3, len(pairs))
 	}) && pass
 	assert.Equal(t, true, pass)
 }

@@ -12,8 +12,8 @@ import (
 func main() {
 	fxApp := fx.New(
 		fx.Provide(config.GetSecrets),
-		fx.Provide(psql.database.NewDatabase),
-		fx.Invoke(psql.database.RunMigrations),
+		fx.Provide(psql.NewDatabase),
+		fx.Invoke(psql.RunMigrations),
 	)
 	if err := fxApp.Start(context.Background()); err != nil {
 		log.Printf("ERROR STARTING APP FOR MIGRATIONS: %s", err)
