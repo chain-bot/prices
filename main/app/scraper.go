@@ -45,6 +45,8 @@ func StartScraper(
 	return nil
 }
 
+// TODO(Zahin): Abstract the use of sqlboiler & psql away
+// We should be able to switch from sqlboiler/psql without changing this file
 func ScrapeExchange(
 	ctx context.Context,
 	secrets *config.Secrets,
@@ -122,6 +124,8 @@ func upsertLastSyncWithTx(
 	return nil
 }
 
+// TODO(Zahin): Abstract methods directly calling influxDB
+// We should be able to switch from influxDB without changing this file
 func upsertOHLCData(
 	ohlcData []*common.OHLCMarketData,
 	influxDBClient influxdb2.Client,
