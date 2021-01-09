@@ -27,6 +27,7 @@ type SupportedAsset struct {
 }
 
 // TODO(Zahin): Make a script to scrape this info, and create a config file that can be dependency injected
+// TODO(Zahin): Have a migration to just insert this into a table
 func GetSupportedAssets() map[string]SupportedAsset {
 	return map[string]SupportedAsset{
 		"BTC": {

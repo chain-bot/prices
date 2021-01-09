@@ -14,7 +14,7 @@ Supported Exchanges:
 - [ ] Kraken
 
 ## Database Migrations and Models
-- App [models](./main/models/generated) are generated using the database schema
+- App [models](app/models/generated) are generated using the database schema
 - [sqlboiler](https://github.com/volatiletech/sqlboiler) introspects the database schema and creates the model files
 - Before generating the models, the database needs to be running, and the migrations need to be executed
 ```bash

@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/mochahub/coinprice-scraper/app/data/psql"
 	"github.com/mochahub/coinprice-scraper/config"
-	"github.com/mochahub/coinprice-scraper/main/src/service/database"
 	"go.uber.org/fx"
 	"log"
 )
@@ -12,8 +12,8 @@ import (
 func main() {
 	fxApp := fx.New(
 		fx.Provide(config.GetSecrets),
-		fx.Provide(database.NewDatabase),
-		fx.Invoke(database.RunMigrations),
+		fx.Provide(psql.database.NewDatabase),
+		fx.Invoke(psql.database.RunMigrations),
 	)
 	if err := fxApp.Start(context.Background()); err != nil {
 		log.Printf("ERROR STARTING APP FOR MIGRATIONS: %s", err)
