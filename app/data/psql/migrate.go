@@ -7,6 +7,7 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jmoiron/sqlx"
+	"github.com/mochahub/coinprice-scraper/app/utils"
 	"github.com/mochahub/coinprice-scraper/config"
 	"log"
 )
@@ -14,7 +15,7 @@ import (
 func RunMigrations(
 	db *sqlx.DB,
 	secrets *config.Secrets,
-) error {
+) (int, error) {
 	if err := db.Ping(); err != nil {
 		log.Fatalf("could not ping DB... %v", err)
 	}
@@ -22,18 +23,19 @@ func RunMigrations(
 	if err != nil {
 		log.Fatalf("could not start sql migration... %v", err)
 	}
-	sourceURL := fmt.Sprintf("file://%s", migrationDir)
+	sourceURL := fmt.Sprintf("file://%s", utils.GetMigrationsDir())
 	m, err := migrate.NewWithDatabaseInstance(
 		sourceURL, // file://path/to/directory
 		secrets.DatabaseCredentials.DBName, driver)
 	if err != nil {
 		log.Fatalf("migration failed... %v", err)
-		return err
+		return 0, err
 	}
 	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
 		log.Fatalf("An error occurred while syncing the database.. %v", err)
-		return err
+		return 0, err
 	}
 	log.Println("Database migrated")
-	return nil
+	verion, _, err := m.Version()
+	return int(verion), err
 }

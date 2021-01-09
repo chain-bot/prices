@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"regexp"
 
@@ -23,4 +24,11 @@ func LoadEnv() {
 
 		os.Exit(-1)
 	}
+}
+
+func GetMigrationsDir() string {
+	re := regexp.MustCompile(`^(.*` + PROJECT_DIR + `)`)
+	cwd, _ := os.Getwd()
+	rootPath := re.Find([]byte(cwd))
+	return fmt.Sprintf("%s/migrations", string(rootPath))
 }
