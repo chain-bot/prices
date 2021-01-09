@@ -10,8 +10,20 @@ Web-Scraper for crypto prices built in Go
 Supported Exchanges:
 - [x] Binance
 - [x] CoinbasePro
-- [ ] Binance.US
+- [ ] Huobi Global
 - [ ] Kraken
+- [ ] Bithumb
+- [ ] Bitfinex
+- [ ] Bitstamp
+- [ ] KuCoin
+- [ ] Coinone
+- [ ] FTX
+- [ ] bitFlyer
+- [ ] Binance.US
+- [ ] Poloniex
+- [ ] OKEx
+- [ ] Bittrex
+- [ ] Liquid
 
 ## Database Migrations and Models
 - App [models](./main/models/generated) are generated using the database schema
