@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mochahub/coinprice-scraper/app/coinpricescraper/service/api/common"
+	"github.com/mochahub/coinprice-scraper/config"
 	"golang.org/x/time/rate"
 	"io/ioutil"
 	"log"
@@ -19,7 +20,7 @@ import (
 	"github.com/hashicorp/go-retryablehttp"
 )
 
-type apiClient struct {
+type ApiClient struct {
 	*retryablehttp.Client
 	*rate.Limiter
 	apiKey        string
@@ -28,20 +29,20 @@ type apiClient struct {
 }
 
 func NewCoinbaseProAPIClient(
-	apiKey, apiSecret, apiPassPhrase string,
-) *apiClient {
+	secrets *config.Secrets,
+) *ApiClient {
 	// 3 callsPerSecond
 	rateLimiter := rate.NewLimiter(rate.Every(time.Second/3), 6)
 	httpClient := retryablehttp.NewClient()
 	httpClient.CheckRetry = common.DefaultCheckRetry
 	httpClient.RetryWaitMin = common.DefaultRetryMin
 	httpClient.RetryMax = common.MaxRetries
-	apiClient := apiClient{
+	apiClient := ApiClient{
 		Client:        httpClient,
 		Limiter:       rateLimiter,
-		apiKey:        apiKey,
-		apiSecret:     apiSecret,
-		apiPassPhrase: apiPassPhrase,
+		apiKey:        secrets.CoinbaseProApiKey,
+		apiSecret:     secrets.CoinbaseProApiSecret,
+		apiPassPhrase: secrets.CoinbaseProApiPassphrase,
 	}
 	apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) {
 		if err := apiClient.Limiter.Wait(context.Background()); err != nil {
@@ -52,12 +53,12 @@ func NewCoinbaseProAPIClient(
 	}
 	return &apiClient
 }
-func (apiClient *apiClient) GetExchangeIdentifier() string {
+func (apiClient *ApiClient) GetExchangeIdentifier() string {
 	return COINBASE
 }
 
 // Get CandleStick data from [startTime, endTime]
-func (apiClient *apiClient) getCandleStickData(
+func (apiClient *ApiClient) getCandleStickData(
 	granularity int,
 	startTime time.Time,
 	endTime time.Time,
@@ -82,7 +83,7 @@ func (apiClient *apiClient) getCandleStickData(
 	return candleStickResponse, nil
 }
 
-func (apiClient *apiClient) getProducts() (productsResponse ProductsResponse, err error) {
+func (apiClient *ApiClient) getProducts() (productsResponse ProductsResponse, err error) {
 	urlString := fmt.Sprintf("%s%s", baseURL, getExchangeProducts)
 	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
 	if err != nil {
@@ -97,7 +98,7 @@ func (apiClient *apiClient) getProducts() (productsResponse ProductsResponse, er
 	return productsResponse, nil
 }
 
-func (apiClient *apiClient) sendAPIKeyAuthenticatedGetRequest(
+func (apiClient *ApiClient) sendAPIKeyAuthenticatedGetRequest(
 	urlString string, headers ...header,
 ) (*http.Response, error) {
 	httpReq, err := http.NewRequest("GET", urlString, nil)
@@ -112,7 +113,7 @@ func (apiClient *apiClient) sendAPIKeyAuthenticatedGetRequest(
 	return apiClient.Do(retryableRequest)
 }
 
-func (apiClient *apiClient) writeRequestHeaders(
+func (apiClient *ApiClient) writeRequestHeaders(
 	req *http.Request, headers ...header,
 ) {
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)

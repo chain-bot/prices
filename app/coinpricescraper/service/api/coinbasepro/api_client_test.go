@@ -13,11 +13,8 @@ import (
 func TestCoinbaseProClient(t *testing.T) {
 	// TODO: Use DI instead of calling GetSecrets directly
 	utils.LoadEnv()
-	secret, _ := config.GetSecrets()
-	exchangeClient := NewCoinbaseProAPIClient(
-		secret.APIKeys.CoinbaseProApiKey,
-		secret.APIKeys.CoinbaseProApiSecret,
-		secret.APIKeys.CoinbaseProApiPassphrase)
+	secrets, _ := config.GetSecrets()
+	exchangeClient := NewCoinbaseProAPIClient(secrets)
 	pass := true
 	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
 		expectedLength := maxLimit * time.Minute

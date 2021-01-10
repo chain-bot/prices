@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/mochahub/coinprice-scraper/app/coinpricescraper/service/api/common"
 	"github.com/mochahub/coinprice-scraper/app/utils"
+	"github.com/mochahub/coinprice-scraper/config"
 	"golang.org/x/time/rate"
 	"io/ioutil"
 	"log"
@@ -17,25 +18,25 @@ import (
 	"github.com/hashicorp/go-retryablehttp"
 )
 
-type apiClient struct {
+type ApiClient struct {
 	*retryablehttp.Client
 	*rate.Limiter
 	apiKey string
 }
 
 func NewBinanceAPIClient(
-	apiKey string,
-) *apiClient {
+	secrets *config.Secrets,
+) *ApiClient {
 	// 1200 callsPerMinute:(60*1000)/1200
 	rateLimiter := rate.NewLimiter(rate.Every(time.Minute/1200), 1)
 	httpClient := retryablehttp.NewClient()
 	httpClient.CheckRetry = common.DefaultCheckRetry
 	httpClient.RetryWaitMin = common.DefaultRetryMin
 	httpClient.RetryMax = common.MaxRetries
-	apiClient := apiClient{
+	apiClient := ApiClient{
 		Client:  httpClient,
 		Limiter: rateLimiter,
-		apiKey:  apiKey,
+		apiKey:  secrets.BinanceApiKey,
 	}
 	apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) {
 		if err := apiClient.Limiter.Wait(context.Background()); err != nil {
@@ -46,12 +47,12 @@ func NewBinanceAPIClient(
 	return &apiClient
 }
 
-func (apiClient *apiClient) GetExchangeIdentifier() string {
+func (apiClient *ApiClient) GetExchangeIdentifier() string {
 	return BINANCE
 }
 
 // Get CandleStick data from [startTime, endTime]
-func (apiClient *apiClient) getCandleStickData(
+func (apiClient *ApiClient) getCandleStickData(
 	baseSymbol string,
 	quoteSymbol string,
 	interval common.Interval,
@@ -81,7 +82,7 @@ func (apiClient *apiClient) getCandleStickData(
 }
 
 // Get ExchangeInfo (supported pairs, percision, etc)
-func (apiClient *apiClient) getExchangeInfo() (exchangeInfoResponse *ExchangeInfoResponse, err error) {
+func (apiClient *ApiClient) getExchangeInfo() (exchangeInfoResponse *ExchangeInfoResponse, err error) {
 	urlString := fmt.Sprintf("%s%s", baseUrl, getExchangeInfo)
 	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
 	if err != nil {
@@ -95,7 +96,7 @@ func (apiClient *apiClient) getExchangeInfo() (exchangeInfoResponse *ExchangeInf
 	return exchangeInfoResponse, nil
 }
 
-func (apiClient *apiClient) sendAPIKeyAuthenticatedGetRequest(
+func (apiClient *ApiClient) sendAPIKeyAuthenticatedGetRequest(
 	urlString string,
 ) (*http.Response, error) {
 	httpReq, err := http.NewRequest("GET", urlString, nil)

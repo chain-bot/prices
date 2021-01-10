@@ -8,7 +8,7 @@ import (
 )
 
 // Get CandleStick data from [startTime, endTime] with pagination
-func (apiClient *apiClient) GetAllOHLCMarketData(
+func (apiClient *ApiClient) GetAllOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
 	interval common.Interval,
@@ -50,7 +50,7 @@ func (apiClient *apiClient) GetAllOHLCMarketData(
 	return result, nil
 }
 
-func (apiClient *apiClient) GetSupportedPairs() ([]*common.Symbol, error) {
+func (apiClient *ApiClient) GetSupportedPairs() ([]*common.Symbol, error) {
 	exchangeInfo, err := apiClient.getExchangeInfo()
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func (apiClient *apiClient) GetSupportedPairs() ([]*common.Symbol, error) {
 	return common.FilterSupportedAssets(result), nil
 }
 
-func (apiClient *apiClient) GetRawMarketData() ([]*common.RawMarketData, error) {
+func (apiClient *ApiClient) GetRawMarketData() ([]*common.RawMarketData, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
@@ -76,7 +76,7 @@ func (apiClient *apiClient) GetRawMarketData() ([]*common.RawMarketData, error) 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Get CandleStick data from [startTime, endTime]
-func (apiClient *apiClient) GetOHLCMarketData(
+func (apiClient *ApiClient) GetOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
 	interval common.Interval,
