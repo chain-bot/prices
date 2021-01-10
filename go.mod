@@ -3,6 +3,7 @@ module github.com/mochahub/coinprice-scraper
 go 1.15
 
 require (
+	github.com/docker/distribution v2.7.1+incompatible
 	github.com/friendsofgo/errors v0.9.2
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/hashicorp/go-retryablehttp v0.6.7
@@ -19,6 +20,6 @@ require (
 	github.com/volatiletech/strmangle v0.0.1
 	go.uber.org/fx v1.13.1
 	golang.org/x/mod v0.4.0 // indirect
-	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
+	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324
 	golang.org/x/tools v0.0.0-20210105210202-9ed45478a130 // indirect
 )
