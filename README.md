@@ -36,7 +36,6 @@ docker-compose up -d
 ```
 
 ## Tests
-- TODO: Integrate uber fx in tests
 - Run tests and update code coverage badge via script
 ```bash
 ./scripts/run-test-with-coverage.sh
