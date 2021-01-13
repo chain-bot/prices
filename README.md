@@ -40,3 +40,5 @@ docker-compose up -d
 ```bash
 ./scripts/run-test-with-coverage.sh
 ```
+## TODO
+- Add readme comments on how to setup .env file
