@@ -39,6 +39,7 @@ type Secrets struct {
 }
 
 func GetSecrets() (*Secrets, error) {
+	LoadEnv()
 	postgresPort, err := strconv.Atoi(os.Getenv("POSTGRESQL_PORT"))
 	if err != nil {
 		return nil, err

@@ -43,13 +43,5 @@ func GetSupportedAssets() map[string]SupportedAsset {
 			Categories: []Category{CATEGORY_STABLECOIN},
 			Blockchain: BLOCKCHAIN_ETH,
 		},
-		//"LTC": {
-		//	Symbol:     "LTC",
-		//	Categories: []Category{CATEGORY_PROOF_OF_WORK},
-		//},
-		//"XRP": {
-		//	Symbol:     "XRP",
-		//	Categories: []Category{CATEGORY_DEFI},
-		//},
 	}
 }
