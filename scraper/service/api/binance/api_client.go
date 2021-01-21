@@ -81,7 +81,7 @@ func (apiClient *ApiClient) getCandleStickData(
 	return candleStickResponse, nil
 }
 
-// Get ExchangeInfo (supported pairs, percision, etc)
+// Get ExchangeInfo (supported pairs, precision, etc)
 func (apiClient *ApiClient) getExchangeInfo() (exchangeInfoResponse *ExchangeInfoResponse, err error) {
 	urlString := fmt.Sprintf("%s%s", baseUrl, getExchangeInfo)
 	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
