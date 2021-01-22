@@ -7,6 +7,7 @@ import (
 	"github.com/mochahub/coinprice-scraper/data/influxdb"
 	"github.com/mochahub/coinprice-scraper/data/psql"
 	app "github.com/mochahub/coinprice-scraper/scraper/app"
+	"github.com/mochahub/coinprice-scraper/scraper/repository"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api"
 	"go.uber.org/fx"
 	"log"
@@ -19,6 +20,7 @@ func main() {
 		fx.Provide(config.GetSecrets),
 		fx.Provide(psql.NewDatabase),
 		fx.Provide(influxdb.NewInfluxDBClient),
+		fx.Provide(repository.NewRepository),
 		fx.Invoke(
 			psql.RunMigrations,
 			app.InitScrapper,

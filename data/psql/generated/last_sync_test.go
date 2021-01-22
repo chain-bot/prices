@@ -38,7 +38,7 @@ func testLastSyncsDelete(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -71,7 +71,7 @@ func testLastSyncsQueryDeleteAll(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -104,7 +104,7 @@ func testLastSyncsSliceDeleteAll(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -139,7 +139,7 @@ func testLastSyncsExists(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -151,7 +151,7 @@ func testLastSyncsExists(t *testing.T) {
 
 	e, err := LastSyncExists(ctx, tx, o.BaseAsset, o.QuoteAsset, o.Exchange)
 	if err != nil {
-		t.Errorf("Unable to check if LastSync exists: %s", err)
+		t.Errorf("Unable to check if LastSyncTime exists: %s", err)
 	}
 	if !e {
 		t.Errorf("Expected LastSyncExists to return true, but got false.")
@@ -165,7 +165,7 @@ func testLastSyncsFind(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -192,7 +192,7 @@ func testLastSyncsBind(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -214,7 +214,7 @@ func testLastSyncsOne(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -239,10 +239,10 @@ func testLastSyncsAll(t *testing.T) {
 	lastSyncOne := &LastSync{}
 	lastSyncTwo := &LastSync{}
 	if err = randomize.Struct(seed, lastSyncOne, lastSyncDBTypes, false, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 	if err = randomize.Struct(seed, lastSyncTwo, lastSyncDBTypes, false, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -273,10 +273,10 @@ func testLastSyncsCount(t *testing.T) {
 	lastSyncOne := &LastSync{}
 	lastSyncTwo := &LastSync{}
 	if err = randomize.Struct(seed, lastSyncOne, lastSyncDBTypes, false, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 	if err = randomize.Struct(seed, lastSyncTwo, lastSyncDBTypes, false, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -355,7 +355,7 @@ func testLastSyncsHooks(t *testing.T) {
 
 	seed := randomize.NewSeed()
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, false); err != nil {
-		t.Errorf("Unable to randomize LastSync object: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime object: %s", err)
 	}
 
 	AddLastSyncHook(boil.BeforeInsertHook, lastSyncBeforeInsertHook)
@@ -447,7 +447,7 @@ func testLastSyncsInsert(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -474,7 +474,7 @@ func testLastSyncsInsertWhitelist(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -501,7 +501,7 @@ func testLastSyncsReload(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -523,7 +523,7 @@ func testLastSyncsReloadAll(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -547,7 +547,7 @@ func testLastSyncsSelect(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -568,7 +568,7 @@ func testLastSyncsSelect(t *testing.T) {
 }
 
 var (
-	lastSyncDBTypes = map[string]string{`BaseAsset`: `text`, `QuoteAsset`: `text`, `Exchange`: `text`, `LastSync`: `timestamp with time zone`}
+	lastSyncDBTypes = map[string]string{`BaseAsset`: `text`, `QuoteAsset`: `text`, `Exchange`: `text`, `LastSyncTime`: `timestamp with time zone`}
 	_               = bytes.MinRead
 )
 
@@ -586,7 +586,7 @@ func testLastSyncsUpdate(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -606,7 +606,7 @@ func testLastSyncsUpdate(t *testing.T) {
 	}
 
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncPrimaryKeyColumns...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	if rowsAff, err := o.Update(ctx, tx, boil.Infer()); err != nil {
@@ -627,7 +627,7 @@ func testLastSyncsSliceUpdateAll(t *testing.T) {
 	var err error
 	o := &LastSync{}
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncColumnsWithDefault...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
@@ -647,7 +647,7 @@ func testLastSyncsSliceUpdateAll(t *testing.T) {
 	}
 
 	if err = randomize.Struct(seed, o, lastSyncDBTypes, true, lastSyncPrimaryKeyColumns...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	// Remove Primary keys and unique columns from what we plan to update
@@ -695,14 +695,14 @@ func testLastSyncsUpsert(t *testing.T) {
 	// Attempt the INSERT side of an UPSERT
 	o := LastSync{}
 	if err = randomize.Struct(seed, &o, lastSyncDBTypes, true); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	ctx := context.Background()
 	tx := MustTx(boil.BeginTx(ctx, nil))
 	defer func() { _ = tx.Rollback() }()
 	if err = o.Upsert(ctx, tx, false, nil, boil.Infer(), boil.Infer()); err != nil {
-		t.Errorf("Unable to upsert LastSync: %s", err)
+		t.Errorf("Unable to upsert LastSyncTime: %s", err)
 	}
 
 	count, err := LastSyncs().Count(ctx, tx)
@@ -715,11 +715,11 @@ func testLastSyncsUpsert(t *testing.T) {
 
 	// Attempt the UPDATE side of an UPSERT
 	if err = randomize.Struct(seed, &o, lastSyncDBTypes, false, lastSyncPrimaryKeyColumns...); err != nil {
-		t.Errorf("Unable to randomize LastSync struct: %s", err)
+		t.Errorf("Unable to randomize LastSyncTime struct: %s", err)
 	}
 
 	if err = o.Upsert(ctx, tx, true, nil, boil.Infer(), boil.Infer()); err != nil {
-		t.Errorf("Unable to upsert LastSync: %s", err)
+		t.Errorf("Unable to upsert LastSyncTime: %s", err)
 	}
 
 	count, err = LastSyncs().Count(ctx, tx)

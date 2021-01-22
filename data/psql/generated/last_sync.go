@@ -130,7 +130,7 @@ var (
 
 type (
 	// LastSyncSlice is an alias for a slice of pointers to LastSync.
-	// This should generally be used opposed to []LastSync.
+	// This should generally be used opposed to []LastSyncTime.
 	LastSyncSlice []*LastSync
 	// LastSyncHook is the signature for custom LastSync hook methods
 	LastSyncHook func(context.Context, boil.ContextExecutor, *LastSync) error
@@ -358,7 +358,7 @@ func (q lastSyncQuery) All(ctx context.Context, exec boil.ContextExecutor) (Last
 
 	err := q.Bind(ctx, exec, &o)
 	if err != nil {
-		return nil, errors.Wrap(err, "models: failed to assign all query results to LastSync slice")
+		return nil, errors.Wrap(err, "models: failed to assign all query results to LastSyncTime slice")
 	}
 
 	if len(lastSyncAfterSelectHooks) != 0 {
@@ -761,7 +761,7 @@ func (o *LastSync) Upsert(ctx context.Context, exec boil.ContextExecutor, update
 // Delete will match against the primary key column to find the record to delete.
 func (o *LastSync) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if o == nil {
-		return 0, errors.New("models: no LastSync provided for delete")
+		return 0, errors.New("models: no LastSyncTime provided for delete")
 	}
 
 	if err := o.doBeforeDeleteHooks(ctx, exec); err != nil {
