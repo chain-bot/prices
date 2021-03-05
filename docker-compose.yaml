@@ -1,17 +1,20 @@
 version: '3.7'
 services:
   influxdb:
-    # https://hub.docker.com/r/bitnami/influxdb/
-    image: quay.io/influxdb/influxdb:v2.0.3
+    # https://hub.docker.com/_/influxdb
+    image: influxdb
     environment:
-      INFLUXDB_ADMIN_USER: influx
-      INFLUXDB_ADMIN_USER_PASSWORD: influx
-      INFLUXDB_HTTP_READINESS_TIMEOUT: 30000
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: admin_password
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: admin_token
+      DOCKER_INFLUXDB_INIT_ORG: coinprice
+      DOCKER_INFLUXDB_INIT_BUCKET: candle
     ports:
       - 8086:8086
       - 8088:8088
     volumes:
-      - influxdb_data:/var/lib/influxdb
+      - ./.docker/influxdb_data:/var/lib/influxdb
   psql:
     image: postgres
     container_name: postgres
@@ -22,7 +25,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - psql_data:/var/lib/postgresql/data
+      - ./.docker/psql_data:/var/lib/postgresql/data
 volumes:
   influxdb_data:
     driver: local
