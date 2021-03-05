@@ -16,6 +16,10 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
+	supportedMap := getSupportedMap()
+	if _, ok := supportedMap[fmt.Sprintf("%s-%s", baseSymbol, quoteSymbol)]; !ok {
+		return []*models.OHLCMarketData{}, nil
+	}
 	// TODO: We should just change the interface signature to use duration instead of a custom type
 	var durationFromInterval time.Duration
 	switch interval {
