@@ -4,6 +4,7 @@ import (
 	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/binance"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/coinbasepro"
+	"github.com/mochahub/coinprice-scraper/scraper/service/api/kucoin"
 	"go.uber.org/fx"
 )
 
@@ -21,6 +22,7 @@ func GetAPIProviders() fx.Option {
 	return fx.Options(
 		fx.Provide(NewBinanaceAPIClient),
 		fx.Provide(NewCoinbaseProAPIClient),
+		fx.Provide(NewKucoinAPIClient),
 	)
 }
 
@@ -33,5 +35,11 @@ func NewBinanaceAPIClient(secrets *config.Secrets) ExchangeClientResult {
 func NewCoinbaseProAPIClient(secrets *config.Secrets) ExchangeClientResult {
 	return ExchangeClientResult{
 		Client: coinbasepro.NewCoinbaseProAPIClient(secrets),
+	}
+}
+
+func NewKucoinAPIClient(secrets *config.Secrets) ExchangeClientResult {
+	return ExchangeClientResult{
+		Client: kucoin.NewKucoinAPIClient(secrets),
 	}
 }
