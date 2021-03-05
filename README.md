@@ -6,8 +6,11 @@
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X71S1S7)
 
-Web-Scraper for crypto prices built in Go
+<p align="center">
+    <img width=100% src="images/coinprice-scraper-white.svg">
+</p>
 
+Web-Scraper for crypto prices built in Go.
 1 Minute candle-stick data is scraped and stored in influxdb.
 
 ## Getting Started
@@ -23,7 +26,7 @@ Web-Scraper for crypto prices built in Go
   ```
 - install project packages: `go get -u ./... -v`
 - run postgres & influxdb: `docker-compose up`
-- run the app : `go run scraper/main.go`
+- run the app : `go run scraper/main.go`  
 
 At this point you should see debug logs in the console of the scraper running, if this isn't the case please file an issue.
 
@@ -76,3 +79,8 @@ docker-compose up -d
 ```bash
 ./scripts/run-test-with-coverage.sh #run from root of the repo
 ```
+
+## Chronograph
+<p align="center">
+    <img width=100% src="images/chronograph.png">
+</p>
