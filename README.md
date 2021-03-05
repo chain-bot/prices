@@ -11,25 +11,30 @@ Web-Scraper for crypto prices built in Go
 1 Minute candle-stick data is scraped and stored in influxdb.
 
 ## Getting Started
-### Prerequisites 
-TODO
-### Environment Variables
-- Create and copy the env variables defined in `env_example.txt`
-```bash
-cp env_example.txt .env
-```
+### Requirements
+- golang: `go version go1.16beta1 linux/amd64` (other versions not tested)
+- docker & docker-compose
+### Setting up Local Environment
+- clone: `git@github.com:mochahub/coinprice-scraper.git`
+- Create `.env` file via tempalte `cp env_example.txt .env`
+  - Variables with a value of `<...>` need to be filled in by the user
+  ```bash
+    cat .env | grep '<...>' 
+  ```
+- install project packages: `go get -u ./... -v`
+- run postgres & influxdb: `docker-compose up`
+- run the app : `go run scraper/main.go`
 
-- Variables with a value of `<...>` need to be filled in by the user
-```bash
-cat .env | grep '<...>' 
-```
+At this point you should see debug logs in the console of the scraper running, if this isn't the case please file an issue.
+
 
 ## Repo Structure
 ```markdown
+├── scripts                     // Useful scripts (code coverage, database management, etc), all should run from root of repo
 ├── chronograph
 │   └── dashboard               // Files you can import into chronograph dashboards (localhost:8086)
 ├── config                      // Handles secrets resolution (secrets, passwords, etc)
-├── data                        // Go code to connect/query/save data to persistance services
+├── data                        // golang code to connect/query/save data to persistance services
 │   ├── influxdb
 │   └── psql
 ├── scraper                     // Entry point of the app lives in main.go
@@ -38,11 +43,10 @@ cat .env | grep '<...>'
 │   ├── service
 │   │   └── api                 // Implementation of scrapers for various exchanges 
 │   └── utils                   // Helpers
-└── scripts                     // useful scripts (code coverage, database management, etc), all should run from root of repo
 ```
 
 
-## Data: PSQL Database Migrations and Models
+## Data: Postgres Database Migrations and Models
 - Database [models](data/psql/generated) are generated using the database schema via [sqlboiler](https://github.com/volatiletech/sqlboiler)
 - sqlboiler introspects the database schema and creates the model files
 - Before generating the models, the database needs to be running, and the migrations need to be executed

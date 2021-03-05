@@ -1,24 +1,18 @@
-export BINANCE_API_KEY=<API KEY>
-
-export COINBASE_PRO_API_KEY=<...>
-export COINBASE_PRO_API_SECRET=<...>
-export COINBASE_PRO_API_KEY_PASSPHRASE=<...>
-
+# Postgres
 export POSTGRES_USERNAME=postgres
 export POSTGRES_PASSWORD=postgres
 export POSTGRES_DATABASE=coinprice
 export POSTGRESQL_HOST=localhost
 export POSTGRESQL_PORT=5432
 
-export INFLUXDB_ADMIN_USER=influx
-export INFLUXDB_ADMIN_USER_PASSWORD=influx
-export INFLUXDB_USER=user
-export INFLUXDB_USER_PASSWORD=12345678
-export INFLUXDB_ADMIN_USER_TOKEN=<...>
-export INFLUXDB_HOST=localhost
-export INFLUXDB_PORT=8086
+# InfluxDB
+export INFLUXDB_ADMIN_USER=admin
+export INFLUXDB_ADMIN_USER_PASSWORD=admin_password
+export INFLUXDB_ADMIN_USER_TOKEN=admin_token
 export INFLUXDB_ORG=coinprice
 export INFLUXDB_BUCKET_CANDLE=candle
+export INFLUXDB_HOST=localhost
+export INFLUXDB_PORT=8086
 
 # SQLBOILER
 export PSQL_DBNAME=coinprice
@@ -28,3 +22,9 @@ export PSQL_USER=postgres
 export PSQL_PASS=postgres
 export PSQL_SSLMODE=disable
 export OUTPUT=data/psql/generated/
+
+# Currently not used
+export BINANCE_API_KEY=<...>
+export COINBASE_PRO_API_KEY=<...>
+export COINBASE_PRO_API_SECRET=<...>
+export COINBASE_PRO_API_KEY_PASSPHRASE=<...>
