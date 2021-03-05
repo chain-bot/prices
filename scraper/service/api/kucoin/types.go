@@ -54,7 +54,7 @@ func (candleStickResponse *CandleStickData) UnmarshalJSON(
 		return err
 	}
 	// "10015.64027200"
-	candleStickResponse.Volume, err = strconv.ParseFloat(responseSlice[6].(string), 64)
+	candleStickResponse.Volume, err = strconv.ParseFloat(responseSlice[5].(string), 64)
 	if err != nil {
 		return err
 	}
