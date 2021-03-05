@@ -81,6 +81,7 @@ docker-compose up -d
 ```
 
 ## Chronograph
+There is an example dashboard under `chronograph/dashboard`
 <p align="center">
     <img width=100% src="images/chronograph.png">
 </p>
