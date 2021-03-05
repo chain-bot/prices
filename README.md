@@ -1,13 +1,17 @@
 # coinprice price scraper
-![gopherbadger-tag-do-not-edit](./coverage_badge.png)
-[![Go Report Card](https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper)](https://goreportcard.com/report/github.com/mochahub/coinprice-scraper)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/mochahub/coinprice-scraper.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mochahub/coinprice-scraper/alerts/)
-<!--[![Language grade: Go](https://img.shields.io/lgtm/grade/go/g/mochahub/coinprice-scraper.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mochahub/coinprice-scraper/context:go)-->
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X71S1S7)
-
 <p align="center">
-    <img width=50% src="images/coinprice-scraper-white.png">
+  <img src="./coverage_badge.png" alt="code coverage">
+  <a href="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper">
+    <img src="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper" alt="Go Report Card">
+  </a>
+  <a href="https://lgtm.com/projects/g/mochahub/coinprice-scraper/alerts/">
+    <img src="https://img.shields.io/lgtm/alerts/g/mochahub/coinprice-scraper.svg?logo=lgtm&logoWidth=18" alt="Looks Good to Me Alerts">
+  </a>
+  <img src="https://img.shields.io/github/license/mochahub/coinprice-scraper" alt="License">
+  <a href="https://ko-fi.com/X8X71S1S7">
+    <img src="https://img.shields.io/badge/donate-Ko--fi-pink" alt="Ko-Fi Donations">
+  </a>
+  <img width=100% src="images/coinprice-scraper-white.png">
 </p>
 
 Web-Scraper for crypto prices built in Go.
