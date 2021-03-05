@@ -7,7 +7,7 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X71S1S7)
 
 <p align="center">
-    <img width=100% src="images/coinprice-scraper-white.svg">
+    <img width=50% src="images/coinprice-scraper-white.png">
 </p>
 
 Web-Scraper for crypto prices built in Go.
