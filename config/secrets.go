@@ -13,6 +13,8 @@ type APIKeys struct {
 	CoinbaseProApiPassphrase string
 	KrakenApiKey             string
 	KucoinApiKey             string
+	KucoinApiSecret          string
+	KucoinApiPassphrase      string
 }
 type DatabaseCredentials struct {
 	User     string
@@ -54,6 +56,9 @@ func GetSecrets() (*Secrets, error) {
 			CoinbaseProApiKey:        os.Getenv("COINBASE_PRO_API_KEY"),
 			CoinbaseProApiSecret:     os.Getenv("COINBASE_PRO_API_SECRET"),
 			CoinbaseProApiPassphrase: os.Getenv("COINBASE_PRO_API_KEY_PASSPHRASE"),
+			KucoinApiKey:             os.Getenv("KUCOIN_API_KEY"),
+			KucoinApiSecret:          os.Getenv("KUCOIN_API_SECRET"),
+			KucoinApiPassphrase:      os.Getenv("KUCOIN_API_PASSPHRASE"),
 		},
 		DatabaseCredentials: DatabaseCredentials{
 			User:     os.Getenv("POSTGRES_USERNAME"),

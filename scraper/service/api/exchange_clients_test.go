@@ -32,8 +32,19 @@ func TestExchangeClients(t *testing.T) {
 		for i := range clients.Clients {
 			exchangeClient := clients.Clients[i]
 			pass := true
+			pass = t.Run("TestGetSupportedPairs", func(t *testing.T) {
+				symbols, err := exchangeClient.GetSupportedPairs()
+				assert.Nil(t, err)
+				assert.NotEmpty(t, symbols)
+			})
+			assert.Equal(t, true, pass)
+			pass = t.Run("TestGetExchangeIdentifier", func(t *testing.T) {
+				identifier := exchangeClient.GetExchangeIdentifier()
+				assert.NotEmpty(t, identifier)
+			})
+			assert.Equal(t, true, pass)
 			pass = t.Run("TestGetAllOHLCMarketData", func(t *testing.T) {
-				expectedLength := 1000 * time.Minute
+				expectedLength := 2000 * time.Minute
 				startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 				endTime := startTime.Add(expectedLength - time.Minute)
 				candleStickData, err := exchangeClient.GetAllOHLCMarketData(
@@ -46,16 +57,7 @@ func TestExchangeClients(t *testing.T) {
 				assert.NoError(t, err)
 				assert.NotEmpty(t, candleStickData)
 				assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData))
-			}) && pass
-			pass = t.Run("TestGetSupportedPairs", func(t *testing.T) {
-				symbols, err := exchangeClient.GetSupportedPairs()
-				assert.Nil(t, err)
-				assert.NotEmpty(t, symbols)
-			}) && pass
-			pass = t.Run("TestGetExchangeIdentifier", func(t *testing.T) {
-				identifier := exchangeClient.GetExchangeIdentifier()
-				assert.NotEmpty(t, identifier)
-			}) && pass
+			})
 			assert.Equal(t, true, pass)
 		}
 	})
