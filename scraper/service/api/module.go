@@ -4,6 +4,7 @@ import (
 	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/binance"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/coinbasepro"
+	"github.com/mochahub/coinprice-scraper/scraper/service/api/ftx"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/kucoin"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/okex"
 	"go.uber.org/fx"
@@ -25,6 +26,7 @@ func GetAPIProviders() fx.Option {
 		fx.Provide(NewCoinbaseProAPIClient),
 		fx.Provide(NewKucoinAPIClient),
 		fx.Provide(NewOkexAPIClient),
+		fx.Provide(NewFtxAPIClient),
 	)
 }
 
@@ -49,5 +51,11 @@ func NewKucoinAPIClient(secrets *config.Secrets) ExchangeClientResult {
 func NewOkexAPIClient() ExchangeClientResult {
 	return ExchangeClientResult{
 		Client: okex.NewOkexAPIClient(),
+	}
+}
+
+func NewFtxAPIClient() ExchangeClientResult {
+	return ExchangeClientResult{
+		Client: ftx.NewFtxAPIClient(),
 	}
 }

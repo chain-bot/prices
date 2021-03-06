@@ -44,7 +44,7 @@ func TestExchangeClients(t *testing.T) {
 			})
 			assert.Equal(t, true, pass)
 			pass = t.Run("TestGetAllOHLCMarketData", func(t *testing.T) {
-				expectedLength := 2000 * time.Minute
+				expectedLength := 12000 * time.Minute
 				startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 				endTime := startTime.Add(expectedLength - time.Minute)
 				candleStickData, err := exchangeClient.GetAllOHLCMarketData(

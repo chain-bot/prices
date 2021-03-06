@@ -9,6 +9,8 @@ type RawMarketData struct {
 	Volume    float64
 }
 
+// TODO: Add "product", which represents how the exchange recognizes the base-quote pair
+// Each exchange handles it slightly differently, we shouldn't try and reconstruct it using the base/quote string
 type Symbol struct {
 	RawBase         string
 	NormalizedBase  string
