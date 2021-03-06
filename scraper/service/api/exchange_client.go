@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/mochahub/coinprice-scraper/scraper/models"
-	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
 	"time"
 )
 
@@ -14,8 +13,7 @@ type ExchangeAPIClient interface {
 	GetAllOHLCMarketData(
 		baseSymbol string,
 		quoteSymbol string,
-		// TODO(Zahin): Makes more sense to make this a duration
-		interval common.Interval,
+		interval time.Duration,
 		startTime time.Time,
 		endTime time.Time,
 	) ([]*models.OHLCMarketData, error)

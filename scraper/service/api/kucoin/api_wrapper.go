@@ -4,46 +4,32 @@ import (
 	"fmt"
 	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
+	"github.com/mochahub/coinprice-scraper/scraper/utils"
 	"strings"
 	"time"
 )
 
-//Get CandleStick data from [startTime, endTime] with pagination
+//Get CandleStick data from [startTime, endTime) with pagination
 func (apiClient *ApiClient) GetAllOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
-	interval common.Interval,
+	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
-	// TODO: We should just change the interface signature to use duration instead of a custom type
-	var durationFromInterval time.Duration
-	switch interval {
-	case common.Day:
-		durationFromInterval = time.Hour * 24
-	case common.Hour:
-		durationFromInterval = time.Hour
-	case common.Minute:
-		durationFromInterval = time.Minute
-	default:
-		return nil, fmt.Errorf("unknown interval: %s", interval)
-	}
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
-	// Kucoin returns data as [start, end)
-	endTime = endTime.Add(durationFromInterval)
-
 	result := []*models.OHLCMarketData{}
 	for startTime.Before(endTime) {
-		newEndTime := startTime.Add(maxLimit * durationFromInterval)
+		newEndTime := startTime.Add(maxLimit * interval)
 		if newEndTime.After(endTime) {
 			newEndTime = endTime
 		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
 			baseSymbol,
 			quoteSymbol,
-			durationFromInterval,
+			interval,
 			startTime,
 			newEndTime)
 		if err != nil {
@@ -99,20 +85,22 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 	}
 	ohlcMarketData := []*models.OHLCMarketData{}
 	for i := range candleStickResponse.Data {
+		candle := candleStickResponse.Data[i]
 		ohlcMarketData = append(ohlcMarketData, &models.OHLCMarketData{
 			MarketData: models.MarketData{
 				Source:        KUCOIN,
 				BaseCurrency:  baseSymbol,
 				QuoteCurrency: quoteSymbol,
 			},
-			StartTime:  time.Unix(int64(candleStickResponse.Data[i].OpenTime), 0),
-			EndTime:    time.Unix(int64(candleStickResponse.Data[i].OpenTime+interval.Seconds()), 0),
-			OpenPrice:  candleStickResponse.Data[i].OpenPrice,
-			HighPrice:  candleStickResponse.Data[i].HighPrice,
-			LowPrice:   candleStickResponse.Data[i].LowPrice,
-			ClosePrice: candleStickResponse.Data[i].ClosePrice,
-			Volume:     candleStickResponse.Data[i].Volume,
+			StartTime:  time.Unix(int64(candle.OpenTime), 0),
+			EndTime:    time.Unix(int64(candle.OpenTime+interval.Seconds()), 0),
+			OpenPrice:  candle.OpenPrice,
+			HighPrice:  candle.HighPrice,
+			LowPrice:   candle.LowPrice,
+			ClosePrice: candle.ClosePrice,
+			Volume:     candle.Volume,
 		})
 	}
-	return ohlcMarketData, nil
+	// Return ascending time
+	return utils.Reverse(ohlcMarketData), nil
 }

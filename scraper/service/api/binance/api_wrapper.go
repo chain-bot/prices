@@ -12,27 +12,16 @@ import (
 func (apiClient *ApiClient) GetAllOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
-	interval common.Interval,
+	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
-	var durationFromInterval time.Duration
-	switch interval {
-	case common.Day:
-		durationFromInterval = time.Hour * 24
-	case common.Hour:
-		durationFromInterval = time.Hour
-	case common.Minute:
-		durationFromInterval = time.Minute
-	default:
-		return nil, fmt.Errorf("unknown interval: %s", interval)
-	}
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
 	result := []*models.OHLCMarketData{}
 	for startTime.Before(endTime) {
-		newEndTime := startTime.Add(maxLimit * durationFromInterval)
+		newEndTime := startTime.Add(maxLimit * interval)
 		if newEndTime.After(endTime) {
 			newEndTime = endTime
 		}
@@ -80,7 +69,7 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 func (apiClient *ApiClient) GetOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
-	interval common.Interval,
+	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
@@ -97,14 +86,17 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 	ohlcMarketData := []*models.OHLCMarketData{}
 
 	for i := range candleStickResponse {
+		candleStart := time.Unix(int64(candleStickResponse[i].OpenTime/1000), 0)
+		// We don't use the candle end time from binance because they return 59 seconds opposed to 0 seconds of next minute
+		candleEnd := candleStart.Add(interval)
 		ohlcMarketData = append(ohlcMarketData, &models.OHLCMarketData{
 			MarketData: models.MarketData{
 				Source:        BINANCE,
 				BaseCurrency:  baseSymbol,
 				QuoteCurrency: quoteSymbol,
 			},
-			StartTime:  time.Unix(int64(candleStickResponse[i].OpenTime/1000), 0),
-			EndTime:    time.Unix(int64(candleStickResponse[i].CloseTime/1000), 0),
+			StartTime:  candleStart,
+			EndTime:    candleEnd,
 			OpenPrice:  candleStickResponse[i].OpenPrice,
 			HighPrice:  candleStickResponse[i].HighPrice,
 			LowPrice:   candleStickResponse[i].LowPrice,

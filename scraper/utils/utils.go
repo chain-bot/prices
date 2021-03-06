@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"log"
 	"time"
 )
@@ -19,13 +20,14 @@ func UnixMillis(t time.Time) int64 {
 	return t.UnixNano() / int64(time.Millisecond)
 }
 
-func Reverse(s []interface{}) []interface{} {
-	a := make([]interface{}, len(s))
+func Reverse(s []*models.OHLCMarketData) []*models.OHLCMarketData {
+	a := make([]*models.OHLCMarketData, len(s))
 	copy(a, s)
 
 	for i := len(a)/2 - 1; i >= 0; i-- {
 		opp := len(a) - 1 - i
 		a[i], a[opp] = a[opp], a[i]
 	}
+
 	return a
 }

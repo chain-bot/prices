@@ -60,9 +60,6 @@ func (apiClient *ApiClient) getKlines(
 	startTime time.Time,
 	endTime time.Time,
 ) (candleStickResponse *CandleStickResponse, err error) {
-	if endTime.IsZero() {
-		endTime = time.Now()
-	}
 	params := url.Values{}
 	params.Add("symbol", symbol)
 	params.Add("startAt", strconv.FormatInt(startTime.Unix(), 10))
@@ -79,11 +76,6 @@ func (apiClient *ApiClient) getKlines(
 		return nil, err
 	}
 	return candleStickResponse, nil
-}
-
-// Get ExchangeInfo (supported pairs, precision, etc)
-func (apiClient *ApiClient) intervalQueryParamFromDuration(intervalDuration time.Duration) (interval string) {
-	return fmt.Sprintf("%dmin", int(intervalDuration.Minutes()))
 }
 
 // Get ExchangeInfo (supported pairs, precision, etc)
@@ -113,4 +105,8 @@ func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
 		return nil, err
 	}
 	return apiClient.Do(retryableRequest)
+}
+
+func (apiClient *ApiClient) intervalQueryParamFromDuration(intervalDuration time.Duration) (interval string) {
+	return fmt.Sprintf("%dmin", int(intervalDuration.Minutes()))
 }

@@ -55,7 +55,6 @@ func (apiClient *ApiClient) getHistoricalPrices(
 	}
 	uri := fmt.Sprintf(getHistoricalPrices, market, int(interval.Seconds()), limit, startTime.Unix(), endTime.Unix())
 	urlString := fmt.Sprintf("%s%s", baseUrl, uri)
-	println(urlString)
 	resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
 	if err != nil {
 		return nil, err

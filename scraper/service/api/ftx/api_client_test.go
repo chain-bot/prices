@@ -1,11 +1,7 @@
 package ftx
 
 import (
-	"fmt"
-	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
-	"github.com/mochahub/coinprice-scraper/scraper/utils"
 	"github.com/stretchr/testify/assert"
-	"log"
 	"testing"
 	"time"
 )
@@ -14,7 +10,7 @@ func TestFtxClient(t *testing.T) {
 	// TODO: Use DI instead of calling GetSecrets directly
 	exchangeClient := NewFtxAPIClient()
 	pass := true
-	// Get Candles from [start, end]
+	// Get Candles from [start, end)
 	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
 		expectedLength := 50 * time.Minute
 		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
@@ -29,11 +25,11 @@ func TestFtxClient(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotEmpty(t, candleStickResponse.Result)
 	}) && pass
-	pass = t.Run("TestGetSymbols", func(t *testing.T) {
-		exchangeInfo, err := exchangeClient.getMarkets()
+	pass = t.Run("TestGetMarkets", func(t *testing.T) {
+		markets, err := exchangeClient.getMarkets()
 		assert.NoError(t, err)
-		assert.NotNil(t, exchangeInfo)
-		fmt.Print(utils.PrettyJSON(exchangeInfo))
+		assert.NotNil(t, markets)
+		//fmt.Print(utils.PrettyJSON(markets))
 	}) && pass
 
 	// Interface Methods
@@ -41,31 +37,28 @@ func TestFtxClient(t *testing.T) {
 		pairs, err := exchangeClient.GetSupportedPairs()
 		assert.Nil(t, err)
 		assert.NotEmpty(t, pairs)
-		fmt.Print(utils.PrettyJSON(pairs))
+		//fmt.Print(utils.PrettyJSON(pairs))
 		assert.Equal(t, 3, len(pairs))
 	}) && pass
 
 	// Should get all prices from [start, end)
 	pass = t.Run("TestGetAllOHLCMarketData", func(t *testing.T) {
-		expectedLength := 20000 * time.Minute
+		expectedLength := 12000 * time.Minute
 		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 		endTime := startTime.Add(expectedLength)
 
 		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
 			"BTC",
 			"USDT",
-			common.Minute,
+			time.Minute,
 			startTime,
 			endTime,
 		)
 
-		log.Println(startTime.String())
-		log.Println(candleStickData[0].StartTime.String())
-		log.Println(endTime.String())
-		log.Println(candleStickData[len(candleStickData)-1].StartTime.String())
-
 		assert.NoError(t, err)
 		assert.NotEmpty(t, candleStickData)
+		assert.Equal(t, startTime.String(), candleStickData[0].StartTime.UTC().String())
+		assert.Equal(t, endTime.String(), candleStickData[len(candleStickData)-1].EndTime.UTC().String())
 		assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData))
 	}) && pass
 

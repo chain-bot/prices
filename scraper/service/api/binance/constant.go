@@ -1,7 +1,5 @@
 package binance
 
-type Interval string
-
 const (
 	BINANCE    = "BINANCE"
 	maxRetries = 3

@@ -12,39 +12,28 @@ import (
 func (apiClient *ApiClient) GetAllOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
-	interval common.Interval,
+	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
 	// TODO: We should just change the interface signature to use duration instead of a custom type
 	ftxBaseSymbol := GetFtxSymbolFromCoinprice(baseSymbol)
 	ftxQuoteSymbol := GetFtxSymbolFromCoinprice(quoteSymbol)
-	var durationFromInterval time.Duration
-	switch interval {
-	case common.Day:
-		durationFromInterval = time.Hour * 24
-	case common.Hour:
-		durationFromInterval = time.Hour
-	case common.Minute:
-		durationFromInterval = time.Minute
-	default:
-		return nil, fmt.Errorf("unknown interval: %s", interval)
-	}
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
 	result := []*models.OHLCMarketData{}
 	for startTime.Before(endTime) {
-		newEndTime := startTime.Add(maxLimit * durationFromInterval)
+		newEndTime := startTime.Add(maxLimit * interval)
 		if newEndTime.After(endTime) {
 			newEndTime = endTime
 		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
 			ftxBaseSymbol,
 			ftxQuoteSymbol,
-			durationFromInterval,
+			interval,
 			startTime,
-			newEndTime.Add(-durationFromInterval))
+			newEndTime.Add(-interval))
 		if err != nil {
 			return nil, err
 		}

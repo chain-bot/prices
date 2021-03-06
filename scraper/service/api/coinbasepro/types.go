@@ -13,7 +13,7 @@ type header struct {
 // https://docs.pro.coinbase.com/?python#get-historic-rates
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 type CandleStickData struct {
-	OpenTime   float64
+	CloseTime  float64
 	LowPrice   float64
 	HighPrice  float64
 	OpenPrice  float64
@@ -28,7 +28,7 @@ func (candleStickResponse *CandleStickData) UnmarshalJSON(
 	if err := json.Unmarshal(data, &responseSlice); err != nil {
 		return err
 	}
-	candleStickResponse.OpenTime = responseSlice[0].(float64)
+	candleStickResponse.CloseTime = responseSlice[0].(float64)
 	candleStickResponse.LowPrice = responseSlice[1].(float64)
 	candleStickResponse.HighPrice = responseSlice[2].(float64)
 	candleStickResponse.OpenPrice = responseSlice[3].(float64)

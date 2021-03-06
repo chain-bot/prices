@@ -4,7 +4,7 @@ type Interval string
 
 const (
 	OKEX     = "OKEX"
-	maxLimit = 300
+	maxLimit = 200
 	// calls per second
 	callsPerSecond = 10
 

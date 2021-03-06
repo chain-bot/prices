@@ -2,9 +2,7 @@ package coinbasepro
 
 import (
 	"github.com/mochahub/coinprice-scraper/config"
-	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
 	"github.com/stretchr/testify/assert"
-	"log"
 	"testing"
 	"time"
 )
@@ -36,25 +34,7 @@ func TestCoinbaseProClient(t *testing.T) {
 		//fmt.Print(utils.PrettyJSON(exchangeInfo))
 	}) && pass
 	// Interface Methods
-	// TODO(Zahin): Do we even need this? exhange_clients_test will test it as well...
-	pass = t.Run("TestGetAllOHLCMarketData", func(t *testing.T) {
-		expectedLength := 1000 * time.Minute
-		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
-		endTime := startTime.Add(expectedLength - time.Minute)
-		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
-			"BTC",
-			"USDT",
-			common.Minute,
-			startTime,
-			endTime,
-		)
-		log.Println(candleStickData[len(candleStickData)-1].StartTime.String())
-		log.Println(candleStickData[0].StartTime.String())
-		assert.NoError(t, err)
-		assert.NotEmpty(t, candleStickData)
-		assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData))
-	}) && pass
-	//
+
 	pass = t.Run("TestGetSupportedPairs", func(t *testing.T) {
 		pairs, err := exchangeClient.GetSupportedPairs()
 		assert.Nil(t, err)
@@ -62,5 +42,27 @@ func TestCoinbaseProClient(t *testing.T) {
 		//fmt.Print(utils.PrettyJSON(pairs))
 		assert.Equal(t, 3, len(pairs))
 	}) && pass
+
+	// Should get all prices from [start, end)
+	pass = t.Run("TestGetAllOHLCMarketData", func(t *testing.T) {
+		expectedLength := 12000 * time.Minute
+		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+		endTime := startTime.Add(expectedLength)
+
+		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
+			"BTC",
+			"USDT",
+			time.Minute,
+			startTime,
+			endTime,
+		)
+
+		assert.NoError(t, err)
+		assert.NotEmpty(t, candleStickData)
+		assert.Equal(t, startTime.String(), candleStickData[0].StartTime.UTC().String())
+		assert.Equal(t, endTime.String(), candleStickData[len(candleStickData)-1].EndTime.UTC().String())
+		assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData))
+	}) && pass
+
 	assert.Equal(t, true, pass)
 }

@@ -12,34 +12,23 @@ import (
 func (apiClient *ApiClient) GetAllOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
-	interval common.Interval,
+	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
-	var durationFromInterval time.Duration
-	switch interval {
-	case common.Day:
-		durationFromInterval = time.Hour * 24
-	case common.Hour:
-		durationFromInterval = time.Hour
-	case common.Minute:
-		durationFromInterval = time.Minute
-	default:
-		return nil, fmt.Errorf("unknown interval: %s", interval)
-	}
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
 	result := []*models.OHLCMarketData{}
 	for startTime.Before(endTime) {
-		newEndTime := startTime.Add(maxLimit * durationFromInterval)
+		newEndTime := startTime.Add(maxLimit * interval)
 		if newEndTime.After(endTime) {
 			newEndTime = endTime
 		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
 			baseSymbol,
 			quoteSymbol,
-			durationFromInterval,
+			interval,
 			startTime,
 			newEndTime)
 		if err != nil {
@@ -115,15 +104,15 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 		candle := candleStickData[i]
 		coinpriceBaseSynbol := GetCoinbaseProSymbolFromCoinprice(baseSymbol)
 		coinpriceQuoteSynbol := GetCoinbaseProSymbolFromCoinprice(quoteSymbol)
-		candleStart := time.Unix(int64(candle.OpenTime), 0)
+		candleEnd := time.Unix(int64(candle.CloseTime), 0)
 		result = append(result, &models.OHLCMarketData{
 			MarketData: models.MarketData{
 				Source:        apiClient.GetExchangeIdentifier(),
 				BaseCurrency:  coinpriceBaseSynbol,
 				QuoteCurrency: coinpriceQuoteSynbol,
 			},
-			StartTime:  candleStart,
-			EndTime:    candleStart.Add(durationInterval),
+			StartTime:  candleEnd.Add(-durationInterval),
+			EndTime:    candleEnd,
 			OpenPrice:  candle.OpenPrice,
 			HighPrice:  candle.ClosePrice,
 			LowPrice:   candle.LowPrice,

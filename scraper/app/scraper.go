@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"github.com/mochahub/coinprice-scraper/scraper/repository"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api"
-	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
 	"log"
 	"sync"
 	"time"
@@ -60,7 +59,7 @@ func ScrapeExchange(
 		if lastSync != nil && !lastSync.LastSyncTime.IsZero() {
 			startTime = lastSync.LastSyncTime
 		}
-		ohlcData, err := client.GetAllOHLCMarketData(pair.RawBase, pair.RawQuote, common.Minute, startTime, endTime)
+		ohlcData, err := client.GetAllOHLCMarketData(pair.RawBase, pair.RawQuote, time.Minute, startTime, endTime)
 		if err != nil {
 			return err
 		}

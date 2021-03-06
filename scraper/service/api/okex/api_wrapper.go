@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
+	"github.com/mochahub/coinprice-scraper/scraper/utils"
 	"strings"
 	"time"
 )
@@ -12,7 +13,7 @@ import (
 func (apiClient *ApiClient) GetAllOHLCMarketData(
 	baseSymbol string,
 	quoteSymbol string,
-	interval common.Interval,
+	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
@@ -20,34 +21,19 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 	if _, ok := supportedMap[fmt.Sprintf("%s-%s", baseSymbol, quoteSymbol)]; !ok {
 		return []*models.OHLCMarketData{}, nil
 	}
-	// TODO: We should just change the interface signature to use duration instead of a custom type
-	var durationFromInterval time.Duration
-	switch interval {
-	case common.Day:
-		durationFromInterval = time.Hour * 24
-	case common.Hour:
-		durationFromInterval = time.Hour
-	case common.Minute:
-		durationFromInterval = time.Minute
-	default:
-		return nil, fmt.Errorf("unknown interval: %s", interval)
-	}
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
-	// okex returns data as [start, end)
-	endTime = endTime.Add(durationFromInterval)
-
 	result := []*models.OHLCMarketData{}
 	for startTime.Before(endTime) {
-		newEndTime := startTime.Add(maxLimit * durationFromInterval)
+		newEndTime := startTime.Add(maxLimit * interval)
 		if newEndTime.After(endTime) {
 			newEndTime = endTime
 		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
 			baseSymbol,
 			quoteSymbol,
-			durationFromInterval,
+			interval,
 			startTime,
 			newEndTime)
 		if err != nil {
@@ -119,5 +105,6 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 			Volume:     candleStickResponse[i].Volume,
 		})
 	}
-	return ohlcMarketData, nil
+	// Return in ascending order
+	return utils.Reverse(ohlcMarketData), nil
 }

@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"github.com/mochahub/coinprice-scraper/config"
-	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/fx"
 	"testing"
@@ -43,20 +42,25 @@ func TestExchangeClients(t *testing.T) {
 				assert.NotEmpty(t, identifier)
 			})
 			assert.Equal(t, true, pass)
+			// Should get all prices from [start, end)
 			pass = t.Run("TestGetAllOHLCMarketData", func(t *testing.T) {
 				expectedLength := 12000 * time.Minute
 				startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
-				endTime := startTime.Add(expectedLength - time.Minute)
+				endTime := startTime.Add(expectedLength)
+
 				candleStickData, err := exchangeClient.GetAllOHLCMarketData(
 					"BTC",
 					"USDT",
-					common.Minute,
+					time.Minute,
 					startTime,
 					endTime,
 				)
+
 				assert.NoError(t, err)
 				assert.NotEmpty(t, candleStickData)
 				assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData))
+				assert.Equal(t, startTime.String(), candleStickData[0].StartTime.UTC().String())
+				assert.Equal(t, endTime.String(), candleStickData[len(candleStickData)-1].EndTime.UTC().String())
 			})
 			assert.Equal(t, true, pass)
 		}

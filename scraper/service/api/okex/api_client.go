@@ -50,18 +50,16 @@ func (apiClient *ApiClient) getInstrumentCandles(
 	endTime time.Time,
 	limit int64,
 ) (candleStickData []*CandleStickData, err error) {
-	if endTime.IsZero() {
-		endTime = time.Now()
-	}
 	uri := fmt.Sprintf(getCandles, symbol)
-	urlString := fmt.Sprintf("%s%s?start=%s&granularity=%d&limit=%d",
+	// For okex end < start...
+	urlString := fmt.Sprintf("%s%s?granularity=%d&limit=%d&start=%s&end=%s",
 		baseUrl,
 		uri,
-		startTime.UTC().Format(time.RFC3339),
 		int(interval.Seconds()),
 		limit,
+		endTime.Add(-interval).UTC().Format(time.RFC3339),
+		startTime.UTC().Format(time.RFC3339),
 	)
-	println(urlString)
 	resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
 	if err != nil {
 		return nil, err
