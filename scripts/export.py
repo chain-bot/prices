@@ -23,6 +23,7 @@ if __name__ == "__main__":
     query_api = client.query_api()
 
     end = int(time.time()) + 60  # Add extra minute to get last time
+    # end = 1456808400
     # Fri Jan 01 2016 05:00:00 GMT+0000
     start = 1451624400
     # Get 30 days at a time
@@ -30,26 +31,35 @@ if __name__ == "__main__":
     res = None
     while start < end:
         new_end = min(start + page_size, end)
-        print(f"Querying {bucket} from {start} to {new_end}")
+        start_string = datetime.utcfromtimestamp(start).strftime('%Y-%m-%d %H:%M:%S')
+        end_string = datetime.utcfromtimestamp(new_end).strftime('%Y-%m-%d %H:%M:%S')
+        print(f"Querying {bucket} from {start_string} to {end_string}")
 
         query = f'''
             from(bucket: "candle")
-          |> range(start: {start}, stop: {new_end})'''
+            |> range(start: {start}, stop: {new_end})
+            |> pivot(
+                    rowKey:["_time"],
+                    columnKey: ["_field"],
+                    valueColumn: "_value"
+            )'''
         df = query_api.query_data_frame(query, org=org)
         if df.shape[0] > 0:
             df.drop(columns=['result', 'table', '_start', '_stop'], inplace=True)
-            df.rename(columns={"_time": "time", "_field": "field", "_value": "value", "_measurement": "base"},
+            df.rename(columns={"_time": "time", "_value": "value", "_measurement": "base"},
                       inplace=True)
-        print(list(df.columns))
         if res is None and df.shape[0] > 0:
             res = df
         else:
             res = pd.concat([res, df])
+        print(f"got {df.shape[0]} rows")
+        print(f"total rows so far {res.shape[0]}")
         start = new_end
     print(f"rows: {res.shape[0]}")
     print(f"columns: {res.shape[1]}")
 
     compression_opts = dict(method='zip',
                             archive_name='out.csv')
-    res.to_csv('out.zip', index=False,
-               compression=compression_opts)
+    res.to_csv('../influx_export/out.zip', index=False,
+               compression=compression_opts,
+               chunksize=1000)

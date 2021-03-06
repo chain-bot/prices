@@ -48,7 +48,8 @@ func ScrapeExchange(
 		return err
 	}
 	// Default start time is 1 day prior for ease of local development
-	startTime := time.Now().AddDate(0, 0, -1)
+	//startTime := time.Now().AddDate(0, 0, -1)
+	startTime, _ := time.Parse(time.RFC3339, "2016-01-01T00:00:00+00:00")
 	endTime := time.Now()
 	for index := range pairs {
 		pair := pairs[index]
