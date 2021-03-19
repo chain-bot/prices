@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"github.com/mochahub/coinprice-scraper/config"
-	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/fx"
 	"testing"
@@ -48,17 +47,10 @@ func TestExchangeClients(t *testing.T) {
 				expectedLength := 12000 * time.Minute
 				startTime := time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)
 				endTime := startTime.Add(expectedLength)
-				// This is kind of messy...
 				pairs, _ := exchangeClient.GetSupportedPairs()
-				symbol := models.Symbol{}
-				for _, p := range pairs {
-					if p.NormalizedBase == "BTC" && (p.NormalizedQuote == "USDT" || p.NormalizedQuote == "USD") {
-						symbol = *p
-					}
-				}
-				assert.NotEqual(t, "", symbol.ProductID)
+				assert.NotEmpty(t, pairs)
 				candleStickData, err := exchangeClient.GetAllOHLCMarketData(
-					symbol,
+					*pairs[0],
 					time.Minute,
 					startTime,
 					endTime,
