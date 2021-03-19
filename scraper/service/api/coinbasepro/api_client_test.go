@@ -1,7 +1,6 @@
 package coinbasepro
 
 import (
-	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -9,10 +8,7 @@ import (
 )
 
 func TestCoinbaseProClient(t *testing.T) {
-	// TODO: Use DI instead of calling GetSecrets directly
-	config.LoadEnv()
-	secrets, _ := config.GetSecrets()
-	exchangeClient := NewCoinbaseProAPIClient(secrets)
+	exchangeClient := NewCoinbaseProAPIClient()
 	pass := true
 	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
 		expectedLength := maxLimit * time.Minute

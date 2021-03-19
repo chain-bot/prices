@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
 	"golang.org/x/time/rate"
 	"io/ioutil"
@@ -20,25 +19,17 @@ import (
 type ApiClient struct {
 	*retryablehttp.Client
 	*rate.Limiter
-	apiKey        string
-	apiSecret     string
-	apiPassphrase string
 }
 
-func NewKucoinAPIClient(
-	secrets *config.Secrets,
-) *ApiClient {
+func NewKucoinAPIClient() *ApiClient {
 	rateLimiter := rate.NewLimiter(rate.Every(time.Minute/callsPerMinute), 1)
 	httpClient := retryablehttp.NewClient()
 	httpClient.CheckRetry = common.DefaultCheckRetry
 	httpClient.RetryWaitMin = common.DefaultRetryMin
 	httpClient.RetryMax = common.MaxRetries
 	apiClient := ApiClient{
-		Client:        httpClient,
-		Limiter:       rateLimiter,
-		apiKey:        secrets.KucoinApiKey,
-		apiSecret:     secrets.KucoinApiSecret,
-		apiPassphrase: secrets.KucoinApiPassphrase,
+		Client:  httpClient,
+		Limiter: rateLimiter,
 	}
 	apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) {
 		if err := apiClient.Limiter.Wait(context.Background()); err != nil {

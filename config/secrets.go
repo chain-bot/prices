@@ -6,16 +6,6 @@ import (
 	"strconv"
 )
 
-type APIKeys struct {
-	BinanceApiKey            string
-	CoinbaseProApiKey        string
-	CoinbaseProApiSecret     string
-	CoinbaseProApiPassphrase string
-	KrakenApiKey             string
-	KucoinApiKey             string
-	KucoinApiSecret          string
-	KucoinApiPassphrase      string
-}
 type DatabaseCredentials struct {
 	User     string
 	Password string
@@ -35,7 +25,6 @@ type InfluxDbCredentials struct {
 }
 
 type Secrets struct {
-	APIKeys
 	DatabaseCredentials
 	InfluxDbCredentials
 }
@@ -51,15 +40,6 @@ func GetSecrets() (*Secrets, error) {
 		return nil, err
 	}
 	return &Secrets{
-		APIKeys: APIKeys{
-			BinanceApiKey:            os.Getenv("BINANCE_API_KEY"),
-			CoinbaseProApiKey:        os.Getenv("COINBASE_PRO_API_KEY"),
-			CoinbaseProApiSecret:     os.Getenv("COINBASE_PRO_API_SECRET"),
-			CoinbaseProApiPassphrase: os.Getenv("COINBASE_PRO_API_KEY_PASSPHRASE"),
-			KucoinApiKey:             os.Getenv("KUCOIN_API_KEY"),
-			KucoinApiSecret:          os.Getenv("KUCOIN_API_SECRET"),
-			KucoinApiPassphrase:      os.Getenv("KUCOIN_API_PASSPHRASE"),
-		},
 		DatabaseCredentials: DatabaseCredentials{
 			User:     os.Getenv("POSTGRES_USERNAME"),
 			Password: os.Getenv("POSTGRES_PASSWORD"),

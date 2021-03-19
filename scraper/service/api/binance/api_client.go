@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
 	"github.com/mochahub/coinprice-scraper/scraper/utils"
 	"golang.org/x/time/rate"
@@ -21,12 +20,9 @@ import (
 type ApiClient struct {
 	*retryablehttp.Client
 	*rate.Limiter
-	apiKey string
 }
 
-func NewBinanceAPIClient(
-	secrets *config.Secrets,
-) *ApiClient {
+func NewBinanceAPIClient() *ApiClient {
 	// 1200 callsPerMinute:(60*1000)/1200
 	rateLimiter := rate.NewLimiter(rate.Every(time.Minute/1200), 1)
 	httpClient := retryablehttp.NewClient()
@@ -36,7 +32,6 @@ func NewBinanceAPIClient(
 	apiClient := ApiClient{
 		Client:  httpClient,
 		Limiter: rateLimiter,
-		apiKey:  secrets.BinanceApiKey,
 	}
 	apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) {
 		if err := apiClient.Limiter.Wait(context.Background()); err != nil {
@@ -68,7 +63,7 @@ func (apiClient *ApiClient) getCandleStickData(
 	params.Add("endTime", strconv.FormatInt(utils.UnixMillis(endTime), 10))
 	params.Add("limit", strconv.Itoa(maxLimit))
 	urlString := fmt.Sprintf("%s%s?%s", baseUrl, getCandleStick, params.Encode())
-	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
+	resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +78,7 @@ func (apiClient *ApiClient) getCandleStickData(
 // Get ExchangeInfo (supported pairs, precision, etc)
 func (apiClient *ApiClient) getExchangeInfo() (exchangeInfoResponse *ExchangeInfoResponse, err error) {
 	urlString := fmt.Sprintf("%s%s", baseUrl, getExchangeInfo)
-	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
+	resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +100,7 @@ func (apiClient *ApiClient) getBinanceIntervalFromDuration(
 	return ret
 }
 
-func (apiClient *ApiClient) sendAPIKeyAuthenticatedGetRequest(
+func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
 	urlString string,
 ) (*http.Response, error) {
 	httpReq, err := http.NewRequest("GET", urlString, nil)
@@ -116,6 +111,5 @@ func (apiClient *ApiClient) sendAPIKeyAuthenticatedGetRequest(
 	if err != nil {
 		return nil, err
 	}
-	retryableRequest.Header.Add("X-MBX-APIKEY", apiClient.apiKey)
 	return apiClient.Do(retryableRequest)
 }

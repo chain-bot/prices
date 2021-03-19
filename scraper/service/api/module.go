@@ -1,7 +1,6 @@
 package api
 
 import (
-	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/binance"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/coinbasepro"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/ftx"
@@ -30,21 +29,21 @@ func GetAPIProviders() fx.Option {
 	)
 }
 
-func NewBinanaceAPIClient(secrets *config.Secrets) ExchangeClientResult {
+func NewBinanaceAPIClient() ExchangeClientResult {
 	return ExchangeClientResult{
-		Client: binance.NewBinanceAPIClient(secrets),
+		Client: binance.NewBinanceAPIClient(),
 	}
 }
 
-func NewCoinbaseProAPIClient(secrets *config.Secrets) ExchangeClientResult {
+func NewCoinbaseProAPIClient() ExchangeClientResult {
 	return ExchangeClientResult{
-		Client: coinbasepro.NewCoinbaseProAPIClient(secrets),
+		Client: coinbasepro.NewCoinbaseProAPIClient(),
 	}
 }
 
-func NewKucoinAPIClient(secrets *config.Secrets) ExchangeClientResult {
+func NewKucoinAPIClient() ExchangeClientResult {
 	return ExchangeClientResult{
-		Client: kucoin.NewKucoinAPIClient(secrets),
+		Client: kucoin.NewKucoinAPIClient(),
 	}
 }
 

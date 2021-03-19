@@ -1,7 +1,6 @@
 package kucoin
 
 import (
-	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -9,10 +8,7 @@ import (
 )
 
 func TestKucoinClient(t *testing.T) {
-	// TODO: Use DI instead of calling GetSecrets directly
-	config.LoadEnv()
-	secret, _ := config.GetSecrets()
-	exchangeClient := NewKucoinAPIClient(secret)
+	exchangeClient := NewKucoinAPIClient()
 	pass := true
 	// Get Candles from [start, end]
 	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {

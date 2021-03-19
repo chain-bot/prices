@@ -1,12 +1,11 @@
-# Postgres
-COINPRICE_ENV=de
+COINPRICE_ENV=dev
+
 POSTGRES_USERNAME=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DATABASE=coinprice
 POSTGRESQL_HOST=localhost
 POSTGRESQL_PORT=5432
 
-# InfluxDB
 INFLUXDB_ADMIN_USER=admin
 INFLUXDB_ADMIN_USER_PASSWORD=admin_password
 INFLUXDB_ADMIN_USER_TOKEN=admin_token
@@ -22,10 +21,4 @@ PSQL_PORT=5432
 PSQL_USER=postgres
 PSQL_PASS=postgres
 PSQL_SSLMODE=disable
-OUTPUT=data/psql/generated/
-
-# Currently not used
-BINANCE_API_KEY=<...>
-COINBASE_PRO_API_KEY=<...>
-COINBASE_PRO_API_SECRET=<...>
-COINBASE_PRO_API_KEY_PASSPHRASE=<...>
+OUTPUT=./data/psql/generated/

@@ -7,7 +7,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/config"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
 	"golang.org/x/time/rate"
 	"io/ioutil"
@@ -23,14 +22,9 @@ import (
 type ApiClient struct {
 	*retryablehttp.Client
 	*rate.Limiter
-	apiKey        string
-	apiSecret     string
-	apiPassPhrase string
 }
 
-func NewCoinbaseProAPIClient(
-	secrets *config.Secrets,
-) *ApiClient {
+func NewCoinbaseProAPIClient() *ApiClient {
 	// 3 callsPerSecond
 	rateLimiter := rate.NewLimiter(rate.Every(time.Second/3), 6)
 	httpClient := retryablehttp.NewClient()
@@ -38,18 +32,14 @@ func NewCoinbaseProAPIClient(
 	httpClient.RetryWaitMin = common.DefaultRetryMin
 	httpClient.RetryMax = common.MaxRetries
 	apiClient := ApiClient{
-		Client:        httpClient,
-		Limiter:       rateLimiter,
-		apiKey:        secrets.CoinbaseProApiKey,
-		apiSecret:     secrets.CoinbaseProApiSecret,
-		apiPassPhrase: secrets.CoinbaseProApiPassphrase,
+		Client:  httpClient,
+		Limiter: rateLimiter,
 	}
 	apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) {
 		if err := apiClient.Limiter.Wait(context.Background()); err != nil {
 			log.Printf("ERROR WAITING FOR LIMIT: %s\n", err.Error())
 			return
 		}
-		apiClient.writeRequestHeaders(req)
 	}
 	return &apiClient
 }
@@ -105,33 +95,11 @@ func (apiClient *ApiClient) sendAPIKeyAuthenticatedGetRequest(
 	if err != nil {
 		return nil, err
 	}
-	apiClient.writeRequestHeaders(httpReq, headers...)
 	retryableRequest, err := retryablehttp.FromRequest(httpReq)
 	if err != nil {
 		return nil, err
 	}
 	return apiClient.Do(retryableRequest)
-}
-
-func (apiClient *ApiClient) writeRequestHeaders(
-	req *http.Request, headers ...header,
-) {
-	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	message := timestamp + req.Method + req.URL.Path
-	sig, err := generateSig(message, apiClient.apiSecret)
-	if err != nil {
-		log.Printf("FAILED TO CREATE %s SIGNATURE: %s\n", apiClient.GetExchangeIdentifier(), err.Error())
-		return
-	}
-	for i := range headers {
-		req.Header.Set(headers[i].key, headers[i].value)
-	}
-	req.Header.Set("CB-ACCESS-KEY", apiClient.apiKey)
-	req.Header.Set("CB-ACCESS-PASSPHRASE", apiClient.apiPassPhrase)
-	req.Header.Set("CB-ACCESS-TIMESTAMP", timestamp)
-	req.Header.Set("CB-ACCESS-SIGN", sig)
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/json")
 }
 
 // Credit to https://github.com/preichenberger/go-coinbasepro
