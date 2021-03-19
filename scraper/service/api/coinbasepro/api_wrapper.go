@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
+	"github.com/mochahub/coinprice-scraper/scraper/utils"
 	"strings"
 	"time"
 )
 
 // Get CandleStick data from [startTime, endTime) with pagination
 func (apiClient *ApiClient) GetAllOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
@@ -26,29 +26,17 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 			newEndTime = endTime
 		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
-			baseSymbol,
-			quoteSymbol,
+			symbol,
 			interval,
 			startTime,
 			newEndTime)
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, reverse(ohlcMarketData)...)
+		result = append(result, ohlcMarketData...)
 		startTime = newEndTime
 	}
 	return result, nil
-}
-func reverse(s []*models.OHLCMarketData) []*models.OHLCMarketData {
-	a := make([]*models.OHLCMarketData, len(s))
-	copy(a, s)
-
-	for i := len(a)/2 - 1; i >= 0; i-- {
-		opp := len(a) - 1 - i
-		a[i], a[opp] = a[opp], a[i]
-	}
-
-	return a
 }
 
 func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
@@ -69,6 +57,7 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 			NormalizedBase:  strings.ToUpper(normalizedBase),
 			RawQuote:        quote,
 			NormalizedQuote: strings.ToUpper(normalizedQuote),
+			ProductID:       product.ID,
 		}
 
 		result = append(result, newPair)
@@ -86,30 +75,25 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 
 // Get CandleStick data from [startTime, endTime]
 func (apiClient *ApiClient) GetOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	durationInterval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
-	coinbaseBaseSymbol := GetCoinbaseProSymbolFromCoinprice(baseSymbol)
-	coinbaseQuoteSymbol := GetCoinbaseProSymbolFromCoinprice(quoteSymbol)
 	candleStickData, err := apiClient.getCandleStickData(
-		int(durationInterval.Seconds()), startTime, endTime, fmt.Sprintf("%s-%s", coinbaseBaseSymbol, coinbaseQuoteSymbol))
+		int(durationInterval.Seconds()), startTime, endTime, symbol.ProductID)
 	if err != nil {
 		return nil, err
 	}
 	result := []*models.OHLCMarketData{}
 	for i := range candleStickData {
 		candle := candleStickData[i]
-		coinpriceBaseSynbol := GetCoinbaseProSymbolFromCoinprice(baseSymbol)
-		coinpriceQuoteSynbol := GetCoinbaseProSymbolFromCoinprice(quoteSymbol)
 		candleEnd := time.Unix(int64(candle.CloseTime), 0)
 		result = append(result, &models.OHLCMarketData{
 			MarketData: models.MarketData{
 				Source:        apiClient.GetExchangeIdentifier(),
-				BaseCurrency:  coinpriceBaseSynbol,
-				QuoteCurrency: coinpriceQuoteSynbol,
+				BaseCurrency:  symbol.NormalizedBase,
+				QuoteCurrency: symbol.NormalizedQuote,
 			},
 			StartTime:  candleEnd.Add(-durationInterval),
 			EndTime:    candleEnd,
@@ -120,5 +104,5 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 			Volume:     candle.Volume,
 		})
 	}
-	return result, nil
+	return utils.Reverse(result), nil
 }

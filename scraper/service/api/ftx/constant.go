@@ -17,7 +17,3 @@ const (
 var ftxToCoinprice = map[string]string{
 	"USD": "USDT",
 }
-
-var coinpriceToftx = map[string]string{
-	"USDT": "USD",
-}

@@ -17,6 +17,13 @@
 Web-Scraper for crypto prices built in Go.
 1 Minute candle-stick data is scraped and stored in influxdb.
 
+Supported Exchanges:
+- Binance
+- CoinbasePro
+- KuCoin
+- FTX
+- OKEX
+
 ## Getting Started
 ### Requirements
 - golang: `go version go1.16beta1 linux/amd64` (other versions not tested)
