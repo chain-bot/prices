@@ -10,15 +10,11 @@ import (
 
 //Get CandleStick data from [startTime, endTime) with pagination
 func (apiClient *ApiClient) GetAllOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
-	// TODO: We should just change the interface signature to use duration instead of a custom type
-	ftxBaseSymbol := GetFtxSymbolFromCoinprice(baseSymbol)
-	ftxQuoteSymbol := GetFtxSymbolFromCoinprice(quoteSymbol)
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
@@ -29,8 +25,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 			newEndTime = endTime
 		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
-			ftxBaseSymbol,
-			ftxQuoteSymbol,
+			symbol,
 			interval,
 			startTime,
 			newEndTime.Add(-interval))
@@ -56,7 +51,7 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 		}
 		// Hack, assumed that USDT is the same as USD
 		// TODO: We should revisit this assumption (same assumption with coinbasepro)
-		if symbol.BaseCurrency == "USD" || symbol.QuoteCurrency == "USD" {
+		if symbol.BaseCurrency == "USDT" || symbol.QuoteCurrency == "USDT" {
 			continue
 		}
 		quote := symbol.QuoteCurrency
@@ -68,6 +63,7 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 			NormalizedBase:  strings.ToUpper(normalizedBase),
 			RawQuote:        quote,
 			NormalizedQuote: strings.ToUpper(normalizedQuote),
+			ProductID:       symbol.Name,
 		})
 	}
 	return common.FilterSupportedAssets(result), nil
@@ -83,14 +79,13 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 
 //Get CandleStick data from [startTime, endTime)
 func (apiClient *ApiClient) GetOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
 	historicalPriceResponse, err := apiClient.getHistoricalPrices(
-		fmt.Sprintf("%s/%s", baseSymbol, quoteSymbol),
+		symbol.ProductID,
 		interval,
 		startTime,
 		endTime,
@@ -105,8 +100,8 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 		ohlcMarketData = append(ohlcMarketData, &models.OHLCMarketData{
 			MarketData: models.MarketData{
 				Source:        FTX,
-				BaseCurrency:  baseSymbol,
-				QuoteCurrency: quoteSymbol,
+				BaseCurrency:  symbol.NormalizedBase,
+				QuoteCurrency: symbol.NormalizedQuote,
 			},
 			StartTime:  candle.StartTime,
 			EndTime:    candle.StartTime.Add(interval),

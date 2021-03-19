@@ -11,8 +11,7 @@ import (
 
 //Get CandleStick data from [startTime, endTime) with pagination
 func (apiClient *ApiClient) GetAllOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
@@ -27,8 +26,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 			newEndTime = endTime
 		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
-			baseSymbol,
-			quoteSymbol,
+			symbol,
 			interval,
 			startTime,
 			newEndTime)
@@ -53,6 +51,7 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 			NormalizedBase:  strings.ToUpper(symbol.BaseCurrency),
 			RawQuote:        symbol.QuoteCurrency,
 			NormalizedQuote: strings.ToUpper(symbol.QuoteCurrency),
+			ProductID:       symbol.Symbol,
 		})
 	}
 	return common.FilterSupportedAssets(result), nil
@@ -68,14 +67,13 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 
 //Get CandleStick data from [startTime, endTime]
 func (apiClient *ApiClient) GetOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
 	candleStickResponse, err := apiClient.getKlines(
-		fmt.Sprintf("%s-%s", baseSymbol, quoteSymbol),
+		symbol.ProductID,
 		interval,
 		startTime,
 		endTime,
@@ -89,8 +87,8 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 		ohlcMarketData = append(ohlcMarketData, &models.OHLCMarketData{
 			MarketData: models.MarketData{
 				Source:        KUCOIN,
-				BaseCurrency:  baseSymbol,
-				QuoteCurrency: quoteSymbol,
+				BaseCurrency:  symbol.NormalizedBase,
+				QuoteCurrency: symbol.NormalizedQuote,
 			},
 			StartTime:  time.Unix(int64(candle.OpenTime), 0),
 			EndTime:    time.Unix(int64(candle.OpenTime+interval.Seconds()), 0),

@@ -11,8 +11,7 @@ type ExchangeAPIClient interface {
 	GetSupportedPairs() ([]*models.Symbol, error)
 	GetRawMarketData() ([]*models.RawMarketData, error)
 	GetAllOHLCMarketData(
-		baseSymbol string,
-		quoteSymbol string,
+		symbol models.Symbol,
 		interval time.Duration,
 		startTime time.Time,
 		endTime time.Time,
