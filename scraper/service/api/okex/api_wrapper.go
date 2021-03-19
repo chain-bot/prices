@@ -11,14 +11,12 @@ import (
 
 //Get CandleStick data from [startTime, endTime] with pagination
 func (apiClient *ApiClient) GetAllOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
-	supportedMap := getSupportedMap()
-	if _, ok := supportedMap[fmt.Sprintf("%s-%s", baseSymbol, quoteSymbol)]; !ok {
+	if _, ok := supportedMap[symbol.ProductID]; !ok {
 		return []*models.OHLCMarketData{}, nil
 	}
 	if endTime.IsZero() {
@@ -31,8 +29,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 			newEndTime = endTime
 		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
-			baseSymbol,
-			quoteSymbol,
+			symbol,
 			interval,
 			startTime,
 			newEndTime)
@@ -57,6 +54,7 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 			NormalizedBase:  strings.ToUpper(symbol.BaseCurrency),
 			RawQuote:        symbol.QuoteCurrency,
 			NormalizedQuote: strings.ToUpper(symbol.QuoteCurrency),
+			ProductID:       symbol.InstrumentID,
 		})
 	}
 	return common.FilterSupportedAssets(result), nil
@@ -72,14 +70,13 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 
 //Get CandleStick data from [startTime, endTime]
 func (apiClient *ApiClient) GetOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
 	candleStickResponse, err := apiClient.getInstrumentCandles(
-		fmt.Sprintf("%s-%s", baseSymbol, quoteSymbol),
+		symbol.ProductID,
 		interval,
 		startTime,
 		endTime,
@@ -93,8 +90,8 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 		ohlcMarketData = append(ohlcMarketData, &models.OHLCMarketData{
 			MarketData: models.MarketData{
 				Source:        OKEX,
-				BaseCurrency:  baseSymbol,
-				QuoteCurrency: quoteSymbol,
+				BaseCurrency:  symbol.NormalizedBase,
+				QuoteCurrency: symbol.NormalizedQuote,
 			},
 			StartTime:  time.Unix(int64(candleStickResponse[i].OpenTime), 0),
 			EndTime:    time.Unix(int64(candleStickResponse[i].OpenTime+interval.Seconds()), 0),

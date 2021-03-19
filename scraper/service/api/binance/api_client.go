@@ -53,8 +53,7 @@ func (apiClient *ApiClient) GetExchangeIdentifier() string {
 
 // Get CandleStick data from [startTime, endTime]
 func (apiClient *ApiClient) getCandleStickData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol string,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
@@ -63,7 +62,7 @@ func (apiClient *ApiClient) getCandleStickData(
 		endTime = time.Now()
 	}
 	params := url.Values{}
-	params.Add("symbol", baseSymbol+quoteSymbol)
+	params.Add("symbol", symbol)
 	params.Add("interval", string(apiClient.getBinanceIntervalFromDuration(interval)))
 	params.Add("startTime", strconv.FormatInt(utils.UnixMillis(startTime), 10))
 	params.Add("endTime", strconv.FormatInt(utils.UnixMillis(endTime), 10))

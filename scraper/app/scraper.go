@@ -26,12 +26,15 @@ func StartScraper(
 		go func(wg *sync.WaitGroup) {
 			// Decrement the counter when the goroutine completes.
 			defer wg.Done()
-			err := ScrapeExchange(ctx, repo, client)
+			// Default start time is 1 day prior for ease of local development
+			//startTime := time.Now().AddDate(0, 0, -1)
+			startTime, _ := time.Parse(time.RFC3339, "2021-01-01T00:00:00+00:00")
+			endTime := time.Now()
+			err := ScrapeExchange(ctx, repo, client, startTime, endTime)
 			if err != nil {
 				log.Printf("ERROR SCRAPING %s\n", client.GetExchangeIdentifier())
 			}
 		}(&waitGroup)
-		//go ScrapeExchange(ctx, secrets, db, influxDBClient, clients[i])
 	}
 	waitGroup.Wait()
 	return nil
@@ -41,15 +44,13 @@ func ScrapeExchange(
 	ctx context.Context,
 	repo repository.Repository,
 	client api.ExchangeAPIClient,
+	startTime time.Time,
+	endTime time.Time,
 ) error {
 	pairs, err := client.GetSupportedPairs()
 	if err != nil {
 		return err
 	}
-	// Default start time is 1 day prior for ease of local development
-	//startTime := time.Now().AddDate(0, 0, -1)
-	startTime, _ := time.Parse(time.RFC3339, "2016-01-01T00:00:00+00:00")
-	endTime := time.Now()
 	for index := range pairs {
 		pair := pairs[index]
 		lastSync, err := repo.GetLastSync(ctx, client.GetExchangeIdentifier(), pair)
@@ -59,7 +60,7 @@ func ScrapeExchange(
 		if lastSync != nil && !lastSync.LastSyncTime.IsZero() {
 			startTime = lastSync.LastSyncTime
 		}
-		ohlcData, err := client.GetAllOHLCMarketData(pair.RawBase, pair.RawQuote, time.Minute, startTime, endTime)
+		ohlcData, err := client.GetAllOHLCMarketData(*pair, time.Minute, startTime, endTime)
 		if err != nil {
 			return err
 		}

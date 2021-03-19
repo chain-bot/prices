@@ -1,6 +1,9 @@
 package ftx
 
 import (
+	"fmt"
+	"github.com/mochahub/coinprice-scraper/scraper/models"
+	"github.com/mochahub/coinprice-scraper/scraper/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -29,7 +32,7 @@ func TestFtxClient(t *testing.T) {
 		markets, err := exchangeClient.getMarkets()
 		assert.NoError(t, err)
 		assert.NotNil(t, markets)
-		//fmt.Print(utils.PrettyJSON(markets))
+		fmt.Print(utils.PrettyJSON(markets))
 	}) && pass
 
 	// Interface Methods
@@ -37,8 +40,36 @@ func TestFtxClient(t *testing.T) {
 		pairs, err := exchangeClient.GetSupportedPairs()
 		assert.Nil(t, err)
 		assert.NotEmpty(t, pairs)
-		//fmt.Print(utils.PrettyJSON(pairs))
+		// TODO: This test is not scale-able unless we use DI to inject what pairs are supported
+		expectedPairs := map[string]models.Symbol{
+			"BTC/USD": {
+				RawBase:         "BTC",
+				RawQuote:        "USD",
+				NormalizedBase:  "BTC",
+				NormalizedQuote: "USDT",
+				ProductID:       "BTC/USD",
+			},
+			"ETH/USD": {
+				RawBase:         "ETH",
+				RawQuote:        "USD",
+				NormalizedBase:  "ETH",
+				NormalizedQuote: "USDT",
+				ProductID:       "ETH/USD",
+			},
+			"ETH/BTC": {
+				RawBase:         "ETH",
+				RawQuote:        "BTC",
+				NormalizedBase:  "ETH",
+				NormalizedQuote: "BTC",
+				ProductID:       "ETH/BTC",
+			},
+		}
 		assert.Equal(t, 3, len(pairs))
+		for _, pair := range pairs {
+			expectedSymbol, ok := expectedPairs[pair.ProductID]
+			assert.Equal(t, true, ok)
+			assert.Equal(t, expectedSymbol, *pair)
+		}
 	}) && pass
 
 	// Should get all prices from [start, end)
@@ -48,8 +79,13 @@ func TestFtxClient(t *testing.T) {
 		endTime := startTime.Add(expectedLength)
 
 		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
-			"BTC",
-			"USDT",
+			models.Symbol{
+				RawBase:         "BTC",
+				NormalizedBase:  "BTC",
+				RawQuote:        "USD",
+				NormalizedQuote: "USDT",
+				ProductID:       "BTC/USD",
+			},
 			time.Minute,
 			startTime,
 			endTime,

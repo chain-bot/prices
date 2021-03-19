@@ -2,6 +2,7 @@ package kucoin
 
 import (
 	"github.com/mochahub/coinprice-scraper/config"
+	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -38,8 +39,36 @@ func TestKucoinClient(t *testing.T) {
 		pairs, err := exchangeClient.GetSupportedPairs()
 		assert.Nil(t, err)
 		assert.NotEmpty(t, pairs)
-		//fmt.Print(utils.PrettyJSON(pairs))
+		// TODO: This test is not scale-able unless we use DI to inject what pairs are supported
+		expectedPairs := map[string]models.Symbol{
+			"BTC-USDT": {
+				RawBase:         "BTC",
+				RawQuote:        "USDT",
+				NormalizedBase:  "BTC",
+				NormalizedQuote: "USDT",
+				ProductID:       "BTC-USDT",
+			},
+			"ETH-USDT": {
+				RawBase:         "ETH",
+				RawQuote:        "USDT",
+				NormalizedBase:  "ETH",
+				NormalizedQuote: "USDT",
+				ProductID:       "ETH-USDT",
+			},
+			"ETH-BTC": {
+				RawBase:         "ETH",
+				RawQuote:        "BTC",
+				NormalizedBase:  "ETH",
+				NormalizedQuote: "BTC",
+				ProductID:       "ETH-BTC",
+			},
+		}
 		assert.Equal(t, 3, len(pairs))
+		for _, pair := range pairs {
+			expectedSymbol, ok := expectedPairs[pair.ProductID]
+			assert.Equal(t, true, ok)
+			assert.Equal(t, expectedSymbol, *pair)
+		}
 	}) && pass
 
 	// Should get all prices from [start, end)
@@ -49,16 +78,17 @@ func TestKucoinClient(t *testing.T) {
 		endTime := startTime.Add(expectedLength)
 
 		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
-			"BTC",
-			"USDT",
+			models.Symbol{
+				RawBase:         "BTC",
+				NormalizedBase:  "BTC",
+				RawQuote:        "USDT",
+				NormalizedQuote: "USDT",
+				ProductID:       "BTC-USDT",
+			},
 			time.Minute,
 			startTime,
 			endTime,
 		)
-		//log.Println(startTime.UTC().String())
-		//log.Println(candleStickData[0].StartTime.UTC().String())
-		//log.Println(endTime.UTC().String())
-		//log.Println(candleStickData[len(candleStickData)-1].EndTime.UTC().String())
 		assert.NoError(t, err)
 		assert.NotEmpty(t, candleStickData)
 		assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData))

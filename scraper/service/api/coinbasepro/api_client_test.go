@@ -2,6 +2,7 @@ package coinbasepro
 
 import (
 	"github.com/mochahub/coinprice-scraper/config"
+	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -34,13 +35,40 @@ func TestCoinbaseProClient(t *testing.T) {
 		//fmt.Print(utils.PrettyJSON(exchangeInfo))
 	}) && pass
 	// Interface Methods
-
 	pass = t.Run("TestGetSupportedPairs", func(t *testing.T) {
 		pairs, err := exchangeClient.GetSupportedPairs()
 		assert.Nil(t, err)
 		assert.NotEmpty(t, pairs)
-		//fmt.Print(utils.PrettyJSON(pairs))
+		// TODO: This test is not scale-able unless we use DI to inject what pairs are supported
+		expectedPairs := map[string]models.Symbol{
+			"BTC-USD": {
+				RawBase:         "BTC",
+				RawQuote:        "USD",
+				NormalizedBase:  "BTC",
+				NormalizedQuote: "USDT",
+				ProductID:       "BTC-USD",
+			},
+			"ETH-USD": {
+				RawBase:         "ETH",
+				RawQuote:        "USD",
+				NormalizedBase:  "ETH",
+				NormalizedQuote: "USDT",
+				ProductID:       "ETH-USD",
+			},
+			"ETH-BTC": {
+				RawBase:         "ETH",
+				RawQuote:        "BTC",
+				NormalizedBase:  "ETH",
+				NormalizedQuote: "BTC",
+				ProductID:       "ETH-BTC",
+			},
+		}
 		assert.Equal(t, 3, len(pairs))
+		for _, pair := range pairs {
+			expectedSymbol, ok := expectedPairs[pair.ProductID]
+			assert.Equal(t, true, ok)
+			assert.Equal(t, expectedSymbol, *pair)
+		}
 	}) && pass
 
 	// Should get all prices from [start, end)
@@ -50,8 +78,13 @@ func TestCoinbaseProClient(t *testing.T) {
 		endTime := startTime.Add(expectedLength)
 
 		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
-			"BTC",
-			"USDT",
+			models.Symbol{
+				RawBase:         "BTC",
+				NormalizedBase:  "BTC",
+				RawQuote:        "USD",
+				NormalizedQuote: "USDT",
+				ProductID:       "BTC-USD",
+			},
 			time.Minute,
 			startTime,
 			endTime,

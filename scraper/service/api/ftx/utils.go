@@ -2,14 +2,6 @@ package ftx
 
 import "strings"
 
-func GetFtxSymbolFromCoinprice(
-	coinpriceSymbol string,
-) string {
-	if symbol, ok := coinpriceToftx[coinpriceSymbol]; ok {
-		return symbol
-	}
-	return coinpriceSymbol
-}
 func GetCoinpriceSymbolFtx(
 	coinbaseSymbol string,
 ) string {

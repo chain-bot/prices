@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"github.com/mochahub/coinprice-scraper/config"
+	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/fx"
 	"testing"
@@ -47,10 +48,17 @@ func TestExchangeClients(t *testing.T) {
 				expectedLength := 12000 * time.Minute
 				startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 				endTime := startTime.Add(expectedLength)
-
+				// This is kind of messy...
+				pairs, _ := exchangeClient.GetSupportedPairs()
+				symbol := models.Symbol{}
+				for _, p := range pairs {
+					// TODO: With #39 We can't hardcode USDT ...
+					if p.NormalizedBase == "BTC" && p.NormalizedQuote == "USDT" {
+						symbol = *p
+					}
+				}
 				candleStickData, err := exchangeClient.GetAllOHLCMarketData(
-					"BTC",
-					"USDT",
+					symbol,
 					time.Minute,
 					startTime,
 					endTime,

@@ -10,8 +10,7 @@ import (
 
 // Get CandleStick data from [startTime, endTime] with pagination
 func (apiClient *ApiClient) GetAllOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
@@ -26,8 +25,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 			newEndTime = endTime
 		}
 		ohlcMarketData, err := apiClient.GetOHLCMarketData(
-			baseSymbol,
-			quoteSymbol,
+			symbol,
 			interval,
 			startTime,
 			newEndTime)
@@ -52,6 +50,7 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 			NormalizedBase:  strings.ToUpper(symbol.BaseAsset),
 			RawQuote:        symbol.QuoteAsset,
 			NormalizedQuote: strings.ToUpper(symbol.QuoteAsset),
+			ProductID:       symbol.Symbol,
 		})
 	}
 	return common.FilterSupportedAssets(result), nil
@@ -67,15 +66,13 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 
 // Get CandleStick data from [startTime, endTime]
 func (apiClient *ApiClient) GetOHLCMarketData(
-	baseSymbol string,
-	quoteSymbol string,
+	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
 ) ([]*models.OHLCMarketData, error) {
 	candleStickResponse, err := apiClient.getCandleStickData(
-		baseSymbol,
-		quoteSymbol,
+		symbol.ProductID,
 		interval,
 		startTime,
 		endTime,
@@ -92,8 +89,8 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 		ohlcMarketData = append(ohlcMarketData, &models.OHLCMarketData{
 			MarketData: models.MarketData{
 				Source:        BINANCE,
-				BaseCurrency:  baseSymbol,
-				QuoteCurrency: quoteSymbol,
+				BaseCurrency:  symbol.NormalizedBase,
+				QuoteCurrency: symbol.NormalizedQuote,
 			},
 			StartTime:  candleStart,
 			EndTime:    candleEnd,
