@@ -21,6 +21,15 @@ Web-Scraper for crypto prices built in Go.
 ### Requirements
 - golang: `go version go1.16beta1 linux/amd64` (other versions not tested)
 - docker & docker-compose
+### Running the Application Via Docker
+```bash
+docker-compose up -d
+docker image build -t coinprice-scraper . 
+docker run --name coinprice-scraper --env-file ./.env --network="host"  coinprice-scraper
+# docker start coinprice-scraper
+# docer restart coinprice-scraper   
+```
+TODO: Create seperate docker-compose file to combine both external services and the app
 ### Setting up Local Environment
 - clone: `git@github.com:mochahub/coinprice-scraper.git`
 - Create `.env` file via tempalte `cp env_example.txt .env`

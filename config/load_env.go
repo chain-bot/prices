@@ -1,11 +1,10 @@
 package config
 
 import (
-	"os"
-	"regexp"
-
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
+	"os"
+	"regexp"
 )
 
 // LoadEnv loads env vars from .env at root of repo
@@ -16,6 +15,10 @@ func GetProjectRoot() string {
 	return string(rootPath)
 }
 func LoadEnv() {
+	if os.Getenv("COINPRICE_ENV") != "" {
+		// Env variables already set
+		return
+	}
 	re := regexp.MustCompile(`^(.*` + PROJECT_DIR + `)`)
 	cwd, _ := os.Getwd()
 	rootPath := re.Find([]byte(cwd))

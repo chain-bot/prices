@@ -27,7 +27,7 @@ func RunMigrations(
 		sourceURL, // file://path/to/directory
 		secrets.DatabaseCredentials.DBName, driver)
 	if err != nil {
-		log.Fatalf("migration failed... %v", err)
+		log.Fatalf("migration failed... err: %v, url: %s", err, sourceURL)
 		return 0, err
 	}
 	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
