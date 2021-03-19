@@ -45,14 +45,14 @@ func TestCoinbaseProClient(t *testing.T) {
 				RawBase:         "BTC",
 				RawQuote:        "USD",
 				NormalizedBase:  "BTC",
-				NormalizedQuote: "USDT",
+				NormalizedQuote: "USD",
 				ProductID:       "BTC-USD",
 			},
 			"ETH-USD": {
 				RawBase:         "ETH",
 				RawQuote:        "USD",
 				NormalizedBase:  "ETH",
-				NormalizedQuote: "USDT",
+				NormalizedQuote: "USD",
 				ProductID:       "ETH-USD",
 			},
 			"ETH-BTC": {
@@ -79,11 +79,7 @@ func TestCoinbaseProClient(t *testing.T) {
 
 		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
 			models.Symbol{
-				RawBase:         "BTC",
-				NormalizedBase:  "BTC",
-				RawQuote:        "USD",
-				NormalizedQuote: "USDT",
-				ProductID:       "BTC-USD",
+				ProductID: "BTC-USD",
 			},
 			time.Minute,
 			startTime,

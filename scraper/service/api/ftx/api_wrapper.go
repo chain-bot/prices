@@ -49,20 +49,15 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 		if symbol.Type != "spot" {
 			continue
 		}
-		// Hack, assumed that USDT is the same as USD
-		// TODO: We should revisit this assumption (same assumption with coinbasepro)
-		if symbol.BaseCurrency == "USDT" || symbol.QuoteCurrency == "USDT" {
-			continue
-		}
 		quote := symbol.QuoteCurrency
-		normalizedQuote := GetCoinpriceSymbolFtx(quote)
+		normalizedQuote := strings.ToUpper(quote)
 		base := symbol.BaseCurrency
-		normalizedBase := GetCoinpriceSymbolFtx(base)
+		normalizedBase := strings.ToUpper(base)
 		result = append(result, &models.Symbol{
 			RawBase:         base,
-			NormalizedBase:  strings.ToUpper(normalizedBase),
+			NormalizedBase:  normalizedBase,
 			RawQuote:        quote,
-			NormalizedQuote: strings.ToUpper(normalizedQuote),
+			NormalizedQuote: normalizedQuote,
 			ProductID:       symbol.Name,
 		})
 	}

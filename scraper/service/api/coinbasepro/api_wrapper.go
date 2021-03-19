@@ -49,14 +49,14 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 	for i := range products {
 		product := products[i]
 		quote := product.QuoteCurrency
-		normalizedQuote := GetCoinpriceSymbolFromCoinbasePro(quote)
+		normalizedQuote := strings.ToUpper(quote)
 		base := product.BaseCurrency
-		normalizedBase := GetCoinpriceSymbolFromCoinbasePro(base)
+		normalizedBase := strings.ToUpper(base)
 		newPair := &models.Symbol{
 			RawBase:         base,
-			NormalizedBase:  strings.ToUpper(normalizedBase),
+			NormalizedBase:  normalizedBase,
 			RawQuote:        quote,
-			NormalizedQuote: strings.ToUpper(normalizedQuote),
+			NormalizedQuote: normalizedQuote,
 			ProductID:       product.ID,
 		}
 

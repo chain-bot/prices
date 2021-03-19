@@ -13,7 +13,3 @@ const (
 	getHistoricalPrices = "/markets/%s/candles?resolution=%d&limit=%d&start_time=%d&end_time=%d"
 	getMarkets          = "/markets"
 )
-
-var ftxToCoinprice = map[string]string{
-	"USD": "USDT",
-}

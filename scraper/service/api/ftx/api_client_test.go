@@ -1,9 +1,7 @@
 package ftx
 
 import (
-	"fmt"
 	"github.com/mochahub/coinprice-scraper/scraper/models"
-	"github.com/mochahub/coinprice-scraper/scraper/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -32,7 +30,7 @@ func TestFtxClient(t *testing.T) {
 		markets, err := exchangeClient.getMarkets()
 		assert.NoError(t, err)
 		assert.NotNil(t, markets)
-		fmt.Print(utils.PrettyJSON(markets))
+		//fmt.Print(utils.PrettyJSON(markets))
 	}) && pass
 
 	// Interface Methods
@@ -46,15 +44,29 @@ func TestFtxClient(t *testing.T) {
 				RawBase:         "BTC",
 				RawQuote:        "USD",
 				NormalizedBase:  "BTC",
-				NormalizedQuote: "USDT",
+				NormalizedQuote: "USD",
 				ProductID:       "BTC/USD",
+			},
+			"BTC/USDT": {
+				RawBase:         "BTC",
+				RawQuote:        "USDT",
+				NormalizedBase:  "BTC",
+				NormalizedQuote: "USDT",
+				ProductID:       "BTC/USDT",
 			},
 			"ETH/USD": {
 				RawBase:         "ETH",
 				RawQuote:        "USD",
 				NormalizedBase:  "ETH",
-				NormalizedQuote: "USDT",
+				NormalizedQuote: "USD",
 				ProductID:       "ETH/USD",
+			},
+			"ETH/USDT": {
+				RawBase:         "ETH",
+				RawQuote:        "USDT",
+				NormalizedBase:  "ETH",
+				NormalizedQuote: "USDT",
+				ProductID:       "ETH/USDT",
 			},
 			"ETH/BTC": {
 				RawBase:         "ETH",
@@ -63,8 +75,15 @@ func TestFtxClient(t *testing.T) {
 				NormalizedQuote: "BTC",
 				ProductID:       "ETH/BTC",
 			},
+			"USDT/USD": {
+				RawBase:         "USDT",
+				RawQuote:        "USD",
+				NormalizedBase:  "USDT",
+				NormalizedQuote: "USD",
+				ProductID:       "USDT/USD",
+			},
 		}
-		assert.Equal(t, 3, len(pairs))
+		assert.Equal(t, 6, len(pairs))
 		for _, pair := range pairs {
 			expectedSymbol, ok := expectedPairs[pair.ProductID]
 			assert.Equal(t, true, ok)
@@ -80,11 +99,7 @@ func TestFtxClient(t *testing.T) {
 
 		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
 			models.Symbol{
-				RawBase:         "BTC",
-				NormalizedBase:  "BTC",
-				RawQuote:        "USD",
-				NormalizedQuote: "USDT",
-				ProductID:       "BTC/USD",
+				ProductID: "BTC/USD",
 			},
 			time.Minute,
 			startTime,
