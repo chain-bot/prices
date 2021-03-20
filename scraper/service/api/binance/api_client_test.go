@@ -12,7 +12,7 @@ import (
 
 func TestBinanceClient(t *testing.T) {
 	ctx, cancelCtx := context.WithCancel(context.Background())
-	exchangeClient := NewBinanceAPIClient(ctx)
+	exchangeClient := NewBinanceAPIClient()
 	pass := true
 	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
 		expectedLength := 480 * time.Minute
@@ -90,7 +90,7 @@ func TestBinanceClient(t *testing.T) {
 			NormalizedQuote: "USDT",
 			ProductID:       "BTCUSDT",
 		}
-		ohlcMarketDataChannel, err := exchangeClient.GetOHLCMarketDataChannel(symbol, time.Minute)
+		ohlcMarketDataChannel, err := exchangeClient.GetOHLCMarketDataChannel(ctx, symbol, time.Minute)
 		assert.Nil(t, err)
 		for i := 0; i < 5; i += 1 {
 			ohlc := <-ohlcMarketDataChannel

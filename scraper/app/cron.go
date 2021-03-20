@@ -14,7 +14,7 @@ func StartScrapperCron(
 ) (*cron.Cron, error) {
 	c := cron.New()
 	err := c.AddFunc("@every 1m", func() {
-		_ = StartScraper(ctx, repo, clients)
+		_ = StartRestScraper(ctx, repo, clients)
 	})
 	if err != nil {
 		return nil, err

@@ -17,13 +17,15 @@ func main() {
 	// TODO: Find a Better Logging Framework and Pass in Via Uber fx
 	fxApp := fx.New(
 		api.GetAPIProviders(),
+		api.GetSocketAPIProviders(),
 		fx.Provide(config.GetSecrets),
 		fx.Provide(psql.NewDatabase),
 		fx.Provide(influxdb.NewInfluxDBClient),
 		fx.Provide(repository.NewRepository),
 		fx.Invoke(
 			psql.RunMigrations,
-			app.InitScrapper,
+			app.InitRestScrapper,
+			app.InitSocketScrapper,
 		),
 	)
 	if err := fxApp.Start(context.Background()); err != nil {

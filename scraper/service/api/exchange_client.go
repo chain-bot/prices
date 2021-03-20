@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"time"
 )
@@ -18,7 +19,9 @@ type RestExchangeAPIClient interface {
 }
 
 type SocketExchangeAPIClient interface {
+	RestExchangeAPIClient // Is embedded the best approach?
 	GetOHLCMarketDataChannel(
+		ctx context.Context,
 		symbol models.Symbol,
 		interval time.Duration,
 	) (chan *models.OHLCMarketData, error)

@@ -8,20 +8,21 @@ import (
 	"go.uber.org/fx"
 )
 
-func InitScrapper(
+func InitRestScrapper(
 	lc fx.Lifecycle,
 	repo repository.Repository,
-	clients api.ExchangeClients,
+	restClients api.RestExchangeClients,
+	socketClients api.SocketExchangeClients,
 ) {
 	var cronJob *cron.Cron
 	var err error
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			// First Time Run Can Potentially take Hours (back filling market data)
-			if err = StartScraper(ctx, repo, clients.Clients); err != nil {
+			if err = StartRestScraper(ctx, repo, restClients.Clients); err != nil {
 				return err
 			}
-			if cronJob, err = StartScrapperCron(ctx, repo, clients.Clients); err != nil {
+			if cronJob, err = StartScrapperCron(ctx, repo, restClients.Clients); err != nil {
 				return err
 			}
 			return nil
@@ -29,6 +30,22 @@ func InitScrapper(
 		OnStop: func(ctx context.Context) error {
 			if cronJob != nil {
 				cronJob.Stop()
+			}
+			return nil
+		},
+	})
+}
+
+func InitSocketScrapper(
+	lc fx.Lifecycle,
+	repo repository.Repository,
+	socketClients api.SocketExchangeClients,
+) {
+	var err error
+	lc.Append(fx.Hook{
+		OnStart: func(ctx context.Context) error {
+			if err = StartSocketScraper(ctx, repo, socketClients.Clients); err != nil {
+				return err
 			}
 			return nil
 		},

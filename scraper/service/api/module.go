@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/binance"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/coinbasepro"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/ftx"
@@ -10,14 +9,24 @@ import (
 	"go.uber.org/fx"
 )
 
-type ExchangeClientResult struct {
+type RestExchangeClientResult struct {
 	fx.Out
-	Client RestExchangeAPIClient `group:"exchange_client"`
+	Client RestExchangeAPIClient `group:"rest_exchange_client"`
 }
 
-type ExchangeClients struct {
+type RestExchangeClients struct {
 	fx.In
-	Clients []RestExchangeAPIClient `group:"exchange_client"`
+	Clients []RestExchangeAPIClient `group:"rest_exchange_client"`
+}
+
+type SocketExchangeClientResult struct {
+	fx.Out
+	Client SocketExchangeAPIClient `group:"socket_exchange_client"`
+}
+
+type SocketExchangeClients struct {
+	fx.In
+	Clients []SocketExchangeAPIClient `group:"socket_exchange_client"`
 }
 
 func GetAPIProviders() fx.Option {
@@ -30,34 +39,44 @@ func GetAPIProviders() fx.Option {
 	)
 }
 
-func NewBinanaceAPIClient(
-	ctx context.Context,
-) ExchangeClientResult {
-	return ExchangeClientResult{
-		Client: binance.NewBinanceAPIClient(ctx),
+func NewBinanaceAPIClient() RestExchangeClientResult {
+	return RestExchangeClientResult{
+		Client: binance.NewBinanceAPIClient(),
 	}
 }
 
-func NewCoinbaseProAPIClient() ExchangeClientResult {
-	return ExchangeClientResult{
+func NewCoinbaseProAPIClient() RestExchangeClientResult {
+	return RestExchangeClientResult{
 		Client: coinbasepro.NewCoinbaseProAPIClient(),
 	}
 }
 
-func NewKucoinAPIClient() ExchangeClientResult {
-	return ExchangeClientResult{
+func NewKucoinAPIClient() RestExchangeClientResult {
+	return RestExchangeClientResult{
 		Client: kucoin.NewKucoinAPIClient(),
 	}
 }
 
-func NewOkexAPIClient() ExchangeClientResult {
-	return ExchangeClientResult{
+func NewOkexAPIClient() RestExchangeClientResult {
+	return RestExchangeClientResult{
 		Client: okex.NewOkexAPIClient(),
 	}
 }
 
-func NewFtxAPIClient() ExchangeClientResult {
-	return ExchangeClientResult{
+func NewFtxAPIClient() RestExchangeClientResult {
+	return RestExchangeClientResult{
 		Client: ftx.NewFtxAPIClient(),
+	}
+}
+
+func GetSocketAPIProviders() fx.Option {
+	return fx.Options(
+		fx.Provide(NewBinanaceSocketAPIClient),
+	)
+}
+
+func NewBinanaceSocketAPIClient() SocketExchangeClientResult {
+	return SocketExchangeClientResult{
+		Client: binance.NewBinanceAPIClient(),
 	}
 }

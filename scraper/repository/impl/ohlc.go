@@ -6,10 +6,13 @@ import (
 )
 
 func (repo *RepositoryImpl) UpsertOHLCData(
-	ohlcData []*models.OHLCMarketData,
 	exchange string,
 	pair *models.Symbol,
+	ohlcData ...*models.OHLCMarketData,
 ) {
+	if len(ohlcData) == 0 {
+		return
+	}
 	writeAPI := (*repo.influxClient).WriteAPI(repo.influxOrg, repo.ohlcBucket)
 	tags := map[string]string{
 		"quote":    pair.NormalizedQuote,

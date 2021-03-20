@@ -27,7 +27,7 @@ func InjectDependencies(
 
 func TestExchangeClients(t *testing.T) {
 	config.LoadEnv()
-	err := InjectDependencies(func(clients ExchangeClients) {
+	err := InjectDependencies(func(clients RestExchangeClients) {
 		for i := range clients.Clients {
 			exchangeClient := clients.Clients[i]
 			pass := true

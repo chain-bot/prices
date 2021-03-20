@@ -18,14 +18,11 @@ import (
 )
 
 type ApiClient struct {
-	context.Context
 	*retryablehttp.Client
 	*rate.Limiter
 }
 
-func NewBinanceAPIClient(
-	ctx context.Context,
-) *ApiClient {
+func NewBinanceAPIClient() *ApiClient {
 	// 1200 callsPerMinute:(60*1000)/1200
 	rateLimiter := rate.NewLimiter(rate.Every(time.Minute/1200), 1)
 	httpClient := retryablehttp.NewClient()
@@ -33,7 +30,6 @@ func NewBinanceAPIClient(
 	httpClient.RetryWaitMin = common.DefaultRetryMin
 	httpClient.RetryMax = common.MaxRetries
 	apiClient := ApiClient{
-		Context: ctx,
 		Client:  httpClient,
 		Limiter: rateLimiter,
 	}

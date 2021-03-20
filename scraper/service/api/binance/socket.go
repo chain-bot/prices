@@ -1,6 +1,7 @@
 package binance
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
@@ -12,6 +13,7 @@ import (
 
 // https://github.com/rootpd/go-binance/blob/master/service_websocket.go
 func (apiClient *ApiClient) GetOHLCMarketDataChannel(
+	ctx context.Context,
 	symbol models.Symbol,
 	interval time.Duration,
 ) (chan *models.OHLCMarketData, error) {
@@ -26,7 +28,7 @@ func (apiClient *ApiClient) GetOHLCMarketDataChannel(
 		defer c.Close()
 		for {
 			select {
-			case <-apiClient.Context.Done():
+			case <-ctx.Done():
 				log.Println("closing reader")
 				return
 			default:

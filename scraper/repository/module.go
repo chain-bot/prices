@@ -23,9 +23,9 @@ type Repository interface {
 		lastSyncTime time.Time,
 	) error
 	UpsertOHLCData(
-		ohlcData []*models.OHLCMarketData,
 		exchange string,
 		pair *models.Symbol,
+		ohlcData ...*models.OHLCMarketData,
 	)
 }
 

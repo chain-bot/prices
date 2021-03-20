@@ -11,10 +11,11 @@ import (
 )
 
 // Get Prices from last_sync.last_sync to time.now()
-func StartScraper(
+func StartRestScraper(
 	ctx context.Context,
 	repo repository.Repository,
-	clients []api.ExchangeAPIClient) error {
+	clients []api.RestExchangeAPIClient,
+) error {
 	log.Println("Starting Scraper")
 	defer log.Println("Stopping Scraper")
 	var waitGroup sync.WaitGroup
@@ -43,7 +44,7 @@ func StartScraper(
 func ScrapeExchange(
 	ctx context.Context,
 	repo repository.Repository,
-	client api.ExchangeAPIClient,
+	client api.RestExchangeAPIClient,
 	startTime time.Time,
 	endTime time.Time,
 ) error {
@@ -75,7 +76,46 @@ func ScrapeExchange(
 			ohlcData[len(ohlcData)-1].StartTime); err != nil {
 			return err
 		}
-		go repo.UpsertOHLCData(ohlcData, client.GetExchangeIdentifier(), pair)
+		go repo.UpsertOHLCData(client.GetExchangeIdentifier(), pair, ohlcData...)
 	}
+	return nil
+}
+
+func StartSocketScraper(
+	ctx context.Context,
+	repo repository.Repository,
+	socketClients []api.SocketExchangeAPIClient,
+) error {
+	log.Println("Starting Socket Scraper")
+	defer log.Println("Stopping Socket Scraper")
+	for index := range socketClients {
+		client := socketClients[index]
+		go func() {
+			ScrapeSocketExchange(ctx, repo, client)
+		}()
+	}
+	<-ctx.Done()
+	return nil
+}
+func ScrapeSocketExchange(
+	ctx context.Context,
+	repo repository.Repository,
+	client api.SocketExchangeAPIClient,
+) error {
+	pairs, err := client.GetSupportedPairs()
+	if err != nil {
+		return err
+	}
+	for index := range pairs {
+		pair := pairs[index]
+		go func() {
+			ohlcChannel, _ := client.GetOHLCMarketDataChannel(ctx, *pair, time.Minute)
+			for {
+				ohlcData := <-ohlcChannel
+				go repo.UpsertOHLCData(client.GetExchangeIdentifier(), pair, ohlcData)
+			}
+		}()
+	}
+	<-ctx.Done()
 	return nil
 }
