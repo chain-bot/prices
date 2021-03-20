@@ -35,36 +35,15 @@ func TestKucoinClient(t *testing.T) {
 		pairs, err := exchangeClient.GetSupportedPairs()
 		assert.Nil(t, err)
 		assert.NotEmpty(t, pairs)
-		// TODO: This test is not scale-able unless we use DI to inject what pairs are supported
-		expectedPairs := map[string]models.Symbol{
-			"BTC-USDT": {
-				RawBase:         "BTC",
-				RawQuote:        "USDT",
-				NormalizedBase:  "BTC",
-				NormalizedQuote: "USDT",
-				ProductID:       "BTC-USDT",
-			},
-			"ETH-USDT": {
-				RawBase:         "ETH",
-				RawQuote:        "USDT",
-				NormalizedBase:  "ETH",
-				NormalizedQuote: "USDT",
-				ProductID:       "ETH-USDT",
-			},
-			"ETH-BTC": {
-				RawBase:         "ETH",
-				RawQuote:        "BTC",
-				NormalizedBase:  "ETH",
-				NormalizedQuote: "BTC",
-				ProductID:       "ETH-BTC",
-			},
+		expectedPair := models.Symbol{
+			RawBase:         "ETH",
+			RawQuote:        "BTC",
+			NormalizedBase:  "ETH",
+			NormalizedQuote: "BTC",
+			ProductID:       "ETH-BTC",
 		}
-		assert.Equal(t, 3, len(pairs))
-		for _, pair := range pairs {
-			expectedSymbol, ok := expectedPairs[pair.ProductID]
-			assert.Equal(t, true, ok)
-			assert.Equal(t, expectedSymbol, *pair)
-		}
+		assert.GreaterOrEqual(t, len(pairs), 3)
+		assert.Contains(t, pairs, &expectedPair)
 	}) && pass
 
 	// Should get all prices from [start, end)
