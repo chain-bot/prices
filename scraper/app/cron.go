@@ -10,7 +10,7 @@ import (
 func StartScrapperCron(
 	ctx context.Context,
 	repo repository.Repository,
-	clients []api.ExchangeAPIClient,
+	clients []api.RestExchangeAPIClient,
 ) (*cron.Cron, error) {
 	c := cron.New()
 	err := c.AddFunc("@every 1m", func() {

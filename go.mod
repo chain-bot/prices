@@ -3,9 +3,13 @@ module github.com/mochahub/coinprice-scraper
 go 1.15
 
 require (
+	github.com/containerd/fifo v0.0.0-20210316144830-115abcc95a1d // indirect
 	github.com/docker/distribution v2.7.1+incompatible
+	github.com/docker/docker v17.12.0-ce-rc1.0.20200618181300-9dc6525e6118+incompatible
+	github.com/docker/go-metrics v0.0.1 // indirect
 	github.com/friendsofgo/errors v0.9.2
 	github.com/golang-migrate/migrate/v4 v4.14.1
+	github.com/gorilla/websocket v1.4.2
 	github.com/hashicorp/go-retryablehttp v0.6.7
 	github.com/influxdata/influxdb-client-go/v2 v2.2.1
 	github.com/jmoiron/sqlx v1.2.0

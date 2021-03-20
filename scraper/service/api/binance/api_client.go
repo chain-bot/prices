@@ -18,11 +18,14 @@ import (
 )
 
 type ApiClient struct {
+	context.Context
 	*retryablehttp.Client
 	*rate.Limiter
 }
 
-func NewBinanceAPIClient() *ApiClient {
+func NewBinanceAPIClient(
+	ctx context.Context,
+) *ApiClient {
 	// 1200 callsPerMinute:(60*1000)/1200
 	rateLimiter := rate.NewLimiter(rate.Every(time.Minute/1200), 1)
 	httpClient := retryablehttp.NewClient()
@@ -30,6 +33,7 @@ func NewBinanceAPIClient() *ApiClient {
 	httpClient.RetryWaitMin = common.DefaultRetryMin
 	httpClient.RetryMax = common.MaxRetries
 	apiClient := ApiClient{
+		Context: ctx,
 		Client:  httpClient,
 		Limiter: rateLimiter,
 	}
@@ -49,7 +53,7 @@ func (apiClient *ApiClient) GetExchangeIdentifier() string {
 // Get CandleStick data from [startTime, endTime]
 func (apiClient *ApiClient) getCandleStickData(
 	symbol string,
-	interval time.Duration,
+	interval string,
 	startTime time.Time,
 	endTime time.Time,
 ) (candleStickResponse []*CandleStickData, err error) {
@@ -58,7 +62,7 @@ func (apiClient *ApiClient) getCandleStickData(
 	}
 	params := url.Values{}
 	params.Add("symbol", symbol)
-	params.Add("interval", string(apiClient.getBinanceIntervalFromDuration(interval)))
+	params.Add("interval", interval)
 	params.Add("startTime", strconv.FormatInt(utils.UnixMillis(startTime), 10))
 	params.Add("endTime", strconv.FormatInt(utils.UnixMillis(endTime), 10))
 	params.Add("limit", strconv.Itoa(maxLimit))
@@ -88,16 +92,6 @@ func (apiClient *ApiClient) getExchangeInfo() (exchangeInfoResponse *ExchangeInf
 		return nil, err
 	}
 	return exchangeInfoResponse, nil
-}
-
-func (apiClient *ApiClient) getBinanceIntervalFromDuration(
-	interval time.Duration,
-) Interval {
-	ret := Minute
-	if int(interval.Hours()) > 0 {
-		ret = Hour
-	}
-	return ret
 }
 
 func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(

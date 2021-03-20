@@ -78,6 +78,78 @@ func (candleStickResponse *CandleStickData) UnmarshalJSON(
 	return nil
 }
 
+type KlineResponse struct {
+	Symbol string `json:"s"`
+	Kline  Kline  `json:"k"`
+}
+type Kline struct {
+	KlineStart  float64 `json:"t"`
+	KlineEnd    float64 `json:"T"`
+	Open        float64 `json:"o"`
+	Close       float64 `json:"c"`
+	High        float64 `json:"h"`
+	Low         float64 `json:"l"`
+	Volume      float64 `json:"v"`
+	KlineClosed bool    `json:"x"`
+}
+
+type rawKline struct {
+	Interval                 string  `json:"i"`
+	FirstTradeID             int64   `json:"f"`
+	LastTradeID              int64   `json:"L"`
+	Final                    bool    `json:"x"`
+	OpenTime                 float64 `json:"t"`
+	CloseTime                float64 `json:"T"`
+	Open                     string  `json:"o"`
+	High                     string  `json:"h"`
+	Low                      string  `json:"l"`
+	Close                    string  `json:"c"`
+	Volume                   string  `json:"v"`
+	NumberOfTrades           int     `json:"n"`
+	QuoteAssetVolume         string  `json:"q"`
+	TakerBuyBaseAssetVolume  string  `json:"V"`
+	TakerBuyQuoteAssetVolume string  `json:"Q"`
+}
+
+func (kline *Kline) UnmarshalJSON(
+	data []byte,
+) (err error) {
+	var rawKline rawKline
+	if err := json.Unmarshal(data, &rawKline); err != nil {
+		return err
+	}
+	// 1501545600000
+	kline.KlineStart = rawKline.OpenTime
+	kline.KlineEnd = rawKline.CloseTime
+	kline.KlineClosed = rawKline.Final
+	// "4261.48000000"
+	kline.Open, err = strconv.ParseFloat(rawKline.Open, 64)
+	if err != nil {
+		return err
+	}
+	// "4745.42000000"
+	kline.Close, err = strconv.ParseFloat(rawKline.Close, 64)
+	if err != nil {
+		return err
+	}
+	// "3400.00000000"
+	kline.High, err = strconv.ParseFloat(rawKline.High, 64)
+	if err != nil {
+		return err
+	}
+	// "4724.89000000"
+	kline.Low, err = strconv.ParseFloat(rawKline.Low, 64)
+	if err != nil {
+		return err
+	}
+	// "10015.64027200"
+	kline.Volume, err = strconv.ParseFloat(rawKline.Volume, 64)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information
 //////////////////////////////////////////////////////////////////////////////////////////////////////////

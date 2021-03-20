@@ -11,4 +11,6 @@ const (
 	// Endpoints
 	getCandleStick  = "/api/v3/klines"
 	getExchangeInfo = "/api/v3/exchangeInfo"
+
+	klineSocketStream = "wss://stream.binance.com:9443/ws/%s@kline_%s"
 )

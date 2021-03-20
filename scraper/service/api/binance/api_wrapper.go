@@ -1,7 +1,6 @@
 package binance
 
 import (
-	"fmt"
 	"github.com/mochahub/coinprice-scraper/scraper/models"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api/common"
 	"strings"
@@ -56,10 +55,6 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 	return common.FilterSupportedAssets(result), nil
 }
 
-func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helpers
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +68,7 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 ) ([]*models.OHLCMarketData, error) {
 	candleStickResponse, err := apiClient.getCandleStickData(
 		symbol.ProductID,
-		interval,
+		string(getBinanceIntervalFromDuration(interval)),
 		startTime,
 		endTime,
 	)
