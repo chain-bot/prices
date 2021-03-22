@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/mochahub/coinprice-scraper/scraper/repository"
 	"github.com/mochahub/coinprice-scraper/scraper/service/api"
 	"log"
@@ -109,7 +110,12 @@ func ScrapeSocketExchange(
 	for index := range pairs {
 		pair := pairs[index]
 		go func() {
-			ohlcChannel, _ := client.GetOHLCMarketDataChannel(ctx, *pair, time.Minute)
+			ohlcChannel, err := client.GetOHLCMarketDataChannel(ctx, *pair, time.Minute)
+			if err != nil {
+				log.Println(fmt.Sprintf("Client Error %s", err))
+				close(ohlcChannel)
+				return
+			}
 			for {
 				ohlcData := <-ohlcChannel
 				go repo.UpsertOHLCData(client.GetExchangeIdentifier(), pair, ohlcData)
