@@ -1,3 +1,4 @@
+.out
 .DS_Store
 .env
 venv/
@@ -5,7 +6,7 @@ cover.out
 coverage.out
 .docker/
 .idea/
-influx_export/
+scripts/influx_export/
 
 # https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider

@@ -1,0 +1,1711 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>influxdb: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/mochahub/coinprice-scraper/app/internal/data/influxdb/service.go (100.0%)</option>
+				
+				<option value="file1">github.com/mochahub/coinprice-scraper/app/internal/data/psql/migrate.go (60.0%)</option>
+				
+				<option value="file2">github.com/mochahub/coinprice-scraper/app/internal/data/psql/service.go (100.0%)</option>
+				
+				<option value="file3">github.com/mochahub/coinprice-scraper/app/pkg/api/binance/api_client.go (77.6%)</option>
+				
+				<option value="file4">github.com/mochahub/coinprice-scraper/app/pkg/api/binance/api_wrapper.go (80.0%)</option>
+				
+				<option value="file5">github.com/mochahub/coinprice-scraper/app/pkg/api/binance/types.go (71.0%)</option>
+				
+				<option value="file6">github.com/mochahub/coinprice-scraper/app/pkg/api/coinbasepro/api_client.go (65.4%)</option>
+				
+				<option value="file7">github.com/mochahub/coinprice-scraper/app/pkg/api/coinbasepro/api_wrapper.go (83.3%)</option>
+				
+				<option value="file8">github.com/mochahub/coinprice-scraper/app/pkg/api/coinbasepro/types.go (90.0%)</option>
+				
+				<option value="file9">github.com/mochahub/coinprice-scraper/app/pkg/api/ftx/api_client.go (75.0%)</option>
+				
+				<option value="file10">github.com/mochahub/coinprice-scraper/app/pkg/api/ftx/api_wrapper.go (85.7%)</option>
+				
+				<option value="file11">github.com/mochahub/coinprice-scraper/app/pkg/api/kucoin/api_client.go (79.1%)</option>
+				
+				<option value="file12">github.com/mochahub/coinprice-scraper/app/pkg/api/kucoin/api_wrapper.go (79.3%)</option>
+				
+				<option value="file13">github.com/mochahub/coinprice-scraper/app/pkg/api/kucoin/types.go (68.2%)</option>
+				
+				<option value="file14">github.com/mochahub/coinprice-scraper/app/pkg/api/module.go (100.0%)</option>
+				
+				<option value="file15">github.com/mochahub/coinprice-scraper/app/pkg/api/okex/api_client.go (74.4%)</option>
+				
+				<option value="file16">github.com/mochahub/coinprice-scraper/app/pkg/api/okex/api_wrapper.go (76.7%)</option>
+				
+				<option value="file17">github.com/mochahub/coinprice-scraper/app/pkg/api/okex/types.go (69.6%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package influxdb
+
+import (
+        "fmt"
+        influxdb2 "github.com/influxdata/influxdb-client-go/v2"
+        "github.com/mochahub/coinprice-scraper/app/configs"
+)
+
+func NewInfluxDBClient(secrets *configs.Secrets) (*influxdb2.Client, error) <span class="cov8" title="1">{
+        influxDBURL := fmt.Sprintf("http://%s:%d", secrets.InfluxDbCredentials.Host, secrets.InfluxDbCredentials.Port)
+        client := influxdb2.NewClient(influxDBURL, secrets.InfluxDbCredentials.Token)
+        return &amp;client, nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package psql
+
+import (
+        "github.com/golang-migrate/migrate/v4"
+        "github.com/golang-migrate/migrate/v4/database/postgres"
+        _ "github.com/golang-migrate/migrate/v4/database/postgres"
+        _ "github.com/golang-migrate/migrate/v4/source/file"
+        "github.com/jmoiron/sqlx"
+        "github.com/mochahub/coinprice-scraper/app/configs"
+        "log"
+)
+
+func RunMigrations(
+        db *sqlx.DB,
+        secrets *configs.Secrets,
+) (int, error) <span class="cov8" title="1">{
+        if err := db.Ping(); err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("could not ping DB... %v", err)
+        }</span>
+        <span class="cov8" title="1">driver, err := postgres.WithInstance(db.DB, &amp;postgres.Config{DatabaseName: secrets.DBName})
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("could not start sql migration... %v", err)
+        }</span>
+        <span class="cov8" title="1">m, err := migrate.NewWithDatabaseInstance(
+                configs.GetMigrationDir(), // file://path/to/directory
+                secrets.DatabaseCredentials.DBName, driver)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("migration failed... err: %v, url: %s", err, configs.GetMigrationDir())
+                return 0, err
+        }</span>
+        <span class="cov8" title="1">if err := m.Up(); err != nil &amp;&amp; err != migrate.ErrNoChange </span><span class="cov0" title="0">{
+                log.Fatalf("An error occurred while syncing the database.. %v", err)
+                return 0, err
+        }</span>
+        <span class="cov8" title="1">log.Println("Database migrated")
+        verion, _, err := m.Version()
+        return int(verion), err</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package psql
+
+import (
+        "fmt"
+        "github.com/jmoiron/sqlx"
+        "github.com/mochahub/coinprice-scraper/app/configs"
+)
+
+func NewDatabase(
+        secrets *configs.Secrets,
+) (*sqlx.DB, error) <span class="cov8" title="1">{
+        psqlInfo := ""
+        psqlInfo = fmt.Sprintf("host=%s port=%d user=%s "+
+                "password=%s dbname=%s sslmode=disable",
+                secrets.DatabaseCredentials.Host,
+                secrets.DatabaseCredentials.Port,
+                secrets.DatabaseCredentials.User,
+                secrets.DatabaseCredentials.Password,
+                secrets.DatabaseCredentials.DBName)
+        return sqlx.Connect(databaseDriver, psqlInfo)
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package binance
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/mochahub/coinprice-scraper/app/utils"
+        "golang.org/x/time/rate"
+        "io/ioutil"
+        "log"
+        "net/http"
+        "net/url"
+        "strconv"
+        "time"
+
+        "github.com/hashicorp/go-retryablehttp"
+)
+
+type ApiClient struct {
+        *retryablehttp.Client
+        *rate.Limiter
+}
+
+func NewBinanceAPIClient() *ApiClient <span class="cov8" title="1">{
+        // 1200 callsPerMinute:(60*1000)/1200
+        rateLimiter := rate.NewLimiter(rate.Every(time.Minute/1200), 1)
+        httpClient := retryablehttp.NewClient()
+        httpClient.CheckRetry = common.DefaultCheckRetry
+        httpClient.RetryWaitMin = common.DefaultRetryMin
+        httpClient.RetryMax = common.MaxRetries
+        apiClient := ApiClient{
+                Client:  httpClient,
+                Limiter: rateLimiter,
+        }
+        apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) </span><span class="cov8" title="1">{
+                if err := apiClient.Limiter.Wait(context.Background()); err != nil </span><span class="cov0" title="0">{
+                        log.Printf("ERROR WAITING FOR LIMIT: %s\n", err.Error())
+                        return
+                }</span>
+        }
+        <span class="cov8" title="1">return &amp;apiClient</span>
+}
+
+func (apiClient *ApiClient) GetExchangeIdentifier() string <span class="cov0" title="0">{
+        return BINANCE
+}</span>
+
+// Get CandleStick data from [startTime, endTime]
+func (apiClient *ApiClient) getCandleStickData(
+        symbol string,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) (candleStickResponse []*CandleStickData, err error) <span class="cov8" title="1">{
+        if endTime.IsZero() </span><span class="cov0" title="0">{
+                endTime = time.Now()
+        }</span>
+        <span class="cov8" title="1">params := url.Values{}
+        params.Add("symbol", symbol)
+        params.Add("interval", string(apiClient.getBinanceIntervalFromDuration(interval)))
+        params.Add("startTime", strconv.FormatInt(utils.UnixMillis(startTime), 10))
+        params.Add("endTime", strconv.FormatInt(utils.UnixMillis(endTime), 10))
+        params.Add("limit", strconv.Itoa(maxLimit))
+        urlString := fmt.Sprintf("%s%s?%s", baseUrl, getCandleStick, params.Encode())
+        resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;candleStickResponse); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return candleStickResponse, nil</span>
+}
+
+// Get ExchangeInfo (supported pairs, precision, etc)
+func (apiClient *ApiClient) getExchangeInfo() (exchangeInfoResponse *ExchangeInfoResponse, err error) <span class="cov8" title="1">{
+        urlString := fmt.Sprintf("%s%s", baseUrl, getExchangeInfo)
+        resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;exchangeInfoResponse); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return exchangeInfoResponse, nil</span>
+}
+
+func (apiClient *ApiClient) getBinanceIntervalFromDuration(
+        interval time.Duration,
+) Interval <span class="cov8" title="1">{
+        ret := Minute
+        if int(interval.Hours()) &gt; 0 </span><span class="cov0" title="0">{
+                ret = Hour
+        }</span>
+        <span class="cov8" title="1">return ret</span>
+}
+
+func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
+        urlString string,
+) (*http.Response, error) <span class="cov8" title="1">{
+        httpReq, err := http.NewRequest("GET", urlString, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">retryableRequest, err := retryablehttp.FromRequest(httpReq)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return apiClient.Do(retryableRequest)</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package binance
+
+import (
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/mochahub/coinprice-scraper/app/pkg/models"
+        "strings"
+        "time"
+)
+
+// Get CandleStick data from [startTime, endTime] with pagination
+func (apiClient *ApiClient) GetAllOHLCMarketData(
+        symbol models.Symbol,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        if endTime.IsZero() </span><span class="cov0" title="0">{
+                endTime = time.Now()
+        }</span>
+        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        for startTime.Before(endTime) </span><span class="cov8" title="1">{
+                newEndTime := startTime.Add(maxLimit * interval)
+                if newEndTime.After(endTime) </span><span class="cov0" title="0">{
+                        newEndTime = endTime
+                }</span>
+                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                        symbol,
+                        interval,
+                        startTime,
+                        newEndTime)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                startTime = newEndTime</span>
+        }
+        <span class="cov8" title="1">return result, nil</span>
+}
+
+func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) <span class="cov8" title="1">{
+        exchangeInfo, err := apiClient.getExchangeInfo()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">result := []*models.Symbol{}
+        for _, symbol := range exchangeInfo.Symbols </span><span class="cov8" title="1">{
+                result = append(result, &amp;models.Symbol{
+                        RawBase:         symbol.BaseAsset,
+                        NormalizedBase:  strings.ToUpper(symbol.BaseAsset),
+                        RawQuote:        symbol.QuoteAsset,
+                        NormalizedQuote: strings.ToUpper(symbol.QuoteAsset),
+                        ProductID:       symbol.Symbol,
+                })
+        }</span>
+        <span class="cov8" title="1">return common.FilterSupportedAssets(result), nil</span>
+}
+
+func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) <span class="cov0" title="0">{
+        return nil, fmt.Errorf("not implemented")
+}</span>
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helpers
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Get CandleStick data from [startTime, endTime]
+func (apiClient *ApiClient) GetOHLCMarketData(
+        symbol models.Symbol,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        candleStickResponse, err := apiClient.getCandleStickData(
+                symbol.ProductID,
+                interval,
+                startTime,
+                endTime,
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">ohlcMarketData := []*models.OHLCMarketData{}
+
+        for i := range candleStickResponse </span><span class="cov8" title="1">{
+                candleStart := time.Unix(int64(candleStickResponse[i].OpenTime/1000), 0)
+                // We don't use the candle end time from binance because they return 59 seconds opposed to 0 seconds of next minute
+                candleEnd := candleStart.Add(interval)
+                ohlcMarketData = append(ohlcMarketData, &amp;models.OHLCMarketData{
+                        MarketData: models.MarketData{
+                                Source:        BINANCE,
+                                BaseCurrency:  symbol.NormalizedBase,
+                                QuoteCurrency: symbol.NormalizedQuote,
+                        },
+                        StartTime:  candleStart,
+                        EndTime:    candleEnd,
+                        OpenPrice:  candleStickResponse[i].OpenPrice,
+                        HighPrice:  candleStickResponse[i].HighPrice,
+                        LowPrice:   candleStickResponse[i].LowPrice,
+                        ClosePrice: candleStickResponse[i].ClosePrice,
+                        Volume:     candleStickResponse[i].Volume,
+                })
+        }</span>
+        <span class="cov8" title="1">return ohlcMarketData, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package binance
+
+import (
+        "encoding/json"
+        "strconv"
+)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#klinecandlestick-data
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+type CandleStickData struct {
+        OpenTime                 float64
+        OpenPrice                float64
+        HighPrice                float64
+        LowPrice                 float64
+        ClosePrice               float64
+        Volume                   float64
+        CloseTime                float64
+        QuoteAssetVolume         float64
+        NumTrades                float64
+        TakerBuyBaseAssetVolume  float64
+        TakerBuyQuoteAssetVolume float64
+}
+
+func (candleStickResponse *CandleStickData) UnmarshalJSON(
+        data []byte,
+) (err error) <span class="cov8" title="1">{
+        var responseSlice []interface{}
+        if err := json.Unmarshal(data, &amp;responseSlice); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // 1501545600000
+        <span class="cov8" title="1">candleStickResponse.OpenTime = responseSlice[0].(float64)
+        // "4261.48000000"
+        candleStickResponse.OpenPrice, err = strconv.ParseFloat(responseSlice[1].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "4745.42000000"
+        <span class="cov8" title="1">candleStickResponse.HighPrice, err = strconv.ParseFloat(responseSlice[2].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "3400.00000000"
+        <span class="cov8" title="1">candleStickResponse.LowPrice, err = strconv.ParseFloat(responseSlice[3].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "4724.89000000"
+        <span class="cov8" title="1">candleStickResponse.ClosePrice, err = strconv.ParseFloat(responseSlice[4].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "10015.64027200"
+        <span class="cov8" title="1">candleStickResponse.Volume, err = strconv.ParseFloat(responseSlice[5].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // 1504223999999
+        <span class="cov8" title="1">candleStickResponse.CloseTime = responseSlice[6].(float64)
+        // "42538297.66482722"
+        candleStickResponse.QuoteAssetVolume, err = strconv.ParseFloat(responseSlice[7].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // 69180
+        <span class="cov8" title="1">candleStickResponse.NumTrades = responseSlice[8].(float64)
+        // "4610.01943100"
+        candleStickResponse.TakerBuyBaseAssetVolume, err = strconv.ParseFloat(responseSlice[9].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "19419232.11660334"
+        <span class="cov8" title="1">candleStickResponse.TakerBuyQuoteAssetVolume, err = strconv.ParseFloat(responseSlice[10].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+type ExchangeInfoResponse struct {
+        Timezone   string    `json:"timezone"`
+        ServerTime int64     `json:"serverTime"`
+        Symbols    []Symbols `json:"symbols"`
+}
+type Symbols struct {
+        Symbol                     string   `json:"symbol"`
+        Status                     string   `json:"status"`
+        BaseAsset                  string   `json:"baseAsset"`
+        BaseAssetPrecision         int      `json:"baseAssetPrecision"`
+        QuoteAsset                 string   `json:"quoteAsset"`
+        QuoteAssetPrecision        int      `json:"quoteAssetPrecision"`
+        BaseCommissionPrecision    int      `json:"baseCommissionPrecision"`
+        QuoteCommissionPrecision   int      `json:"quoteCommissionPrecision"`
+        OrderTypes                 []string `json:"orderTypes"`
+        IcebergAllowed             bool     `json:"icebergAllowed"`
+        OcoAllowed                 bool     `json:"ocoAllowed"`
+        QuoteOrderQtyMarketAllowed bool     `json:"quoteOrderQtyMarketAllowed"`
+        IsSpotTradingAllowed       bool     `json:"isSpotTradingAllowed"`
+        IsMarginTradingAllowed     bool     `json:"isMarginTradingAllowed"`
+        Permissions                []string `json:"permissions"`
+}
+
+type Interval string
+
+const (
+        Minute Interval = "1m"
+        Hour   Interval = "1h"
+        Day    Interval = "1D"
+)
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package coinbasepro
+
+import (
+        "context"
+        "crypto/hmac"
+        "crypto/sha256"
+        "encoding/base64"
+        "encoding/json"
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "golang.org/x/time/rate"
+        "io/ioutil"
+        "log"
+        "net/http"
+        "net/url"
+        "strconv"
+        "time"
+
+        "github.com/hashicorp/go-retryablehttp"
+)
+
+type ApiClient struct {
+        *retryablehttp.Client
+        *rate.Limiter
+}
+
+func NewCoinbaseProAPIClient() *ApiClient <span class="cov8" title="1">{
+        // 3 callsPerSecond
+        rateLimiter := rate.NewLimiter(rate.Every(time.Second/3), 6)
+        httpClient := retryablehttp.NewClient()
+        httpClient.CheckRetry = common.DefaultCheckRetry
+        httpClient.RetryWaitMin = common.DefaultRetryMin
+        httpClient.RetryMax = common.MaxRetries
+        apiClient := ApiClient{
+                Client:  httpClient,
+                Limiter: rateLimiter,
+        }
+        apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) </span><span class="cov8" title="1">{
+                if err := apiClient.Limiter.Wait(context.Background()); err != nil </span><span class="cov0" title="0">{
+                        log.Printf("ERROR WAITING FOR LIMIT: %s\n", err.Error())
+                        return
+                }</span>
+        }
+        <span class="cov8" title="1">return &amp;apiClient</span>
+}
+func (apiClient *ApiClient) GetExchangeIdentifier() string <span class="cov8" title="1">{
+        return COINBASE
+}</span>
+
+// Get CandleStick data from [startTime, endTime]
+func (apiClient *ApiClient) getCandleStickData(
+        granularity int,
+        startTime time.Time,
+        endTime time.Time,
+        productID string,
+) (candleStickResponse []*CandleStickData, err error) <span class="cov8" title="1">{
+        params := url.Values{}
+        params.Add("start", startTime.Format(time.RFC3339))
+        params.Add("end", endTime.Format(time.RFC3339))
+        params.Add("granularity", strconv.Itoa(granularity))
+        path := fmt.Sprintf(getCandles, productID)
+        urlString := fmt.Sprintf("%s%s?%s", baseURL, path, params.Encode())
+        resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;candleStickResponse); err != nil </span><span class="cov0" title="0">{
+                log.Println(string(body))
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return candleStickResponse, nil</span>
+}
+
+func (apiClient *ApiClient) getProducts() (productsResponse ProductsResponse, err error) <span class="cov8" title="1">{
+        urlString := fmt.Sprintf("%s%s", baseURL, getExchangeProducts)
+        resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;productsResponse); err != nil </span><span class="cov0" title="0">{
+                log.Println(string(body))
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return productsResponse, nil</span>
+}
+
+func (apiClient *ApiClient) sendAPIKeyAuthenticatedGetRequest(
+        urlString string, headers ...header,
+) (*http.Response, error) <span class="cov8" title="1">{
+        httpReq, err := http.NewRequest("GET", urlString, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">retryableRequest, err := retryablehttp.FromRequest(httpReq)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return apiClient.Do(retryableRequest)</span>
+}
+
+// Credit to https://github.com/preichenberger/go-coinbasepro
+func generateSig(message, secret string) (string, error) <span class="cov0" title="0">{
+        key, err := base64.StdEncoding.DecodeString(secret)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">signature := hmac.New(sha256.New, key)
+        _, err = signature.Write([]byte(message))
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">return base64.StdEncoding.EncodeToString(signature.Sum(nil)), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package coinbasepro
+
+import (
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/mochahub/coinprice-scraper/app/pkg/models"
+        "github.com/mochahub/coinprice-scraper/app/utils"
+        "strings"
+        "time"
+)
+
+// Get CandleStick data from [startTime, endTime) with pagination
+func (apiClient *ApiClient) GetAllOHLCMarketData(
+        symbol models.Symbol,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        if endTime.IsZero() </span><span class="cov0" title="0">{
+                endTime = time.Now()
+        }</span>
+        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        for startTime.Before(endTime) </span><span class="cov8" title="1">{
+                newEndTime := startTime.Add(maxLimit * interval)
+                if newEndTime.After(endTime) </span><span class="cov0" title="0">{
+                        newEndTime = endTime
+                }</span>
+                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                        symbol,
+                        interval,
+                        startTime,
+                        newEndTime)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                startTime = newEndTime</span>
+        }
+        <span class="cov8" title="1">return result, nil</span>
+}
+
+func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) <span class="cov8" title="1">{
+        products, err := apiClient.getProducts()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">result := []*models.Symbol{}
+
+        for i := range products </span><span class="cov8" title="1">{
+                product := products[i]
+                quote := product.QuoteCurrency
+                normalizedQuote := strings.ToUpper(quote)
+                base := product.BaseCurrency
+                normalizedBase := strings.ToUpper(base)
+                newPair := &amp;models.Symbol{
+                        RawBase:         base,
+                        NormalizedBase:  normalizedBase,
+                        RawQuote:        quote,
+                        NormalizedQuote: normalizedQuote,
+                        ProductID:       product.ID,
+                }
+
+                result = append(result, newPair)
+        }</span>
+        <span class="cov8" title="1">return common.FilterSupportedAssets(result), nil</span>
+}
+
+func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) <span class="cov0" title="0">{
+        return nil, fmt.Errorf("not implemented")
+}</span>
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helpers
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Get CandleStick data from [startTime, endTime]
+func (apiClient *ApiClient) GetOHLCMarketData(
+        symbol models.Symbol,
+        durationInterval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        candleStickData, err := apiClient.getCandleStickData(
+                int(durationInterval.Seconds()), startTime, endTime, symbol.ProductID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        for i := range candleStickData </span><span class="cov8" title="1">{
+                candle := candleStickData[i]
+                candleEnd := time.Unix(int64(candle.CloseTime), 0)
+                result = append(result, &amp;models.OHLCMarketData{
+                        MarketData: models.MarketData{
+                                Source:        apiClient.GetExchangeIdentifier(),
+                                BaseCurrency:  symbol.NormalizedBase,
+                                QuoteCurrency: symbol.NormalizedQuote,
+                        },
+                        StartTime:  candleEnd.Add(-durationInterval),
+                        EndTime:    candleEnd,
+                        OpenPrice:  candle.OpenPrice,
+                        HighPrice:  candle.ClosePrice,
+                        LowPrice:   candle.LowPrice,
+                        ClosePrice: candle.ClosePrice,
+                        Volume:     candle.Volume,
+                })
+        }</span>
+        <span class="cov8" title="1">return utils.Reverse(result), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package coinbasepro
+
+import (
+        "encoding/json"
+)
+
+type header struct {
+        key   string
+        value string
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://docs.pro.coinbase.com/?python#get-historic-rates
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+type CandleStickData struct {
+        CloseTime  float64
+        LowPrice   float64
+        HighPrice  float64
+        OpenPrice  float64
+        ClosePrice float64
+        Volume     float64
+}
+
+func (candleStickResponse *CandleStickData) UnmarshalJSON(
+        data []byte,
+) (err error) <span class="cov8" title="1">{
+        var responseSlice []interface{}
+        if err := json.Unmarshal(data, &amp;responseSlice); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">candleStickResponse.CloseTime = responseSlice[0].(float64)
+        candleStickResponse.LowPrice = responseSlice[1].(float64)
+        candleStickResponse.HighPrice = responseSlice[2].(float64)
+        candleStickResponse.OpenPrice = responseSlice[3].(float64)
+        candleStickResponse.ClosePrice = responseSlice[4].(float64)
+        candleStickResponse.Volume = responseSlice[5].(float64)
+        return nil</span>
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://docs.pro.coinbase.com/?python#get-products
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+type ProductsResponse []struct {
+        ID              string `json:"id"`
+        Message         string `json:"message"` // ERROR MESSAGE
+        DisplayName     string `json:"display_name"`
+        BaseCurrency    string `json:"base_currency"`
+        QuoteCurrency   string `json:"quote_currency"`
+        BaseIncrement   string `json:"base_increment"`
+        QuoteIncrement  string `json:"quote_increment"`
+        BaseMinSize     string `json:"base_min_size"`
+        BaseMaxSize     string `json:"base_max_size"`
+        MinMarketFunds  string `json:"min_market_funds"`
+        MaxMarketFunds  string `json:"max_market_funds"`
+        Status          string `json:"status"`
+        StatusMessage   string `json:"status_message"`
+        CancelOnly      bool   `json:"cancel_only"`
+        LimitOnly       bool   `json:"limit_only"`
+        PostOnly        bool   `json:"post_only"`
+        TradingDisabled bool   `json:"trading_disabled"`
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package ftx
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "golang.org/x/time/rate"
+        "io/ioutil"
+        "log"
+        "net/http"
+        "time"
+
+        "github.com/hashicorp/go-retryablehttp"
+)
+
+type ApiClient struct {
+        *retryablehttp.Client
+        *rate.Limiter
+}
+
+func NewFtxAPIClient() *ApiClient <span class="cov8" title="1">{
+        rateLimiter := rate.NewLimiter(rate.Every(time.Second/callsPerSecond), 1)
+        httpClient := retryablehttp.NewClient()
+        httpClient.CheckRetry = common.DefaultCheckRetry
+        httpClient.RetryWaitMin = common.DefaultRetryMin
+        httpClient.RetryMax = common.MaxRetries
+        apiClient := ApiClient{
+                Client:  httpClient,
+                Limiter: rateLimiter,
+        }
+        apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) </span><span class="cov8" title="1">{
+                if err := apiClient.Limiter.Wait(context.Background()); err != nil </span><span class="cov0" title="0">{
+                        log.Printf("ERROR WAITING FOR LIMIT: %s\n", err.Error())
+                        return
+                }</span>
+        }
+        <span class="cov8" title="1">return &amp;apiClient</span>
+}
+
+func (apiClient *ApiClient) GetExchangeIdentifier() string <span class="cov0" title="0">{
+        return FTX
+}</span>
+
+//Get CandleStick data from [startTime, endTime)
+func (apiClient *ApiClient) getHistoricalPrices(
+        market string,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+        limit int64,
+) (historicalPricesResponse *HistoricalPricesResponse, err error) <span class="cov8" title="1">{
+        if endTime.IsZero() </span><span class="cov0" title="0">{
+                endTime = time.Now()
+        }</span>
+        <span class="cov8" title="1">uri := fmt.Sprintf(getHistoricalPrices, market, int(interval.Seconds()), limit, startTime.Unix(), endTime.Unix())
+        urlString := fmt.Sprintf("%s%s", baseUrl, uri)
+        resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;historicalPricesResponse); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return historicalPricesResponse, nil</span>
+}
+
+func (apiClient *ApiClient) getMarkets() (marketResponse *MarketsResponse, err error) <span class="cov8" title="1">{
+        urlString := fmt.Sprintf("%s%s", baseUrl, getMarkets)
+        resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;marketResponse); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return marketResponse, nil</span>
+}
+
+func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
+        urlString string,
+) (*http.Response, error) <span class="cov8" title="1">{
+        httpReq, err := http.NewRequest("GET", urlString, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">retryableRequest, err := retryablehttp.FromRequest(httpReq)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return apiClient.Do(retryableRequest)</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package ftx
+
+import (
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/mochahub/coinprice-scraper/app/pkg/models"
+        "strings"
+        "time"
+)
+
+//Get CandleStick data from [startTime, endTime) with pagination
+func (apiClient *ApiClient) GetAllOHLCMarketData(
+        symbol models.Symbol,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        if endTime.IsZero() </span><span class="cov0" title="0">{
+                endTime = time.Now()
+        }</span>
+        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        for startTime.Before(endTime) </span><span class="cov8" title="1">{
+                newEndTime := startTime.Add(maxLimit * interval)
+                if newEndTime.After(endTime) </span><span class="cov8" title="1">{
+                        newEndTime = endTime
+                }</span>
+                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                        symbol,
+                        interval,
+                        startTime,
+                        newEndTime.Add(-interval))
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                startTime = newEndTime</span>
+        }
+        <span class="cov8" title="1">return result, nil</span>
+}
+
+func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) <span class="cov8" title="1">{
+        marketResponse, err := apiClient.getMarkets()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">result := []*models.Symbol{}
+        for _, symbol := range marketResponse.Result </span><span class="cov8" title="1">{
+                // Only Spot Markets Supported Rn
+                if symbol.Type != "spot" </span><span class="cov8" title="1">{
+                        continue</span>
+                }
+                <span class="cov8" title="1">quote := symbol.QuoteCurrency
+                normalizedQuote := strings.ToUpper(quote)
+                base := symbol.BaseCurrency
+                normalizedBase := strings.ToUpper(base)
+                result = append(result, &amp;models.Symbol{
+                        RawBase:         base,
+                        NormalizedBase:  normalizedBase,
+                        RawQuote:        quote,
+                        NormalizedQuote: normalizedQuote,
+                        ProductID:       symbol.Name,
+                })</span>
+        }
+        <span class="cov8" title="1">return common.FilterSupportedAssets(result), nil</span>
+}
+
+func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) <span class="cov0" title="0">{
+        return nil, fmt.Errorf("not implemented")
+}</span>
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helpers
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Get CandleStick data from [startTime, endTime)
+func (apiClient *ApiClient) GetOHLCMarketData(
+        symbol models.Symbol,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        historicalPriceResponse, err := apiClient.getHistoricalPrices(
+                symbol.ProductID,
+                interval,
+                startTime,
+                endTime,
+                int64(endTime.Sub(startTime))/int64(interval),
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">ohlcMarketData := []*models.OHLCMarketData{}
+        for i := range historicalPriceResponse.Result </span><span class="cov8" title="1">{
+                candle := historicalPriceResponse.Result[i]
+                ohlcMarketData = append(ohlcMarketData, &amp;models.OHLCMarketData{
+                        MarketData: models.MarketData{
+                                Source:        FTX,
+                                BaseCurrency:  symbol.NormalizedBase,
+                                QuoteCurrency: symbol.NormalizedQuote,
+                        },
+                        StartTime:  candle.StartTime,
+                        EndTime:    candle.StartTime.Add(interval),
+                        OpenPrice:  candle.Open,
+                        HighPrice:  candle.High,
+                        LowPrice:   candle.Low,
+                        ClosePrice: candle.Close,
+                        Volume:     candle.Volume,
+                })
+        }</span>
+        <span class="cov8" title="1">return ohlcMarketData, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package kucoin
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "golang.org/x/time/rate"
+        "io/ioutil"
+        "log"
+        "net/http"
+        "net/url"
+        "strconv"
+        "time"
+
+        "github.com/hashicorp/go-retryablehttp"
+)
+
+type ApiClient struct {
+        *retryablehttp.Client
+        *rate.Limiter
+}
+
+func NewKucoinAPIClient() *ApiClient <span class="cov8" title="1">{
+        rateLimiter := rate.NewLimiter(rate.Every(time.Minute/callsPerMinute), 1)
+        httpClient := retryablehttp.NewClient()
+        httpClient.CheckRetry = common.DefaultCheckRetry
+        httpClient.RetryWaitMin = common.DefaultRetryMin
+        httpClient.RetryMax = common.MaxRetries
+        apiClient := ApiClient{
+                Client:  httpClient,
+                Limiter: rateLimiter,
+        }
+        apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) </span><span class="cov8" title="1">{
+                if err := apiClient.Limiter.Wait(context.Background()); err != nil </span><span class="cov0" title="0">{
+                        log.Printf("ERROR WAITING FOR LIMIT: %s\n", err.Error())
+                        return
+                }</span>
+        }
+        <span class="cov8" title="1">return &amp;apiClient</span>
+}
+
+func (apiClient *ApiClient) GetExchangeIdentifier() string <span class="cov0" title="0">{
+        return KUCOIN
+}</span>
+
+//Get CandleStick data from [startTime, endTime)
+func (apiClient *ApiClient) getKlines(
+        symbol string,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) (candleStickResponse *CandleStickResponse, err error) <span class="cov8" title="1">{
+        params := url.Values{}
+        params.Add("symbol", symbol)
+        params.Add("startAt", strconv.FormatInt(startTime.Unix(), 10))
+        params.Add("endAt", strconv.FormatInt(endTime.Unix(), 10))
+        params.Add("type", apiClient.intervalQueryParamFromDuration(interval))
+        urlString := fmt.Sprintf("%s%s?%s", baseUrl, getKlines, params.Encode())
+        resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;candleStickResponse); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return candleStickResponse, nil</span>
+}
+
+// Get ExchangeInfo (supported pairs, precision, etc)
+func (apiClient *ApiClient) getSymbols() (symbolsResponse *SymbolsResponse, err error) <span class="cov8" title="1">{
+        urlString := fmt.Sprintf("%s%s", baseUrl, getSymbols)
+        resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;symbolsResponse); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return symbolsResponse, nil</span>
+}
+
+func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
+        urlString string,
+) (*http.Response, error) <span class="cov8" title="1">{
+        httpReq, err := http.NewRequest("GET", urlString, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">retryableRequest, err := retryablehttp.FromRequest(httpReq)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return apiClient.Do(retryableRequest)</span>
+}
+
+func (apiClient *ApiClient) intervalQueryParamFromDuration(intervalDuration time.Duration) (interval string) <span class="cov8" title="1">{
+        return fmt.Sprintf("%dmin", int(intervalDuration.Minutes()))
+}</span>
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package kucoin
+
+import (
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/mochahub/coinprice-scraper/app/pkg/models"
+        "github.com/mochahub/coinprice-scraper/app/utils"
+        "strings"
+        "time"
+)
+
+//Get CandleStick data from [startTime, endTime) with pagination
+func (apiClient *ApiClient) GetAllOHLCMarketData(
+        symbol models.Symbol,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        if endTime.IsZero() </span><span class="cov0" title="0">{
+                endTime = time.Now()
+        }</span>
+        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        for startTime.Before(endTime) </span><span class="cov8" title="1">{
+                newEndTime := startTime.Add(maxLimit * interval)
+                if newEndTime.After(endTime) </span><span class="cov0" title="0">{
+                        newEndTime = endTime
+                }</span>
+                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                        symbol,
+                        interval,
+                        startTime,
+                        newEndTime)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                startTime = newEndTime</span>
+        }
+        <span class="cov8" title="1">return result, nil</span>
+}
+
+func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) <span class="cov8" title="1">{
+        exchangeSymbols, err := apiClient.getSymbols()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">result := []*models.Symbol{}
+        for _, symbol := range exchangeSymbols.Data </span><span class="cov8" title="1">{
+                result = append(result, &amp;models.Symbol{
+                        RawBase:         symbol.BaseCurrency,
+                        NormalizedBase:  strings.ToUpper(symbol.BaseCurrency),
+                        RawQuote:        symbol.QuoteCurrency,
+                        NormalizedQuote: strings.ToUpper(symbol.QuoteCurrency),
+                        ProductID:       symbol.Symbol,
+                })
+        }</span>
+        <span class="cov8" title="1">return common.FilterSupportedAssets(result), nil</span>
+}
+
+func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) <span class="cov0" title="0">{
+        return nil, fmt.Errorf("not implemented")
+}</span>
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helpers
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Get CandleStick data from [startTime, endTime]
+func (apiClient *ApiClient) GetOHLCMarketData(
+        symbol models.Symbol,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        candleStickResponse, err := apiClient.getKlines(
+                symbol.ProductID,
+                interval,
+                startTime,
+                endTime,
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">ohlcMarketData := []*models.OHLCMarketData{}
+        for i := range candleStickResponse.Data </span><span class="cov8" title="1">{
+                candle := candleStickResponse.Data[i]
+                ohlcMarketData = append(ohlcMarketData, &amp;models.OHLCMarketData{
+                        MarketData: models.MarketData{
+                                Source:        KUCOIN,
+                                BaseCurrency:  symbol.NormalizedBase,
+                                QuoteCurrency: symbol.NormalizedQuote,
+                        },
+                        StartTime:  time.Unix(int64(candle.OpenTime), 0),
+                        EndTime:    time.Unix(int64(candle.OpenTime+interval.Seconds()), 0),
+                        OpenPrice:  candle.OpenPrice,
+                        HighPrice:  candle.HighPrice,
+                        LowPrice:   candle.LowPrice,
+                        ClosePrice: candle.ClosePrice,
+                        Volume:     candle.Volume,
+                })
+        }</span>
+        // Return ascending time
+        <span class="cov8" title="1">return utils.Reverse(ohlcMarketData), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package kucoin
+
+import (
+        "encoding/json"
+        "strconv"
+)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://docs.kucoin.com/#get-klines
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+type CandleStickResponse struct {
+        Code string            `json:"code"`
+        Data []CandleStickData `json:"data"`
+}
+type CandleStickData struct {
+        OpenTime   float64
+        OpenPrice  float64
+        HighPrice  float64
+        LowPrice   float64
+        ClosePrice float64
+        Volume     float64
+}
+
+func (candleStickResponse *CandleStickData) UnmarshalJSON(
+        data []byte,
+) (err error) <span class="cov8" title="1">{
+        var responseSlice []interface{}
+        if err := json.Unmarshal(data, &amp;responseSlice); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "1545904980"
+        <span class="cov8" title="1">candleStickResponse.OpenTime, err = strconv.ParseFloat(responseSlice[0].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "4261.48000000"
+        <span class="cov8" title="1">candleStickResponse.OpenPrice, err = strconv.ParseFloat(responseSlice[1].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "4745.42000000"
+        <span class="cov8" title="1">candleStickResponse.HighPrice, err = strconv.ParseFloat(responseSlice[2].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "3400.00000000"
+        <span class="cov8" title="1">candleStickResponse.LowPrice, err = strconv.ParseFloat(responseSlice[3].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "4724.89000000"
+        <span class="cov8" title="1">candleStickResponse.ClosePrice, err = strconv.ParseFloat(responseSlice[4].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "10015.64027200"
+        <span class="cov8" title="1">candleStickResponse.Volume, err = strconv.ParseFloat(responseSlice[5].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://docs.kucoin.com/#get-symbols-list
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+type SymbolsResponse struct {
+        Code string   `json:"code"`
+        Data []Symbol `json:"data"`
+}
+type Symbol struct {
+        Symbol          string `json:"symbol"`
+        Name            string `json:"name"`
+        BaseCurrency    string `json:"baseCurrency"`
+        QuoteCurrency   string `json:"quoteCurrency"`
+        BaseMinSize     string `json:"baseMinSize"`
+        QuoteMinSize    string `json:"quoteMinSize"`
+        BaseMaxSize     string `json:"baseMaxSize"`
+        QuoteMaxSize    string `json:"quoteMaxSize"`
+        BaseIncrement   string `json:"baseIncrement"`
+        QuoteIncrement  string `json:"quoteIncrement"`
+        PriceIncrement  string `json:"priceIncrement"`
+        FeeCurrency     string `json:"feeCurrency"`
+        EnableTrading   bool   `json:"enableTrading"`
+        IsMarginEnabled bool   `json:"isMarginEnabled"`
+        PriceLimitRate  string `json:"priceLimitRate"`
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package api
+
+import (
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/binance"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/coinbasepro"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/ftx"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/kucoin"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/okex"
+        "github.com/mochahub/coinprice-scraper/app/pkg/models"
+        "go.uber.org/fx"
+)
+
+type ExchangeClientResult struct {
+        fx.Out
+        Client models.ExchangeAPIClient `group:"exchange_client"`
+}
+
+type ExchangeClients struct {
+        fx.In
+        Clients []models.ExchangeAPIClient `group:"exchange_client"`
+}
+
+func GetAPIProviders() fx.Option <span class="cov8" title="1">{
+        return fx.Options(
+                fx.Provide(NewBinanaceAPIClient),
+                fx.Provide(NewCoinbaseProAPIClient),
+                fx.Provide(NewKucoinAPIClient),
+                fx.Provide(NewOkexAPIClient),
+                fx.Provide(NewFtxAPIClient),
+        )
+}</span>
+
+func NewBinanaceAPIClient() ExchangeClientResult <span class="cov8" title="1">{
+        return ExchangeClientResult{
+                Client: binance.NewBinanceAPIClient(),
+        }
+}</span>
+
+func NewCoinbaseProAPIClient() ExchangeClientResult <span class="cov8" title="1">{
+        return ExchangeClientResult{
+                Client: coinbasepro.NewCoinbaseProAPIClient(),
+        }
+}</span>
+
+func NewKucoinAPIClient() ExchangeClientResult <span class="cov8" title="1">{
+        return ExchangeClientResult{
+                Client: kucoin.NewKucoinAPIClient(),
+        }
+}</span>
+
+func NewOkexAPIClient() ExchangeClientResult <span class="cov8" title="1">{
+        return ExchangeClientResult{
+                Client: okex.NewOkexAPIClient(),
+        }
+}</span>
+
+func NewFtxAPIClient() ExchangeClientResult <span class="cov8" title="1">{
+        return ExchangeClientResult{
+                Client: ftx.NewFtxAPIClient(),
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package okex
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "golang.org/x/time/rate"
+        "io/ioutil"
+        "log"
+        "net/http"
+        "time"
+
+        "github.com/hashicorp/go-retryablehttp"
+)
+
+type ApiClient struct {
+        *retryablehttp.Client
+        *rate.Limiter
+}
+
+func NewOkexAPIClient() *ApiClient <span class="cov8" title="1">{
+        rateLimiter := rate.NewLimiter(rate.Every(time.Second/callsPerSecond), 1)
+        httpClient := retryablehttp.NewClient()
+        httpClient.CheckRetry = common.DefaultCheckRetry
+        httpClient.RetryWaitMin = common.DefaultRetryMin
+        httpClient.RetryMax = common.MaxRetries
+        apiClient := ApiClient{
+                Client:  httpClient,
+                Limiter: rateLimiter,
+        }
+        apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) </span><span class="cov8" title="1">{
+                if err := apiClient.Limiter.Wait(context.Background()); err != nil </span><span class="cov0" title="0">{
+                        log.Printf("ERROR WAITING FOR LIMIT: %s\n", err.Error())
+                        return
+                }</span>
+        }
+        <span class="cov8" title="1">return &amp;apiClient</span>
+}
+
+func (apiClient *ApiClient) GetExchangeIdentifier() string <span class="cov0" title="0">{
+        return OKEX
+}</span>
+
+//Get CandleStick data from [startTime, endTime)
+func (apiClient *ApiClient) getInstrumentCandles(
+        symbol string,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+        limit int64,
+) (candleStickData []*CandleStickData, err error) <span class="cov8" title="1">{
+        uri := fmt.Sprintf(getCandles, symbol)
+        // For okex end &lt; start...
+        urlString := fmt.Sprintf("%s%s?granularity=%d&amp;limit=%d&amp;start=%s&amp;end=%s",
+                baseUrl,
+                uri,
+                int(interval.Seconds()),
+                limit,
+                endTime.Add(-interval).UTC().Format(time.RFC3339),
+                startTime.UTC().Format(time.RFC3339),
+        )
+        resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;candleStickData); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return candleStickData, nil</span>
+}
+
+func (apiClient *ApiClient) getInstruments() (instruments []*Instrument, err error) <span class="cov8" title="1">{
+        urlString := fmt.Sprintf("%s%s", baseUrl, getInstruments)
+        resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        if err = json.Unmarshal(body, &amp;instruments); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return instruments, nil</span>
+}
+
+func (apiClient *ApiClient) intervalQueryParamFromDuration(intervalDuration time.Duration) (interval string) <span class="cov0" title="0">{
+        return fmt.Sprintf("%dmin", int(intervalDuration.Minutes()))
+}</span>
+
+func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
+        urlString string,
+) (*http.Response, error) <span class="cov8" title="1">{
+        httpReq, err := http.NewRequest("GET", urlString, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">retryableRequest, err := retryablehttp.FromRequest(httpReq)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return apiClient.Do(retryableRequest)</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package okex
+
+import (
+        "fmt"
+        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/mochahub/coinprice-scraper/app/pkg/models"
+        "github.com/mochahub/coinprice-scraper/app/utils"
+        "strings"
+        "time"
+)
+
+//Get CandleStick data from [startTime, endTime] with pagination
+func (apiClient *ApiClient) GetAllOHLCMarketData(
+        symbol models.Symbol,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        if _, ok := supportedMap[symbol.ProductID]; !ok </span><span class="cov0" title="0">{
+                return []*models.OHLCMarketData{}, nil
+        }</span>
+        <span class="cov8" title="1">if endTime.IsZero() </span><span class="cov0" title="0">{
+                endTime = time.Now()
+        }</span>
+        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        for startTime.Before(endTime) </span><span class="cov8" title="1">{
+                newEndTime := startTime.Add(maxLimit * interval)
+                if newEndTime.After(endTime) </span><span class="cov0" title="0">{
+                        newEndTime = endTime
+                }</span>
+                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                        symbol,
+                        interval,
+                        startTime,
+                        newEndTime)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                startTime = newEndTime</span>
+        }
+        <span class="cov8" title="1">return result, nil</span>
+}
+
+func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) <span class="cov8" title="1">{
+        exchangeInstruments, err := apiClient.getInstruments()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">result := []*models.Symbol{}
+        for _, symbol := range exchangeInstruments </span><span class="cov8" title="1">{
+                result = append(result, &amp;models.Symbol{
+                        RawBase:         symbol.BaseCurrency,
+                        NormalizedBase:  strings.ToUpper(symbol.BaseCurrency),
+                        RawQuote:        symbol.QuoteCurrency,
+                        NormalizedQuote: strings.ToUpper(symbol.QuoteCurrency),
+                        ProductID:       symbol.InstrumentID,
+                })
+        }</span>
+        <span class="cov8" title="1">return common.FilterSupportedAssets(result), nil</span>
+}
+
+func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) <span class="cov0" title="0">{
+        return nil, fmt.Errorf("not implemented")
+}</span>
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helpers
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Get CandleStick data from [startTime, endTime]
+func (apiClient *ApiClient) GetOHLCMarketData(
+        symbol models.Symbol,
+        interval time.Duration,
+        startTime time.Time,
+        endTime time.Time,
+) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+        candleStickResponse, err := apiClient.getInstrumentCandles(
+                symbol.ProductID,
+                interval,
+                startTime,
+                endTime,
+                int64(endTime.Sub(startTime))/int64(interval),
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">ohlcMarketData := []*models.OHLCMarketData{}
+        for i := range candleStickResponse </span><span class="cov8" title="1">{
+                ohlcMarketData = append(ohlcMarketData, &amp;models.OHLCMarketData{
+                        MarketData: models.MarketData{
+                                Source:        OKEX,
+                                BaseCurrency:  symbol.NormalizedBase,
+                                QuoteCurrency: symbol.NormalizedQuote,
+                        },
+                        StartTime:  time.Unix(int64(candleStickResponse[i].OpenTime), 0),
+                        EndTime:    time.Unix(int64(candleStickResponse[i].OpenTime+interval.Seconds()), 0),
+                        OpenPrice:  candleStickResponse[i].OpenPrice,
+                        HighPrice:  candleStickResponse[i].HighPrice,
+                        LowPrice:   candleStickResponse[i].LowPrice,
+                        ClosePrice: candleStickResponse[i].ClosePrice,
+                        Volume:     candleStickResponse[i].Volume,
+                })
+        }</span>
+        // Return in ascending order
+        <span class="cov8" title="1">return utils.Reverse(ohlcMarketData), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package okex
+
+import (
+        "encoding/json"
+        "strconv"
+        "time"
+)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://www.okex.com/docs/en/#spot-line
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+type CandleStickData struct {
+        OpenTime   float64
+        OpenPrice  float64
+        HighPrice  float64
+        LowPrice   float64
+        ClosePrice float64
+        Volume     float64
+}
+
+func (candleStickResponse *CandleStickData) UnmarshalJSON(
+        data []byte,
+) (err error) <span class="cov8" title="1">{
+        var responseSlice []interface{}
+        if err := json.Unmarshal(data, &amp;responseSlice); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "2020-01-01T00:00:00.000Z""
+        <span class="cov8" title="1">temp, err := time.Parse(time.RFC3339, responseSlice[0].(string))
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">candleStickResponse.OpenTime = float64(temp.Unix())
+        // "7195.0"
+        candleStickResponse.OpenPrice, err = strconv.ParseFloat(responseSlice[1].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "7195.0"
+        <span class="cov8" title="1">candleStickResponse.HighPrice, err = strconv.ParseFloat(responseSlice[2].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "7195.0"
+        <span class="cov8" title="1">candleStickResponse.LowPrice, err = strconv.ParseFloat(responseSlice[3].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "7195.0"
+        <span class="cov8" title="1">candleStickResponse.ClosePrice, err = strconv.ParseFloat(responseSlice[4].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // "30.32773632"
+        <span class="cov8" title="1">candleStickResponse.Volume, err = strconv.ParseFloat(responseSlice[5].(string), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// https://www.okex.com/docs/en/#spot-some
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+type Instrument struct {
+        BaseCurrency  string `json:"base_currency"`
+        Category      string `json:"category"`
+        InstrumentID  string `json:"instrument_id"`
+        MinSize       string `json:"min_size"`
+        QuoteCurrency string `json:"quote_currency"`
+        SizeIncrement string `json:"size_increment"`
+        TickSize      string `json:"tick_size"`
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
