@@ -17,6 +17,7 @@
 
 Web-Scraper for crypto prices built in Go.
 1 Minute candle-stick data is scraped and stored in influxdb.
+Web-socket feeds pull live prices from supported exchanges (WIP).
 
 Supported Exchanges:
 - Binance
@@ -31,13 +32,16 @@ Supported Exchanges:
 - docker & docker-compose
 ### Running the Application Via Docker
 ```bash
-docker-compose up -d
+# External Dependencies (psql, influxdb)
+docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up -d
+# Build app docker image
 docker image build -t coinprice-scraper -f build/dockerfile . 
 docker run --name coinprice-scraper --env-file ./.env --network="host"  coinprice-scraper
+# For future runs:
 # docker start coinprice-scraper
 # docer restart coinprice-scraper   
 ```
-TODO: Create seperate docker-compose file to combine both external services and the app
+
 ### Setting up Local Environment
 - clone: `git@github.com:mochahub/coinprice-scraper.git`
 - Create `.env` file via tempalte `cp env_example.txt .env`
@@ -47,26 +51,28 @@ TODO: Create seperate docker-compose file to combine both external services and 
   ```
 - install project packages: `go get -u ./... -v`
 - run postgres & influxdb: ` docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up `
-- run the app : `go run scraper/main.go`  
+- run the app : `go run app/cmd/main.go`  
 
 At this point you should see debug logs in the console of the scraper running, if this isn't the case please file an issue.
 
 
 ## Repo Structure
 ```markdown
-├── scripts                     // Useful scripts (code coverage, database management, etc), all should run from root of repo
-├── chronograph
-│   └── dashboard               // Files you can import into chronograph dashboards (localhost:8086)
-├── config                      // Handles secrets resolution (secrets, passwords, etc)
-├── data                        // golang code to connect/query/save data to persistance services
-│   ├── influxdb
-│   └── psql
-├── scraper                     // Entry point of the app lives in main.go
-│   ├── app                     // Entry point of the scraper lives in initialize.go, it backfills data then starts a cron job
-│   ├── models                  // Application models
-│   ├── service
-│   │   └── api                 // Implementation of scrapers for various exchanges 
-│   └── utils                   // Helpers
+├── app
+│   ├── cmd
+│   ├── configs                             // Handles secrets resolution (secrets, passwords, etc)
+│   ├── internal                            // Scraper code + influx/psql interface code
+│   └── pkg                                 // All API interface code
+├── build
+│   ├── docker-compose.yaml
+│   └── dockerfile
+├── docs
+│   ├── chronograph
+│   ├── cover.html
+│   ├── env_example.txt
+│   └── images
+├── scripts
+│   ├── run-test-with-coverage.sh           // Code Coverage Script (Run Before Making PR)
 ```
 
 
@@ -75,10 +81,11 @@ At this point you should see debug logs in the console of the scraper running, i
 - sqlboiler introspects the database schema and creates the model files
 - Before generating the models, the database needs to be running, and the migrations need to be executed
 ```bash
-docker-compose up -d 
+docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up -d
 ./scripts/run-database-migrations.sh
 ./scripts/generate-database-models.sh
 ```
+- Note: Running `main.go` will automatically run relevant migrations
 
 ### Process for Creating New Database Models
 - Create a migration file under `data/psql/migrations`, and name it appropriately (ex. `2_new_migration.up.sql`)
@@ -87,22 +94,22 @@ docker-compose up -d
 
 ## Scraper
 ### Supporting New Data Sources (Exchanges)
-- Create a new package under `service/api` with the name of the data source
-- Create an `api_client.go` and `api_wrapper.go` and have them implement the `ExchangeAPIClien` type interface
-- Create a wrapper method for the new data source in `service/api/module.go` 
+- Create a new package under `app/pkg/api` with the name of the data source
+- Create an `api_client.go` and `api_wrapper.go` and have them implement the `ExchangeAPIClient` type interface
+- Create a wrapper method for the new data source in `app/pkg/api/module.go` 
     - ex. `func NewCoinbaseProAPIClient(...) ExchangeClientResult {...}`
 - Add wrapper method to `GetAPIProviders` (this makes it available to the app via uber.fx dependency injection)
-- Run the test file `service/api/exchange_client_test.go`
+- Run the test file `app/pkg/api/exchange_client_test.go`
 
 ## Tests
-- Run tests and update the `coverage_badge.png` via the following script
-- The script will run all tests inside the `scraper` folder
+- Run tests and update the `README.md` via the following script
+- The script will run all tests inside the `app` folder (excluding sqlboiler generated files)
 ```bash
 ./scripts/run-test-with-coverage.sh #run from root of the repo
 ```
 
 ## Chronograph
-There is an example dashboard under `chronograph/dashboard`
+There is an example dashboard under `docs/chronograph/dashboard`
 <p align="center">
     <img width=100% src="docs/images/chronograph.png">
 </p>
