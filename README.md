@@ -1,5 +1,5 @@
 # coinprice price scraper
-![Coverage](https://img.shields.io/badge/Coverage-1-red)
+![Coverage](https://img.shields.io/badge/Coverage-76.2%25-brightgreen)
 <p align="center">
   [comment]: <> (  <img src="./docs/images/coverage_badge.png" alt="code coverage">)
   <a href="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper">
