@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"os"
@@ -13,6 +14,10 @@ func GetProjectRoot() string {
 	cwd, _ := os.Getwd()
 	rootPath := re.Find([]byte(cwd))
 	return string(rootPath)
+}
+
+func GetMigrationDir() string {
+	return fmt.Sprintf("file://%s%s", GetProjectRoot(), MIGRATION_DIR)
 }
 func LoadEnv() {
 	if os.Getenv("COINPRICE_ENV") != "" {

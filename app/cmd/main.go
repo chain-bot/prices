@@ -22,7 +22,7 @@ func main() {
 		fx.Provide(influxdb.NewInfluxDBClient),
 		fx.Provide(repository.NewRepository),
 		fx.Invoke(
-			RunMigrations,
+			psql.RunMigrations,
 			scraper.InitScrapper,
 		),
 	)

@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/app/pkg/api"
 	"github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+	"github.com/mochahub/coinprice-scraper/app/utils"
 	"golang.org/x/time/rate"
 	"io/ioutil"
 	"log"
@@ -59,8 +59,8 @@ func (apiClient *ApiClient) getCandleStickData(
 	params := url.Values{}
 	params.Add("symbol", symbol)
 	params.Add("interval", string(apiClient.getBinanceIntervalFromDuration(interval)))
-	params.Add("startTime", strconv.FormatInt(api.UnixMillis(startTime), 10))
-	params.Add("endTime", strconv.FormatInt(api.UnixMillis(endTime), 10))
+	params.Add("startTime", strconv.FormatInt(utils.UnixMillis(startTime), 10))
+	params.Add("endTime", strconv.FormatInt(utils.UnixMillis(endTime), 10))
 	params.Add("limit", strconv.Itoa(maxLimit))
 	urlString := fmt.Sprintf("%s%s?%s", baseUrl, getCandleStick, params.Encode())
 	resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)

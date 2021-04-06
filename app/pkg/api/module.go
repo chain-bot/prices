@@ -6,17 +6,18 @@ import (
 	"github.com/mochahub/coinprice-scraper/app/pkg/api/ftx"
 	"github.com/mochahub/coinprice-scraper/app/pkg/api/kucoin"
 	"github.com/mochahub/coinprice-scraper/app/pkg/api/okex"
+	"github.com/mochahub/coinprice-scraper/app/pkg/models"
 	"go.uber.org/fx"
 )
 
 type ExchangeClientResult struct {
 	fx.Out
-	Client ExchangeAPIClient `group:"exchange_client"`
+	Client models.ExchangeAPIClient `group:"exchange_client"`
 }
 
 type ExchangeClients struct {
 	fx.In
-	Clients []ExchangeAPIClient `group:"exchange_client"`
+	Clients []models.ExchangeAPIClient `group:"exchange_client"`
 }
 
 func GetAPIProviders() fx.Option {

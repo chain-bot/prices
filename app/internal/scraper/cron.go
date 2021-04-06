@@ -3,14 +3,14 @@ package scraper
 import (
 	"context"
 	"github.com/mochahub/coinprice-scraper/app/internal/repository"
-	"github.com/mochahub/coinprice-scraper/app/pkg/api"
+	"github.com/mochahub/coinprice-scraper/app/pkg/models"
 	"github.com/robfig/cron"
 )
 
 func StartScrapperCron(
 	ctx context.Context,
 	repo repository.Repository,
-	clients []api.ExchangeAPIClient,
+	clients []models.ExchangeAPIClient,
 ) (*cron.Cron, error) {
 	c := cron.New()
 	err := c.AddFunc("@every 1m", func() {

@@ -34,7 +34,7 @@ Supported Exchanges:
 ### Running the Application Via Docker
 ```bash
 docker-compose up -d
-docker image build -t coinprice-scraper . 
+docker image build -t coinprice-scraper -f build/dockerfile . 
 docker run --name coinprice-scraper --env-file ./.env --network="host"  coinprice-scraper
 # docker start coinprice-scraper
 # docer restart coinprice-scraper   
@@ -48,7 +48,7 @@ TODO: Create seperate docker-compose file to combine both external services and 
     cat .env | grep '<...>' 
   ```
 - install project packages: `go get -u ./... -v`
-- run postgres & influxdb: `docker-compose up`
+- run postgres & influxdb: ` docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up `
 - run the app : `go run scraper/main.go`  
 
 At this point you should see debug logs in the console of the scraper running, if this isn't the case please file an issue.

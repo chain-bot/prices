@@ -1,7 +1,6 @@
-package main
+package psql
 
 import (
-	"fmt"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -22,12 +21,11 @@ func RunMigrations(
 	if err != nil {
 		log.Fatalf("could not start sql migration... %v", err)
 	}
-	sourceURL := fmt.Sprintf("file://%s/data/psql/migrations", configs.GetProjectRoot())
 	m, err := migrate.NewWithDatabaseInstance(
-		sourceURL, // file://path/to/directory
+		configs.GetMigrationDir(), // file://path/to/directory
 		secrets.DatabaseCredentials.DBName, driver)
 	if err != nil {
-		log.Fatalf("migration failed... err: %v, url: %s", err, sourceURL)
+		log.Fatalf("migration failed... err: %v, url: %s", err, configs.GetMigrationDir())
 		return 0, err
 	}
 	if err := m.Up(); err != nil && err != migrate.ErrNoChange {

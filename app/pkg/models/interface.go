@@ -1,19 +1,18 @@
-package api
+package models
 
 import (
-	"github.com/mochahub/coinprice-scraper/app/pkg/models"
 	"time"
 )
 
 // TODO(Zahin): Get a List of Supported Symbols
 type ExchangeAPIClient interface {
 	GetExchangeIdentifier() string
-	GetSupportedPairs() ([]*models.Symbol, error)
-	GetRawMarketData() ([]*models.RawMarketData, error)
+	GetSupportedPairs() ([]*Symbol, error)
+	GetRawMarketData() ([]*RawMarketData, error)
 	GetAllOHLCMarketData(
-		symbol models.Symbol,
+		symbol Symbol,
 		interval time.Duration,
 		startTime time.Time,
 		endTime time.Time,
-	) ([]*models.OHLCMarketData, error)
+	) ([]*OHLCMarketData, error)
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/mochahub/coinprice-scraper/app/internal/repository"
-	"github.com/mochahub/coinprice-scraper/app/pkg/api"
+	"github.com/mochahub/coinprice-scraper/app/pkg/models"
 	"log"
 	"sync"
 	"time"
@@ -14,7 +14,7 @@ import (
 func StartScraper(
 	ctx context.Context,
 	repo repository.Repository,
-	clients []api.ExchangeAPIClient) error {
+	clients []models.ExchangeAPIClient) error {
 	log.Println("Starting Scraper")
 	defer log.Println("Stopping Scraper")
 	var waitGroup sync.WaitGroup
@@ -27,8 +27,8 @@ func StartScraper(
 			// Decrement the counter when the goroutine completes.
 			defer wg.Done()
 			// Default start time is 1 day prior for ease of local development
-			//startTime := time.Now().AddDate(0, 0, -1)
-			startTime, _ := time.Parse(time.RFC3339, "2021-01-01T00:00:00+00:00")
+			startTime := time.Now().AddDate(0, 0, -1)
+			//startTime, _ := time.Parse(time.RFC3339, "2021-03-01T00:00:00+00:00")
 			endTime := time.Now()
 			err := ScrapeExchange(ctx, repo, client, startTime, endTime)
 			if err != nil {
@@ -43,7 +43,7 @@ func StartScraper(
 func ScrapeExchange(
 	ctx context.Context,
 	repo repository.Repository,
-	client api.ExchangeAPIClient,
+	client models.ExchangeAPIClient,
 	startTime time.Time,
 	endTime time.Time,
 ) error {

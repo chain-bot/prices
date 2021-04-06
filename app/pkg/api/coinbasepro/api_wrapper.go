@@ -2,9 +2,9 @@ package coinbasepro
 
 import (
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/app/pkg/api"
 	"github.com/mochahub/coinprice-scraper/app/pkg/api/common"
 	"github.com/mochahub/coinprice-scraper/app/pkg/models"
+	"github.com/mochahub/coinprice-scraper/app/utils"
 	"strings"
 	"time"
 )
@@ -104,5 +104,5 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 			Volume:     candle.Volume,
 		})
 	}
-	return api.Reverse(result), nil
+	return utils.Reverse(result), nil
 }

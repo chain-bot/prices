@@ -3,27 +3,31 @@ services:
   influxdb:
     # https://hub.docker.com/_/influxdb
     image: influxdb
+    env_file:
+      - ../.env
     environment:
       DOCKER_INFLUXDB_INIT_MODE: setup
-      DOCKER_INFLUXDB_INIT_USERNAME: admin
-      DOCKER_INFLUXDB_INIT_PASSWORD: admin_password
-      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: admin_token
-      DOCKER_INFLUXDB_INIT_ORG: coinprice
-      DOCKER_INFLUXDB_INIT_BUCKET: candle
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_ADMIN_USER}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_ADMIN_USER_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_ADMIN_USER_TOKEN}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET_CANDLE}
     ports:
-      - 8086:8086
-      - 8088:8088
+      - ${INFLUXDB_PORT}:8086
+      - ${CHRONOGRAPH_PORT}:8088
     volumes:
       - ./.docker/influxdb_data:/var/lib/influxdb
   psql:
     image: postgres
+    env_file:
+      - ../.env
     container_name: postgres
     environment:
-      POSTGRES_DB: coinprice
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - 5432:5432
+      - ${POSTGRESQL_PORT}:5432
     volumes:
       - ./.docker/psql_data:/var/lib/postgresql/data
 volumes:
