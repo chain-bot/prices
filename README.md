@@ -1,6 +1,6 @@
 # coinprice price scraper
 <p align="center">
-  <img src="./coverage_badge.png" alt="code coverage">
+  <img src="docs/coverage_badge.png" alt="code coverage">
   <a href="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper">
     <img src="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper" alt="Go Report Card">
   </a>
@@ -14,7 +14,7 @@
   <a href="https://join.slack.com/t/coinprice/shared_invite/zt-o5se8lo1-VNFyMDLewICRa9A49hl8Bw">
     <img alt="Slack" src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white" />
   </a>
-  <img width=100% src="images/coinprice-scraper-white.png">
+  <img width=100% src="docs/images/coinprice-scraper-white.png">
 </p>
 
 Web-Scraper for crypto prices built in Go.
@@ -73,7 +73,7 @@ At this point you should see debug logs in the console of the scraper running, i
 
 
 ## Data: Postgres Database Migrations and Models
-- Database [models](data/psql/generated) are generated using the database schema via [sqlboiler](https://github.com/volatiletech/sqlboiler)
+- Database [models](app/internal/data/psql/generated) are generated using the database schema via [sqlboiler](https://github.com/volatiletech/sqlboiler)
 - sqlboiler introspects the database schema and creates the model files
 - Before generating the models, the database needs to be running, and the migrations need to be executed
 ```bash
@@ -106,5 +106,5 @@ docker-compose up -d
 ## Chronograph
 There is an example dashboard under `chronograph/dashboard`
 <p align="center">
-    <img width=100% src="images/chronograph.png">
+    <img width=100% src="docs/images/chronograph.png">
 </p>
