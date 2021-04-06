@@ -1,6 +1,7 @@
 # coinprice price scraper
+![Coverage](https://img.shields.io/badge/Coverage-1-red)
 <p align="center">
-  <img src="docs/coverage_badge.png" alt="code coverage">
+  [comment]: <> (  <img src="./docs/images/coverage_badge.png" alt="code coverage">)
   <a href="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper">
     <img src="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper" alt="Go Report Card">
   </a>
@@ -11,10 +12,7 @@
   <a href="https://ko-fi.com/X8X71S1S7">
     <img src="https://img.shields.io/badge/donate-Ko--fi-pink" alt="Ko-Fi Donations">
   </a>
-  <a href="https://join.slack.com/t/coinprice/shared_invite/zt-o5se8lo1-VNFyMDLewICRa9A49hl8Bw">
-    <img alt="Slack" src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white" />
-  </a>
-  <img width=100% src="docs/images/coinprice-scraper-white.png">
+  <img width=100% src="./docs/images/coinprice-scraper-white.png">
 </p>
 
 Web-Scraper for crypto prices built in Go.
