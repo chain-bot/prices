@@ -1,7 +1,10 @@
 # coinprice price scraper
-![Coverage](https://img.shields.io/badge/Coverage-76.2%25-brightgreen)
+
+[comment]: <> (![Coverage]&#40;https://img.shields.io/badge/Coverage-76.2%25-brightgreen&#41;)
+
 <p align="center">
-  [comment]: <> (  <img src="./docs/images/coverage_badge.png" alt="code coverage">)
+  <a href="https://codeclimate.com/github/mochahub/coinprice-scraper/test_coverage"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/test_coverage" /></a>
+  <a href="https://codeclimate.com/github/mochahub/coinprice-scraper/maintainability"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/maintainability" /></a>
   <a href="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper">
     <img src="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper" alt="Go Report Card">
   </a>
