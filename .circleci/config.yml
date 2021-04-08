@@ -37,7 +37,7 @@ jobs:
           name: Start Docker Compose
           command: |
             set -x
-            docker-compose --file ./build/circleci/docker-compose.yaml  --env-file ../../.env up -d --build
+            docker-compose --file ./build/circleci/docker-compose.yaml up -d --build
       - run:
           name: Run Tests & Update Code Climate
           command: |
