@@ -17,6 +17,7 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
+      - setup_remote_docker
       - run:
           name: Install Docker Compose
           command: |
