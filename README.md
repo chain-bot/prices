@@ -44,7 +44,7 @@ docker run --name coinprice-scraper --env-file ./.env --network="host"  coinpric
 ```
 
 ### Setting up Local Environment
-- clone: `git@github.com:mochahub/coinprice-scraper.git`
+- clone: `git clone git@github.com:mochahub/coinprice-scraper.git`
 - Create `.env` file via tempalte `cp env_example.txt .env`
   - Variables with a value of `<...>` need to be filled in by the user
   ```bash
