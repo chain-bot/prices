@@ -17,6 +17,7 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
+      - setup_remote_docker
       - run:
           name: Install Docker Compose
           command: |
@@ -41,7 +42,7 @@ jobs:
           name: Run Tests & Update Code Climate
           command: |
             set -x
-            ./cc-test-reporter before-build -r=$CC_TEST_REPORTER_ID
+            ./cc-test-reporter before-build
             cd app
             go test -coverprofile ../c.out $(go list ./... | grep -v /psql/generated)
             cd ../
