@@ -37,15 +37,14 @@ jobs:
           name: Start Docker Compose
           command: |
             set -x
-            docker-compose --file ./build/docker-compose.yaml up -d
+            docker-compose --file ./build/circleci/docker-compose.yaml  --env-file ../../.env up -d --build
       - run:
           name: Run Tests & Update Code Climate
           command: |
             set -x
             ./cc-test-reporter before-build
-            cd app
-            go test -coverprofile ../c.out $(go list ./... | grep -v /psql/generated)
-            cd ../
+            docker exec -it circleci_scraper_1 bash ./scripts/run-test-with-coverage.sh
+            docker cp circleci_scraper_1:/coinprice-scraper/c.out .
             cc-test-reporter format-coverage -t gocov --prefix github.com/mochahub/coinprice-scraper c.out
             cc-test-reporter after-build --prefix github.com/mochahub/coinprice-scraper -r=$CC_TEST_REPORTER_ID --exit-code $?
             go tool cover -html=c.out -o=coverage/c.html
