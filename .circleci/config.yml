@@ -49,5 +49,5 @@ jobs:
             ./cc-test-reporter after-build --prefix github.com/mochahub/coinprice-scraper -r=$CC_TEST_REPORTER_ID --exit-code $?
             go tool cover -html=c.out -o=coverage/c.html
             mv c.out coverage/c.out
-      - store_test_results:
-          path: ~/coinprice-scraper/coverage
+      - store_artifacts:
+          path: ./coverage
