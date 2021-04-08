@@ -1,0 +1,53 @@
+version: '3.7'
+services:
+  influxdb:
+    # https://hub.docker.com/_/influxdb
+    image: influxdb
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_ADMIN_USER}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_ADMIN_USER_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_ADMIN_USER_TOKEN}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET_CANDLE}
+    ports:
+      - ${INFLUXDB_PORT}:8086
+      - ${CHRONOGRAPH_PORT}:8088
+    volumes:
+      - ./.docker/influxdb_data:/var/lib/influxdb
+  psql:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - ${POSTGRESQL_PORT}:5432
+    volumes:
+      - ./.docker/psql_data:/var/lib/postgresql/data
+  scraper:
+    build:
+      context: ../../
+      dockerfile: build/circleci/dockerfile
+    command: tail -F anything
+    environment:
+      COINPRICE_ENV: test
+      INFLUXDB_ADMIN_USER: ${INFLUXDB_ADMIN_USER}
+      INFLUXDB_ADMIN_USER_PASSWORD: ${INFLUXDB_ADMIN_USER_PASSWORD}
+      INFLUXDB_ADMIN_USER_TOKEN: ${INFLUXDB_ADMIN_USER_TOKEN}
+      INFLUXDB_ORG: ${INFLUXDB_ORG}
+      INFLUXDB_BUCKET_CANDLE: ${INFLUXDB_BUCKET_CANDLE}
+      INFLUXDB_HOST: influxdb
+      INFLUXDB_PORT: ${INFLUXDB_PORT}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRESQL_HOST: psql
+      POSTGRESQL_PORT: ${POSTGRESQL_PORT}
+      CC_TEST_REPORTER_ID: ${CC_TEST_REPORTER_ID}
+
+volumes:
+  influxdb_data:
+    driver: local
+  psql_data:
+    driver: local

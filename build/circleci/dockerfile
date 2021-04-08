@@ -1,0 +1,34 @@
+FROM golang:1.16-alpine
+RUN apk add --no-cache git
+RUN apk add --no-cache curl
+RUN apk add --no-cache bash
+RUN apk add --no-cache build-base
+
+
+ENV COINPRICE_ENV=${COINPRICE_ENV}
+ENV INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
+ENV INFLUXDB_ADMIN_USER_PASSWORD=${INFLUXDB_ADMIN_USER_PASSWORD}
+ENV INFLUXDB_ADMIN_USER_TOKEN=${INFLUXDB_ADMIN_USER_TOKEN}
+ENV INFLUXDB_ORG=${INFLUXDB_ORG}
+ENV INFLUXDB_BUCKET_CANDLE=${INFLUXDB_BUCKET_CANDLE}
+ENV INFLUXDB_HOST=${INFLUXDB_HOST}
+ENV INFLUXDB_PORT=${INFLUXDB_PORT}
+ENV POSTGRES_USERNAME=${POSTGRES_USERNAME}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+ENV POSTGRES_DATABASE=${POSTGRES_DATABASE}
+ENV POSTGRESQL_HOST=${POSTGRESQL_HOST}
+ENV POSTGRESQL_PORT=${POSTGRESQL_PORT}
+ENV CC_TEST_REPORTER_ID=${CC_TEST_REPORTER_ID}
+
+# Set the Current Working Directory inside the container
+#Note: Need to have "coinprice-scraper" because of how we do pathing in some parts of the code
+WORKDIR /coinprice-scraper
+# We want to populate the module cache based on the go.{mod,sum} files.
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+RUN curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+RUN chmod +x ./cc-test-reporter
+COPY app ./app
+COPY scripts ./scripts
+RUN mkdir coverage
