@@ -36,7 +36,7 @@ jobs:
           name: Start Docker Compose
           command: |
             set -x
-            docker-compose --file ./build/docker-compose.yaml -d
+            docker-compose --file ./build/docker-compose.yaml up -d
       - run:
           name: Run Tests & Update Code Climate
           command: |
