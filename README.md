@@ -1,5 +1,6 @@
 # coinprice price scraper 
 <p align="center">
+<img src="https://circleci.com/gh/mochahub/coinprice-scraper.svg?style=shield"/>
   <a href="https://codeclimate.com/github/mochahub/coinprice-scraper/test_coverage"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/test_coverage" /></a>
   <a href="https://codeclimate.com/github/mochahub/coinprice-scraper/maintainability"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/maintainability" /></a>
   <a href="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper">
