@@ -44,7 +44,7 @@ func NewCoinbaseProAPIClient() *ApiClient {
 	return &apiClient
 }
 func (apiClient *ApiClient) GetExchangeIdentifier() string {
-	return COINBASE
+	return COINBASEPRO
 }
 
 // Get CandleStick data from [startTime, endTime]
