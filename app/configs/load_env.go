@@ -20,7 +20,7 @@ func GetMigrationDir() string {
 	return fmt.Sprintf("file://%s%s", GetProjectRoot(), MIGRATION_DIR)
 }
 func LoadEnv() {
-	if os.Getenv("COINPRICE_ENV") != "" {
+	if os.Getenv("CHAINBOT_ENV") != "" {
 		// Env variables already set
 		return
 	}

@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/mochahub/coinprice-scraper/app/configs"
-	"github.com/mochahub/coinprice-scraper/app/pkg/models"
+	"github.com/chain-bot/scraper/app/configs"
+	"github.com/chain-bot/scraper/app/pkg/models"
 )
 
 func FilterSupportedAssets(symbols []*models.Symbol) []*models.Symbol {

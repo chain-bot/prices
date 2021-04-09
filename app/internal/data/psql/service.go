@@ -2,8 +2,8 @@ package psql
 
 import (
 	"fmt"
+	"github.com/chain-bot/scraper/app/configs"
 	"github.com/jmoiron/sqlx"
-	"github.com/mochahub/coinprice-scraper/app/configs"
 )
 
 func NewDatabase(

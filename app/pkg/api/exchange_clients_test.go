@@ -2,7 +2,7 @@ package api
 
 import (
 	"context"
-	"github.com/mochahub/coinprice-scraper/app/configs"
+	"github.com/chain-bot/scraper/app/configs"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/fx"
 	"testing"

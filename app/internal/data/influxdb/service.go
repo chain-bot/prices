@@ -2,8 +2,8 @@ package influxdb
 
 import (
 	"fmt"
+	"github.com/chain-bot/scraper/app/configs"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
-	"github.com/mochahub/coinprice-scraper/app/configs"
 )
 
 func NewInfluxDBClient(secrets *configs.Secrets) (*influxdb2.Client, error) {

@@ -2,10 +2,10 @@ package repository
 
 import (
 	"context"
+	"github.com/chain-bot/scraper/app/configs"
+	"github.com/chain-bot/scraper/app/pkg/models"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/jmoiron/sqlx"
-	"github.com/mochahub/coinprice-scraper/app/configs"
-	"github.com/mochahub/coinprice-scraper/app/pkg/models"
 	"time"
 )
 

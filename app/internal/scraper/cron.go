@@ -2,8 +2,8 @@ package scraper
 
 import (
 	"context"
-	"github.com/mochahub/coinprice-scraper/app/internal/repository"
-	"github.com/mochahub/coinprice-scraper/app/pkg/models"
+	"github.com/chain-bot/scraper/app/internal/repository"
+	"github.com/chain-bot/scraper/app/pkg/models"
 	"github.com/robfig/cron"
 )
 

@@ -2,7 +2,7 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/coinprice-scraper
+    working_directory: ~/scraper
     docker:
       - image: circleci/golang:1.16
     steps:
@@ -44,9 +44,9 @@ jobs:
             set -x
             ./cc-test-reporter before-build
             docker exec -it circleci_scraper_1 bash ./scripts/run-test-with-coverage.sh
-            docker cp circleci_scraper_1:/coinprice-scraper/c.out .
-            ./cc-test-reporter format-coverage -t gocov --prefix github.com/mochahub/coinprice-scraper c.out
-            ./cc-test-reporter after-build --prefix github.com/mochahub/coinprice-scraper -r=$CC_TEST_REPORTER_ID --exit-code $?
+            docker cp circleci_scraper_1:/scraper/c.out .
+            ./cc-test-reporter format-coverage -t gocov --prefix github.com/chain-bot/scraper c.out
+            ./cc-test-reporter after-build --prefix github.com/chain-bot/scraper -r=$CC_TEST_REPORTER_ID --exit-code $?
             go tool cover -html=c.out -o=coverage/c.html
             mv c.out coverage/c.out
       - store_artifacts:

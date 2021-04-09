@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"github.com/chain-bot/scraper/app/pkg/models"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
-	"github.com/mochahub/coinprice-scraper/app/pkg/models"
 )
 
 func (repo *RepositoryImpl) UpsertOHLCData(
