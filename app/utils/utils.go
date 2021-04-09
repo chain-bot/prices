@@ -20,8 +20,8 @@ func UnixMillis(t time.Time) int64 {
 	return t.UnixNano() / int64(time.Millisecond)
 }
 
-func Reverse(s []*models.OHLCMarketData) []*models.OHLCMarketData {
-	a := make([]*models.OHLCMarketData, len(s))
+func Reverse(s []*models.OHLCVMarketData) []*models.OHLCVMarketData {
+	a := make([]*models.OHLCVMarketData, len(s))
 	copy(a, s)
 
 	for i := len(a)/2 - 1; i >= 0; i-- {

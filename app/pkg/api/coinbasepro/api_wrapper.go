@@ -10,22 +10,22 @@ import (
 )
 
 // Get CandleStick data from [startTime, endTime) with pagination
-func (apiClient *ApiClient) GetAllOHLCMarketData(
+func (apiClient *ApiClient) GetAllOHLCVMarketData(
 	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
-) ([]*models.OHLCMarketData, error) {
+) ([]*models.OHLCVMarketData, error) {
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
-	result := []*models.OHLCMarketData{}
+	result := []*models.OHLCVMarketData{}
 	for startTime.Before(endTime) {
 		newEndTime := startTime.Add(maxLimit * interval)
 		if newEndTime.After(endTime) {
 			newEndTime = endTime
 		}
-		ohlcMarketData, err := apiClient.GetOHLCMarketData(
+		ohlcvMarketData, err := apiClient.GetOHLCVMarketData(
 			symbol,
 			interval,
 			startTime,
@@ -33,7 +33,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, ohlcMarketData...)
+		result = append(result, ohlcvMarketData...)
 		startTime = newEndTime
 	}
 	return result, nil
@@ -74,22 +74,22 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Get CandleStick data from [startTime, endTime]
-func (apiClient *ApiClient) GetOHLCMarketData(
+func (apiClient *ApiClient) GetOHLCVMarketData(
 	symbol models.Symbol,
 	durationInterval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
-) ([]*models.OHLCMarketData, error) {
+) ([]*models.OHLCVMarketData, error) {
 	candleStickData, err := apiClient.getCandleStickData(
 		int(durationInterval.Seconds()), startTime, endTime, symbol.ProductID)
 	if err != nil {
 		return nil, err
 	}
-	result := []*models.OHLCMarketData{}
+	result := []*models.OHLCVMarketData{}
 	for i := range candleStickData {
 		candle := candleStickData[i]
 		candleEnd := time.Unix(int64(candle.CloseTime), 0)
-		result = append(result, &models.OHLCMarketData{
+		result = append(result, &models.OHLCVMarketData{
 			MarketData: models.MarketData{
 				Source:        apiClient.GetExchangeIdentifier(),
 				BaseCurrency:  symbol.NormalizedBase,

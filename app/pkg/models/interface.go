@@ -9,10 +9,10 @@ type ExchangeAPIClient interface {
 	GetExchangeIdentifier() string
 	GetSupportedPairs() ([]*Symbol, error)
 	GetRawMarketData() ([]*RawMarketData, error)
-	GetAllOHLCMarketData(
+	GetAllOHLCVMarketData(
 		symbol Symbol,
 		interval time.Duration,
 		startTime time.Time,
 		endTime time.Time,
-	) ([]*OHLCMarketData, error)
+	) ([]*OHLCVMarketData, error)
 }

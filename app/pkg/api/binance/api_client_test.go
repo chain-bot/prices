@@ -14,7 +14,7 @@ func TestBinanceClient(t *testing.T) {
 		expectedLength := 480 * time.Minute
 		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 		endTime := startTime.Add(expectedLength - time.Minute)
-		candleStickData, err := exchangeClient.GetOHLCMarketData(
+		candleStickData, err := exchangeClient.GetOHLCVMarketData(
 			models.Symbol{
 				RawBase:         "BTC",
 				NormalizedBase:  "BTC",
@@ -54,12 +54,12 @@ func TestBinanceClient(t *testing.T) {
 	}) && pass
 
 	// Should get all prices from [start, end)
-	pass = t.Run("TestGetAllOHLCMarketData", func(t *testing.T) {
+	pass = t.Run("TestGetAllOHLCVMarketData", func(t *testing.T) {
 		expectedLength := 12000 * time.Minute
 		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 		endTime := startTime.Add(expectedLength)
 
-		candleStickData, err := exchangeClient.GetAllOHLCMarketData(
+		candleStickData, err := exchangeClient.GetAllOHLCVMarketData(
 			models.Symbol{
 				RawBase:         "BTC",
 				NormalizedBase:  "BTC",

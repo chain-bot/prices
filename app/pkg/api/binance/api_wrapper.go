@@ -9,22 +9,22 @@ import (
 )
 
 // Get CandleStick data from [startTime, endTime] with pagination
-func (apiClient *ApiClient) GetAllOHLCMarketData(
+func (apiClient *ApiClient) GetAllOHLCVMarketData(
 	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
-) ([]*models.OHLCMarketData, error) {
+) ([]*models.OHLCVMarketData, error) {
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
-	result := []*models.OHLCMarketData{}
+	result := []*models.OHLCVMarketData{}
 	for startTime.Before(endTime) {
 		newEndTime := startTime.Add(maxLimit * interval)
 		if newEndTime.After(endTime) {
 			newEndTime = endTime
 		}
-		ohlcMarketData, err := apiClient.GetOHLCMarketData(
+		ohlcvMarketData, err := apiClient.GetOHLCVMarketData(
 			symbol,
 			interval,
 			startTime,
@@ -32,7 +32,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, ohlcMarketData...)
+		result = append(result, ohlcvMarketData...)
 		startTime = newEndTime
 	}
 	return result, nil
@@ -65,12 +65,12 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Get CandleStick data from [startTime, endTime]
-func (apiClient *ApiClient) GetOHLCMarketData(
+func (apiClient *ApiClient) GetOHLCVMarketData(
 	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
-) ([]*models.OHLCMarketData, error) {
+) ([]*models.OHLCVMarketData, error) {
 	candleStickResponse, err := apiClient.getCandleStickData(
 		symbol.ProductID,
 		interval,
@@ -80,13 +80,13 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 	if err != nil {
 		return nil, err
 	}
-	ohlcMarketData := []*models.OHLCMarketData{}
+	ohlcvMarketData := []*models.OHLCVMarketData{}
 
 	for i := range candleStickResponse {
 		candleStart := time.Unix(int64(candleStickResponse[i].OpenTime/1000), 0)
 		// We don't use the candle end time from binance because they return 59 seconds opposed to 0 seconds of next minute
 		candleEnd := candleStart.Add(interval)
-		ohlcMarketData = append(ohlcMarketData, &models.OHLCMarketData{
+		ohlcvMarketData = append(ohlcvMarketData, &models.OHLCVMarketData{
 			MarketData: models.MarketData{
 				Source:        BINANCE,
 				BaseCurrency:  symbol.NormalizedBase,
@@ -101,5 +101,5 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 			Volume:     candleStickResponse[i].Volume,
 		})
 	}
-	return ohlcMarketData, nil
+	return ohlcvMarketData, nil
 }

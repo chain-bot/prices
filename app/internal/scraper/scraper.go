@@ -60,11 +60,11 @@ func ScrapeExchange(
 		if lastSync != nil && !lastSync.LastSyncTime.IsZero() {
 			startTime = lastSync.LastSyncTime
 		}
-		ohlcData, err := client.GetAllOHLCMarketData(*pair, time.Minute, startTime, endTime)
+		ohlcvMarketData, err := client.GetAllOHLCVMarketData(*pair, time.Minute, startTime, endTime)
 		if err != nil {
 			return err
 		}
-		if len(ohlcData) == 0 {
+		if len(ohlcvMarketData) == 0 {
 			continue
 		}
 		// Update Last Sync, Upsert candle data
@@ -72,10 +72,10 @@ func ScrapeExchange(
 			ctx,
 			client.GetExchangeIdentifier(),
 			pair,
-			ohlcData[len(ohlcData)-1].StartTime); err != nil {
+			ohlcvMarketData[len(ohlcvMarketData)-1].StartTime); err != nil {
 			return err
 		}
-		go repo.UpsertOHLCData(ohlcData, client.GetExchangeIdentifier(), pair)
+		go repo.UpsertOHLCVData(ohlcvMarketData, client.GetExchangeIdentifier(), pair)
 	}
 	return nil
 }

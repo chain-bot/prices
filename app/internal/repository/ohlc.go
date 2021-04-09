@@ -5,30 +5,30 @@ import (
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 )
 
-func (repo *RepositoryImpl) UpsertOHLCData(
-	ohlcData []*models.OHLCMarketData,
+func (repo *RepositoryImpl) UpsertOHLCVData(
+	ohlcvMarketData []*models.OHLCVMarketData,
 	exchange string,
 	pair *models.Symbol,
 ) {
-	writeAPI := (*repo.influxClient).WriteAPI(repo.influxOrg, repo.ohlcBucket)
+	writeAPI := (*repo.influxClient).WriteAPI(repo.influxOrg, repo.ohlcvBucket)
 	tags := map[string]string{
 		"quote":    pair.NormalizedQuote,
 		"exchange": exchange,
 	}
-	for index := range ohlcData {
-		ohlc := ohlcData[index]
+	for index := range ohlcvMarketData {
+		ohlcv := ohlcvMarketData[index]
 		fields := map[string]interface{}{
-			"open":   ohlc.OpenPrice,
-			"high":   ohlc.HighPrice,
-			"low":    ohlc.LowPrice,
-			"close":  ohlc.ClosePrice,
-			"volume": ohlc.Volume,
+			"open":   ohlcv.OpenPrice,
+			"high":   ohlcv.HighPrice,
+			"low":    ohlcv.LowPrice,
+			"close":  ohlcv.ClosePrice,
+			"volume": ohlcv.Volume,
 		}
 		p := influxdb2.NewPoint(
 			pair.NormalizedBase,
 			tags,
 			fields,
-			ohlc.StartTime)
+			ohlcv.StartTime)
 		writeAPI.WritePoint(p)
 	}
 }

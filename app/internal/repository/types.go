@@ -10,7 +10,7 @@ type RepositoryImpl struct {
 	db           *sqlx.DB
 	influxClient *influxdb2.Client
 	influxOrg    string
-	ohlcBucket   string
+	ohlcvBucket  string
 }
 
 func NewRepositoryImpl(
@@ -22,6 +22,6 @@ func NewRepositoryImpl(
 		db:           db,
 		influxClient: influxClient,
 		influxOrg:    config.Org,
-		ohlcBucket:   config.Bucket,
+		ohlcvBucket:  config.Bucket,
 	}
 }

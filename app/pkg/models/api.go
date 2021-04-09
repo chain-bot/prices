@@ -17,7 +17,7 @@ type Symbol struct {
 	ProductID       string
 }
 
-type OHLCMarketData struct {
+type OHLCVMarketData struct {
 	MarketData
 	StartTime  time.Time
 	EndTime    time.Time

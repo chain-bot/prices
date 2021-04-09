@@ -309,22 +309,22 @@ import (
 )
 
 // Get CandleStick data from [startTime, endTime] with pagination
-func (apiClient *ApiClient) GetAllOHLCMarketData(
+func (apiClient *ApiClient) GetAllohlcvMarketData(
         symbol models.Symbol,
         interval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         if endTime.IsZero() </span><span class="cov0" title="0">{
                 endTime = time.Now()
         }</span>
-        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">result := []*models.ohlcvMarketData{}
         for startTime.Before(endTime) </span><span class="cov8" title="1">{
                 newEndTime := startTime.Add(maxLimit * interval)
                 if newEndTime.After(endTime) </span><span class="cov0" title="0">{
                         newEndTime = endTime
                 }</span>
-                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                <span class="cov8" title="1">ohlcvMarketData, err := apiClient.GetOHLCVMarketData(
                         symbol,
                         interval,
                         startTime,
@@ -332,7 +332,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
                 if err != nil </span><span class="cov0" title="0">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                <span class="cov8" title="1">result = append(result, ohlcvMarketData...)
                 startTime = newEndTime</span>
         }
         <span class="cov8" title="1">return result, nil</span>
@@ -365,12 +365,12 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Get CandleStick data from [startTime, endTime]
-func (apiClient *ApiClient) GetOHLCMarketData(
+func (apiClient *ApiClient) GetOHLCVMarketData(
         symbol models.Symbol,
         interval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         candleStickResponse, err := apiClient.getCandleStickData(
                 symbol.ProductID,
                 interval,
@@ -380,13 +380,13 @@ func (apiClient *ApiClient) GetOHLCMarketData(
         if err != nil </span><span class="cov0" title="0">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">ohlcMarketData := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">ohlcvMarketData := []*models.ohlcvMarketData{}
 
         for i := range candleStickResponse </span><span class="cov8" title="1">{
                 candleStart := time.Unix(int64(candleStickResponse[i].OpenTime/1000), 0)
                 // We don't use the candle end time from binance because they return 59 seconds opposed to 0 seconds of next minute
                 candleEnd := candleStart.Add(interval)
-                ohlcMarketData = append(ohlcMarketData, &amp;models.OHLCMarketData{
+                ohlcvMarketData = append(ohlcvMarketData, &amp;models.ohlcvMarketData{
                         MarketData: models.MarketData{
                                 Source:        BINANCE,
                                 BaseCurrency:  symbol.NormalizedBase,
@@ -401,7 +401,7 @@ func (apiClient *ApiClient) GetOHLCMarketData(
                         Volume:     candleStickResponse[i].Volume,
                 })
         }</span>
-        <span class="cov8" title="1">return ohlcMarketData, nil</span>
+        <span class="cov8" title="1">return ohlcvMarketData, nil</span>
 }
 </pre>
 		
@@ -653,22 +653,22 @@ import (
 )
 
 // Get CandleStick data from [startTime, endTime) with pagination
-func (apiClient *ApiClient) GetAllOHLCMarketData(
+func (apiClient *ApiClient) GetAllohlcvMarketData(
         symbol models.Symbol,
         interval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         if endTime.IsZero() </span><span class="cov0" title="0">{
                 endTime = time.Now()
         }</span>
-        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">result := []*models.ohlcvMarketData{}
         for startTime.Before(endTime) </span><span class="cov8" title="1">{
                 newEndTime := startTime.Add(maxLimit * interval)
                 if newEndTime.After(endTime) </span><span class="cov0" title="0">{
                         newEndTime = endTime
                 }</span>
-                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                <span class="cov8" title="1">ohlcvMarketData, err := apiClient.GetOHLCVMarketData(
                         symbol,
                         interval,
                         startTime,
@@ -676,7 +676,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
                 if err != nil </span><span class="cov0" title="0">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                <span class="cov8" title="1">result = append(result, ohlcvMarketData...)
                 startTime = newEndTime</span>
         }
         <span class="cov8" title="1">return result, nil</span>
@@ -717,22 +717,22 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Get CandleStick data from [startTime, endTime]
-func (apiClient *ApiClient) GetOHLCMarketData(
+func (apiClient *ApiClient) GetOHLCVMarketData(
         symbol models.Symbol,
         durationInterval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         candleStickData, err := apiClient.getCandleStickData(
                 int(durationInterval.Seconds()), startTime, endTime, symbol.ProductID)
         if err != nil </span><span class="cov0" title="0">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">result := []*models.ohlcvMarketData{}
         for i := range candleStickData </span><span class="cov8" title="1">{
                 candle := candleStickData[i]
                 candleEnd := time.Unix(int64(candle.CloseTime), 0)
-                result = append(result, &amp;models.OHLCMarketData{
+                result = append(result, &amp;models.ohlcvMarketData{
                         MarketData: models.MarketData{
                                 Source:        apiClient.GetExchangeIdentifier(),
                                 BaseCurrency:  symbol.NormalizedBase,
@@ -923,22 +923,22 @@ import (
 )
 
 //Get CandleStick data from [startTime, endTime) with pagination
-func (apiClient *ApiClient) GetAllOHLCMarketData(
+func (apiClient *ApiClient) GetAllohlcvMarketData(
         symbol models.Symbol,
         interval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         if endTime.IsZero() </span><span class="cov0" title="0">{
                 endTime = time.Now()
         }</span>
-        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">result := []*models.ohlcvMarketData{}
         for startTime.Before(endTime) </span><span class="cov8" title="1">{
                 newEndTime := startTime.Add(maxLimit * interval)
                 if newEndTime.After(endTime) </span><span class="cov8" title="1">{
                         newEndTime = endTime
                 }</span>
-                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                <span class="cov8" title="1">ohlcvMarketData, err := apiClient.GetOHLCVMarketData(
                         symbol,
                         interval,
                         startTime,
@@ -946,7 +946,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
                 if err != nil </span><span class="cov0" title="0">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                <span class="cov8" title="1">result = append(result, ohlcvMarketData...)
                 startTime = newEndTime</span>
         }
         <span class="cov8" title="1">return result, nil</span>
@@ -987,12 +987,12 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Get CandleStick data from [startTime, endTime)
-func (apiClient *ApiClient) GetOHLCMarketData(
+func (apiClient *ApiClient) GetOHLCVMarketData(
         symbol models.Symbol,
         interval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         historicalPriceResponse, err := apiClient.getHistoricalPrices(
                 symbol.ProductID,
                 interval,
@@ -1003,10 +1003,10 @@ func (apiClient *ApiClient) GetOHLCMarketData(
         if err != nil </span><span class="cov0" title="0">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">ohlcMarketData := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">ohlcvMarketData := []*models.ohlcvMarketData{}
         for i := range historicalPriceResponse.Result </span><span class="cov8" title="1">{
                 candle := historicalPriceResponse.Result[i]
-                ohlcMarketData = append(ohlcMarketData, &amp;models.OHLCMarketData{
+                ohlcvMarketData = append(ohlcvMarketData, &amp;models.ohlcvMarketData{
                         MarketData: models.MarketData{
                                 Source:        FTX,
                                 BaseCurrency:  symbol.NormalizedBase,
@@ -1021,7 +1021,7 @@ func (apiClient *ApiClient) GetOHLCMarketData(
                         Volume:     candle.Volume,
                 })
         }</span>
-        <span class="cov8" title="1">return ohlcMarketData, nil</span>
+        <span class="cov8" title="1">return ohlcvMarketData, nil</span>
 }
 </pre>
 		
@@ -1142,22 +1142,22 @@ import (
 )
 
 //Get CandleStick data from [startTime, endTime) with pagination
-func (apiClient *ApiClient) GetAllOHLCMarketData(
+func (apiClient *ApiClient) GetAllohlcvMarketData(
         symbol models.Symbol,
         interval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         if endTime.IsZero() </span><span class="cov0" title="0">{
                 endTime = time.Now()
         }</span>
-        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">result := []*models.ohlcvMarketData{}
         for startTime.Before(endTime) </span><span class="cov8" title="1">{
                 newEndTime := startTime.Add(maxLimit * interval)
                 if newEndTime.After(endTime) </span><span class="cov0" title="0">{
                         newEndTime = endTime
                 }</span>
-                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                <span class="cov8" title="1">ohlcvMarketData, err := apiClient.GetOHLCVMarketData(
                         symbol,
                         interval,
                         startTime,
@@ -1165,7 +1165,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
                 if err != nil </span><span class="cov0" title="0">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                <span class="cov8" title="1">result = append(result, ohlcvMarketData...)
                 startTime = newEndTime</span>
         }
         <span class="cov8" title="1">return result, nil</span>
@@ -1198,12 +1198,12 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Get CandleStick data from [startTime, endTime]
-func (apiClient *ApiClient) GetOHLCMarketData(
+func (apiClient *ApiClient) GetOHLCVMarketData(
         symbol models.Symbol,
         interval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         candleStickResponse, err := apiClient.getKlines(
                 symbol.ProductID,
                 interval,
@@ -1213,10 +1213,10 @@ func (apiClient *ApiClient) GetOHLCMarketData(
         if err != nil </span><span class="cov0" title="0">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">ohlcMarketData := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">ohlcvMarketData := []*models.ohlcvMarketData{}
         for i := range candleStickResponse.Data </span><span class="cov8" title="1">{
                 candle := candleStickResponse.Data[i]
-                ohlcMarketData = append(ohlcMarketData, &amp;models.OHLCMarketData{
+                ohlcvMarketData = append(ohlcvMarketData, &amp;models.ohlcvMarketData{
                         MarketData: models.MarketData{
                                 Source:        KUCOIN,
                                 BaseCurrency:  symbol.NormalizedBase,
@@ -1232,7 +1232,7 @@ func (apiClient *ApiClient) GetOHLCMarketData(
                 })
         }</span>
         // Return ascending time
-        <span class="cov8" title="1">return utils.Reverse(ohlcMarketData), nil</span>
+        <span class="cov8" title="1">return utils.Reverse(ohlcvMarketData), nil</span>
 }
 </pre>
 		
@@ -1507,25 +1507,25 @@ import (
 )
 
 //Get CandleStick data from [startTime, endTime] with pagination
-func (apiClient *ApiClient) GetAllOHLCMarketData(
+func (apiClient *ApiClient) GetAllohlcvMarketData(
         symbol models.Symbol,
         interval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         if _, ok := supportedMap[symbol.ProductID]; !ok </span><span class="cov0" title="0">{
-                return []*models.OHLCMarketData{}, nil
+                return []*models.ohlcvMarketData{}, nil
         }</span>
         <span class="cov8" title="1">if endTime.IsZero() </span><span class="cov0" title="0">{
                 endTime = time.Now()
         }</span>
-        <span class="cov8" title="1">result := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">result := []*models.ohlcvMarketData{}
         for startTime.Before(endTime) </span><span class="cov8" title="1">{
                 newEndTime := startTime.Add(maxLimit * interval)
                 if newEndTime.After(endTime) </span><span class="cov0" title="0">{
                         newEndTime = endTime
                 }</span>
-                <span class="cov8" title="1">ohlcMarketData, err := apiClient.GetOHLCMarketData(
+                <span class="cov8" title="1">ohlcvMarketData, err := apiClient.GetOHLCVMarketData(
                         symbol,
                         interval,
                         startTime,
@@ -1533,7 +1533,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
                 if err != nil </span><span class="cov0" title="0">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">result = append(result, ohlcMarketData...)
+                <span class="cov8" title="1">result = append(result, ohlcvMarketData...)
                 startTime = newEndTime</span>
         }
         <span class="cov8" title="1">return result, nil</span>
@@ -1566,12 +1566,12 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Get CandleStick data from [startTime, endTime]
-func (apiClient *ApiClient) GetOHLCMarketData(
+func (apiClient *ApiClient) GetOHLCVMarketData(
         symbol models.Symbol,
         interval time.Duration,
         startTime time.Time,
         endTime time.Time,
-) ([]*models.OHLCMarketData, error) <span class="cov8" title="1">{
+) ([]*models.ohlcvMarketData, error) <span class="cov8" title="1">{
         candleStickResponse, err := apiClient.getInstrumentCandles(
                 symbol.ProductID,
                 interval,
@@ -1582,9 +1582,9 @@ func (apiClient *ApiClient) GetOHLCMarketData(
         if err != nil </span><span class="cov0" title="0">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">ohlcMarketData := []*models.OHLCMarketData{}
+        <span class="cov8" title="1">ohlcvMarketData := []*models.ohlcvMarketData{}
         for i := range candleStickResponse </span><span class="cov8" title="1">{
-                ohlcMarketData = append(ohlcMarketData, &amp;models.OHLCMarketData{
+                ohlcvMarketData = append(ohlcvMarketData, &amp;models.ohlcvMarketData{
                         MarketData: models.MarketData{
                                 Source:        OKEX,
                                 BaseCurrency:  symbol.NormalizedBase,
@@ -1600,7 +1600,7 @@ func (apiClient *ApiClient) GetOHLCMarketData(
                 })
         }</span>
         // Return in ascending order
-        <span class="cov8" title="1">return utils.Reverse(ohlcMarketData), nil</span>
+        <span class="cov8" title="1">return utils.Reverse(ohlcvMarketData), nil</span>
 }
 </pre>
 		

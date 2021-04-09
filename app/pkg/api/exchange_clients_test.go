@@ -40,7 +40,7 @@ func TestExchangeClients(t *testing.T) {
 				identifier := exchangeClient.GetExchangeIdentifier()
 				assert.NotEmpty(t, identifier, exchangeClient.GetExchangeIdentifier())
 			})
-			t.Run("TestGetAllOHLCMarketData", func(t *testing.T) {
+			t.Run("TestGetAllOHLCVMarketData", func(t *testing.T) {
 				expectedLength := 12000 * time.Minute
 				startTime := time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)
 				endTime := startTime.Add(expectedLength)
@@ -48,7 +48,7 @@ func TestExchangeClients(t *testing.T) {
 				assert.NotEmpty(t, pairs, exchangeClient.GetExchangeIdentifier())
 				pair := filterPairsForBTC(pairs)
 				assert.NotEmpty(t, pair, exchangeClient.GetExchangeIdentifier(), pairs)
-				candleStickData, err := exchangeClient.GetAllOHLCMarketData(
+				candleStickData, err := exchangeClient.GetAllOHLCVMarketData(
 					*pair,
 					time.Minute,
 					startTime,

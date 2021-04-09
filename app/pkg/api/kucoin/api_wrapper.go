@@ -10,22 +10,22 @@ import (
 )
 
 //Get CandleStick data from [startTime, endTime) with pagination
-func (apiClient *ApiClient) GetAllOHLCMarketData(
+func (apiClient *ApiClient) GetAllOHLCVMarketData(
 	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
-) ([]*models.OHLCMarketData, error) {
+) ([]*models.OHLCVMarketData, error) {
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
-	result := []*models.OHLCMarketData{}
+	result := []*models.OHLCVMarketData{}
 	for startTime.Before(endTime) {
 		newEndTime := startTime.Add(maxLimit * interval)
 		if newEndTime.After(endTime) {
 			newEndTime = endTime
 		}
-		ohlcMarketData, err := apiClient.GetOHLCMarketData(
+		ohlcvMarketData, err := apiClient.GetohlcvMarketData(
 			symbol,
 			interval,
 			startTime,
@@ -33,7 +33,7 @@ func (apiClient *ApiClient) GetAllOHLCMarketData(
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, ohlcMarketData...)
+		result = append(result, ohlcvMarketData...)
 		startTime = newEndTime
 	}
 	return result, nil
@@ -66,12 +66,12 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Get CandleStick data from [startTime, endTime]
-func (apiClient *ApiClient) GetOHLCMarketData(
+func (apiClient *ApiClient) GetohlcvMarketData(
 	symbol models.Symbol,
 	interval time.Duration,
 	startTime time.Time,
 	endTime time.Time,
-) ([]*models.OHLCMarketData, error) {
+) ([]*models.OHLCVMarketData, error) {
 	candleStickResponse, err := apiClient.getKlines(
 		symbol.ProductID,
 		interval,
@@ -81,10 +81,10 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 	if err != nil {
 		return nil, err
 	}
-	ohlcMarketData := []*models.OHLCMarketData{}
+	ohlcvMarketData := []*models.OHLCVMarketData{}
 	for i := range candleStickResponse.Data {
 		candle := candleStickResponse.Data[i]
-		ohlcMarketData = append(ohlcMarketData, &models.OHLCMarketData{
+		ohlcvMarketData = append(ohlcvMarketData, &models.OHLCVMarketData{
 			MarketData: models.MarketData{
 				Source:        KUCOIN,
 				BaseCurrency:  symbol.NormalizedBase,
@@ -100,5 +100,5 @@ func (apiClient *ApiClient) GetOHLCMarketData(
 		})
 	}
 	// Return ascending time
-	return utils.Reverse(ohlcMarketData), nil
+	return utils.Reverse(ohlcvMarketData), nil
 }
