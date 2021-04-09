@@ -14,11 +14,3 @@ const (
 	getExchangeProducts = "/products"
 	getCandles          = "/products/%s/candles"
 )
-
-var coinbaseToCoinprice = map[string]string{
-	"USD": "USDT",
-}
-
-var coinpriceToCoinbase = map[string]string{
-	"USDT": "USD",
-}

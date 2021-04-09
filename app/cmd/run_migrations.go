@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	"github.com/chain-bot/scraper/app/configs"
+	"github.com/chain-bot/scraper/app/internal/data/psql"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/mochahub/coinprice-scraper/app/configs"
-	"github.com/mochahub/coinprice-scraper/app/internal/data/psql"
 	"go.uber.org/fx"
 	"log"
 )

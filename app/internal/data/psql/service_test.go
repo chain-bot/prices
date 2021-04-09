@@ -1,8 +1,8 @@
 package psql
 
 import (
+	"github.com/chain-bot/scraper/app/configs"
 	"github.com/jmoiron/sqlx"
-	"github.com/mochahub/coinprice-scraper/app/configs"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"

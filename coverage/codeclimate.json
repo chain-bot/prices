@@ -10,8 +10,8 @@
   "environment": {
     "gem_version": "3.1.2",
     "package_version": "",
-    "pwd": "/home/zahin/Dev/mochahub/coinprice/coinprice-scraper",
-    "prefix": "github.com/mochahub/coinprice-scraper",
+    "pwd": "/home/zahin/Dev/chain-bot/scraper",
+    "prefix": "github.com/chain-bot/scraper",
     "rails_root": "",
     "reporter_version": "latest",
     "simplecov_root": ""

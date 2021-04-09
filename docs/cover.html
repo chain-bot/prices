@@ -55,41 +55,41 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/mochahub/coinprice-scraper/app/internal/data/influxdb/service.go (100.0%)</option>
+				<option value="file0">github.com/chain-bot/scraper/app/internal/data/influxdb/service.go (100.0%)</option>
 				
-				<option value="file1">github.com/mochahub/coinprice-scraper/app/internal/data/psql/migrate.go (60.0%)</option>
+				<option value="file1">github.com/chain-bot/scraper/app/internal/data/psql/migrate.go (60.0%)</option>
 				
-				<option value="file2">github.com/mochahub/coinprice-scraper/app/internal/data/psql/service.go (100.0%)</option>
+				<option value="file2">github.com/chain-bot/scraper/app/internal/data/psql/service.go (100.0%)</option>
 				
-				<option value="file3">github.com/mochahub/coinprice-scraper/app/pkg/api/binance/api_client.go (77.6%)</option>
+				<option value="file3">github.com/chain-bot/scraper/app/pkg/api/binance/api_client.go (77.6%)</option>
 				
-				<option value="file4">github.com/mochahub/coinprice-scraper/app/pkg/api/binance/api_wrapper.go (80.0%)</option>
+				<option value="file4">github.com/chain-bot/scraper/app/pkg/api/binance/api_wrapper.go (80.0%)</option>
 				
-				<option value="file5">github.com/mochahub/coinprice-scraper/app/pkg/api/binance/types.go (71.0%)</option>
+				<option value="file5">github.com/chain-bot/scraper/app/pkg/api/binance/types.go (71.0%)</option>
 				
-				<option value="file6">github.com/mochahub/coinprice-scraper/app/pkg/api/coinbasepro/api_client.go (65.4%)</option>
+				<option value="file6">github.com/chain-bot/scraper/app/pkg/api/coinbasepro/api_client.go (65.4%)</option>
 				
-				<option value="file7">github.com/mochahub/coinprice-scraper/app/pkg/api/coinbasepro/api_wrapper.go (83.3%)</option>
+				<option value="file7">github.com/chain-bot/scraper/app/pkg/api/coinbasepro/api_wrapper.go (83.3%)</option>
 				
-				<option value="file8">github.com/mochahub/coinprice-scraper/app/pkg/api/coinbasepro/types.go (90.0%)</option>
+				<option value="file8">github.com/chain-bot/scraper/app/pkg/api/coinbasepro/types.go (90.0%)</option>
 				
-				<option value="file9">github.com/mochahub/coinprice-scraper/app/pkg/api/ftx/api_client.go (75.0%)</option>
+				<option value="file9">github.com/chain-bot/scraper/app/pkg/api/ftx/api_client.go (75.0%)</option>
 				
-				<option value="file10">github.com/mochahub/coinprice-scraper/app/pkg/api/ftx/api_wrapper.go (85.7%)</option>
+				<option value="file10">github.com/chain-bot/scraper/app/pkg/api/ftx/api_wrapper.go (85.7%)</option>
 				
-				<option value="file11">github.com/mochahub/coinprice-scraper/app/pkg/api/kucoin/api_client.go (79.1%)</option>
+				<option value="file11">github.com/chain-bot/scraper/app/pkg/api/kucoin/api_client.go (79.1%)</option>
 				
-				<option value="file12">github.com/mochahub/coinprice-scraper/app/pkg/api/kucoin/api_wrapper.go (79.3%)</option>
+				<option value="file12">github.com/chain-bot/scraper/app/pkg/api/kucoin/api_wrapper.go (79.3%)</option>
 				
-				<option value="file13">github.com/mochahub/coinprice-scraper/app/pkg/api/kucoin/types.go (68.2%)</option>
+				<option value="file13">github.com/chain-bot/scraper/app/pkg/api/kucoin/types.go (68.2%)</option>
 				
-				<option value="file14">github.com/mochahub/coinprice-scraper/app/pkg/api/module.go (100.0%)</option>
+				<option value="file14">github.com/chain-bot/scraper/app/pkg/api/module.go (100.0%)</option>
 				
-				<option value="file15">github.com/mochahub/coinprice-scraper/app/pkg/api/okex/api_client.go (74.4%)</option>
+				<option value="file15">github.com/chain-bot/scraper/app/pkg/api/okex/api_client.go (74.4%)</option>
 				
-				<option value="file16">github.com/mochahub/coinprice-scraper/app/pkg/api/okex/api_wrapper.go (76.7%)</option>
+				<option value="file16">github.com/chain-bot/scraper/app/pkg/api/okex/api_wrapper.go (76.7%)</option>
 				
-				<option value="file17">github.com/mochahub/coinprice-scraper/app/pkg/api/okex/types.go (69.6%)</option>
+				<option value="file17">github.com/chain-bot/scraper/app/pkg/api/okex/types.go (69.6%)</option>
 				
 				</select>
 			</div>
@@ -108,7 +108,7 @@
 import (
         "fmt"
         influxdb2 "github.com/influxdata/influxdb-client-go/v2"
-        "github.com/mochahub/coinprice-scraper/app/configs"
+        "github.com/chain-bot/scraper/app/configs"
 )
 
 func NewInfluxDBClient(secrets *configs.Secrets) (*influxdb2.Client, error) <span class="cov8" title="1">{
@@ -126,7 +126,7 @@ import (
         _ "github.com/golang-migrate/migrate/v4/database/postgres"
         _ "github.com/golang-migrate/migrate/v4/source/file"
         "github.com/jmoiron/sqlx"
-        "github.com/mochahub/coinprice-scraper/app/configs"
+        "github.com/chain-bot/scraper/app/configs"
         "log"
 )
 
@@ -163,7 +163,7 @@ func RunMigrations(
 import (
         "fmt"
         "github.com/jmoiron/sqlx"
-        "github.com/mochahub/coinprice-scraper/app/configs"
+        "github.com/chain-bot/scraper/app/configs"
 )
 
 func NewDatabase(
@@ -187,8 +187,8 @@ import (
         "context"
         "encoding/json"
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
-        "github.com/mochahub/coinprice-scraper/app/utils"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/utils"
         "golang.org/x/time/rate"
         "io/ioutil"
         "log"
@@ -302,8 +302,8 @@ func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
 
 import (
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
-        "github.com/mochahub/coinprice-scraper/app/pkg/models"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/pkg/models"
         "strings"
         "time"
 )
@@ -529,7 +529,7 @@ import (
         "encoding/base64"
         "encoding/json"
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
         "golang.org/x/time/rate"
         "io/ioutil"
         "log"
@@ -645,9 +645,9 @@ func generateSig(message, secret string) (string, error) <span class="cov0" titl
 
 import (
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
-        "github.com/mochahub/coinprice-scraper/app/pkg/models"
-        "github.com/mochahub/coinprice-scraper/app/utils"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/pkg/models"
+        "github.com/chain-bot/scraper/app/utils"
         "strings"
         "time"
 )
@@ -820,7 +820,7 @@ import (
         "context"
         "encoding/json"
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
         "golang.org/x/time/rate"
         "io/ioutil"
         "log"
@@ -916,8 +916,8 @@ func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
 
 import (
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
-        "github.com/mochahub/coinprice-scraper/app/pkg/models"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/pkg/models"
         "strings"
         "time"
 )
@@ -1031,7 +1031,7 @@ import (
         "context"
         "encoding/json"
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
         "golang.org/x/time/rate"
         "io/ioutil"
         "log"
@@ -1134,9 +1134,9 @@ func (apiClient *ApiClient) intervalQueryParamFromDuration(intervalDuration time
 
 import (
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
-        "github.com/mochahub/coinprice-scraper/app/pkg/models"
-        "github.com/mochahub/coinprice-scraper/app/utils"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/pkg/models"
+        "github.com/chain-bot/scraper/app/utils"
         "strings"
         "time"
 )
@@ -1328,12 +1328,12 @@ type Symbol struct {
 		<pre class="file" id="file14" style="display: none">package api
 
 import (
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/binance"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/coinbasepro"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/ftx"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/kucoin"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/okex"
-        "github.com/mochahub/coinprice-scraper/app/pkg/models"
+        "github.com/chain-bot/scraper/app/pkg/api/binance"
+        "github.com/chain-bot/scraper/app/pkg/api/coinbasepro"
+        "github.com/chain-bot/scraper/app/pkg/api/ftx"
+        "github.com/chain-bot/scraper/app/pkg/api/kucoin"
+        "github.com/chain-bot/scraper/app/pkg/api/okex"
+        "github.com/chain-bot/scraper/app/pkg/models"
         "go.uber.org/fx"
 )
 
@@ -1394,7 +1394,7 @@ import (
         "context"
         "encoding/json"
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
         "golang.org/x/time/rate"
         "io/ioutil"
         "log"
@@ -1499,9 +1499,9 @@ func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
 
 import (
         "fmt"
-        "github.com/mochahub/coinprice-scraper/app/pkg/api/common"
-        "github.com/mochahub/coinprice-scraper/app/pkg/models"
-        "github.com/mochahub/coinprice-scraper/app/utils"
+        "github.com/chain-bot/scraper/app/pkg/api/common"
+        "github.com/chain-bot/scraper/app/pkg/models"
+        "github.com/chain-bot/scraper/app/utils"
         "strings"
         "time"
 )

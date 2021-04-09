@@ -2,9 +2,9 @@ package coinbasepro
 
 import (
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/app/pkg/api/common"
-	"github.com/mochahub/coinprice-scraper/app/pkg/models"
-	"github.com/mochahub/coinprice-scraper/app/utils"
+	"github.com/chain-bot/scraper/app/pkg/api/common"
+	"github.com/chain-bot/scraper/app/pkg/models"
+	"github.com/chain-bot/scraper/app/utils"
 	"strings"
 	"time"
 )

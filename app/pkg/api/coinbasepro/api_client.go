@@ -7,7 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/mochahub/coinprice-scraper/app/pkg/api/common"
+	"github.com/chain-bot/scraper/app/pkg/api/common"
 	"golang.org/x/time/rate"
 	"io/ioutil"
 	"log"

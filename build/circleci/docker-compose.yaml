@@ -31,7 +31,7 @@ services:
       dockerfile: build/circleci/dockerfile
     command: tail -F anything
     environment:
-      COINPRICE_ENV: test
+      CHAINBOT_ENV: test
       INFLUXDB_ADMIN_USER: ${INFLUXDB_ADMIN_USER}
       INFLUXDB_ADMIN_USER_PASSWORD: ${INFLUXDB_ADMIN_USER_PASSWORD}
       INFLUXDB_ADMIN_USER_TOKEN: ${INFLUXDB_ADMIN_USER_TOKEN}

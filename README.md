@@ -1,19 +1,19 @@
-# coinprice price scraper 
+# Chainbot Price Scraper 
 <p align="center">
-<img src="https://circleci.com/gh/mochahub/coinprice-scraper.svg?style=shield"/>
-  <a href="https://codeclimate.com/github/mochahub/coinprice-scraper/test_coverage"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/test_coverage" /></a>
-  <a href="https://codeclimate.com/github/mochahub/coinprice-scraper/maintainability"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/maintainability" /></a>
-  <a href="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper">
-    <img src="https://goreportcard.com/badge/github.com/mochahub/coinprice-scraper" alt="Go Report Card">
+<img src="https://circleci.com/gh/chain-bot/scraper.svg?style=shield"/>
+  <a href="https://codeclimate.com/github/chain-bot/scraper/test_coverage"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/test_coverage" /></a>
+  <a href="https://codeclimate.com/github/chain-bot/scraper/maintainability"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/maintainability" /></a>
+  <a href="https://goreportcard.com/badge/github.com/chain-bot/scraper">
+    <img src="https://goreportcard.com/badge/github.com/chain-bot/scraper" alt="Go Report Card">
   </a>
-  <a href="https://lgtm.com/projects/g/mochahub/coinprice-scraper/alerts/">
-    <img src="https://img.shields.io/lgtm/alerts/g/mochahub/coinprice-scraper.svg?logo=lgtm&logoWidth=18" alt="Looks Good to Me Alerts">
+  <a href="https://lgtm.com/projects/g/chain-bot/scraper/alerts/">
+    <img src="https://img.shields.io/lgtm/alerts/g/chain-bot/scraper.svg?logo=lgtm&logoWidth=18" alt="Looks Good to Me Alerts">
   </a>
-  <img src="https://img.shields.io/github/license/mochahub/coinprice-scraper" alt="License">
+  <img src="https://img.shields.io/github/license/chain-bot/scraper" alt="License">
   <a href="https://ko-fi.com/X8X71S1S7">
     <img src="https://img.shields.io/badge/donate-Ko--fi-pink" alt="Ko-Fi Donations">
   </a>
-  <img width=100% src="./docs/images/coinprice-scraper-white.png">
+  <img width=100% src="./docs/images/scraper-white.png">
 </p>
 
 Web-Scraper for crypto prices built in Go.
@@ -36,15 +36,15 @@ Supported Exchanges:
 # External Dependencies (psql, influxdb)
 docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up -d
 # Build app docker image
-docker image build -t coinprice-scraper -f build/dockerfile . 
-docker run --name coinprice-scraper --env-file ./.env --network="host"  coinprice-scraper
+docker image build -t scraper -f build/dockerfile . 
+docker run --name scraper --env-file ./.env --network="host"  scraper
 # For future runs:
-# docker start coinprice-scraper
-# docer restart coinprice-scraper   
+# docker start scraper
+# docer restart scraper   
 ```
 
 ### Setting up Local Environment
-- clone: `git clone git@github.com:mochahub/coinprice-scraper.git`
+- clone: `git clone git@github.com:chain-bot/scraper.git`
 - Create `.env` file via tempalte `cp env_example.txt .env`
   - Variables with a value of `<...>` need to be filled in by the user
   ```bash

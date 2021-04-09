@@ -1,7 +1,7 @@
 package okex
 
 import (
-	"github.com/mochahub/coinprice-scraper/app/pkg/models"
+	"github.com/chain-bot/scraper/app/pkg/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

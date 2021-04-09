@@ -1,8 +1,8 @@
 FROM golang:1.16-alpine
 RUN apk add --no-cache git
 # Set the Current Working Directory inside the container
-#Note: Need to have "coinprice-scraper" because of how we do pathing in some parts of the code
-WORKDIR /coinprice-scraper
+#Note: Need to have "scraper" because of how we do pathing in some parts of the code
+WORKDIR /scraper
 # We want to populate the module cache based on the go.{mod,sum} files.
 COPY go.mod .
 COPY go.sum .

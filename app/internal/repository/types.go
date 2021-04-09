@@ -1,9 +1,9 @@
 package repository
 
 import (
+	"github.com/chain-bot/scraper/app/configs"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/jmoiron/sqlx"
-	"github.com/mochahub/coinprice-scraper/app/configs"
 )
 
 type RepositoryImpl struct {

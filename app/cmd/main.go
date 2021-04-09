@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
+	"github.com/chain-bot/scraper/app/configs"
+	"github.com/chain-bot/scraper/app/internal/data/influxdb"
+	"github.com/chain-bot/scraper/app/internal/data/psql"
+	"github.com/chain-bot/scraper/app/internal/repository"
+	"github.com/chain-bot/scraper/app/internal/scraper"
+	"github.com/chain-bot/scraper/app/pkg/api"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/mochahub/coinprice-scraper/app/configs"
-	"github.com/mochahub/coinprice-scraper/app/internal/data/influxdb"
-	"github.com/mochahub/coinprice-scraper/app/internal/data/psql"
-	"github.com/mochahub/coinprice-scraper/app/internal/repository"
-	"github.com/mochahub/coinprice-scraper/app/internal/scraper"
-	"github.com/mochahub/coinprice-scraper/app/pkg/api"
 	"go.uber.org/fx"
 	"log"
 )

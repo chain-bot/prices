@@ -3,8 +3,8 @@ package scraper
 import (
 	"context"
 	"database/sql"
-	"github.com/mochahub/coinprice-scraper/app/internal/repository"
-	"github.com/mochahub/coinprice-scraper/app/pkg/models"
+	"github.com/chain-bot/scraper/app/internal/repository"
+	"github.com/chain-bot/scraper/app/pkg/models"
 	"log"
 	"sync"
 	"time"

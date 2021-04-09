@@ -1,4 +1,4 @@
-module github.com/mochahub/coinprice-scraper
+module github.com/chain-bot/scraper
 
 go 1.15
 

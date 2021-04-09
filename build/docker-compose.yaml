@@ -17,7 +17,6 @@ services:
       - ./.docker/influxdb_data:/var/lib/influxdb
   psql:
     image: postgres
-    container_name: postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DATABASE}
       POSTGRES_USER: ${POSTGRES_USERNAME}
