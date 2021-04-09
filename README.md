@@ -1,8 +1,8 @@
 # Chainbot Price Scraper 
 <p align="center">
 <img src="https://circleci.com/gh/chain-bot/scraper.svg?style=shield"/>
-  <a href="https://codeclimate.com/github/chain-bot/scraper/test_coverage"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/test_coverage" /></a>
-  <a href="https://codeclimate.com/github/chain-bot/scraper/maintainability"><img src="https://api.codeclimate.com/v1/badges/a3257a1d92683cfe3a7c/maintainability" /></a>
+  <a href="https://codeclimate.com/github/chain-bot/scraper/test_coverage"><img src="https://api.codeclimate.com/v1/badges/fa6c05b23969964f4e65/test_coverage" /></a>
+  <a href="https://codeclimate.com/github/chain-bot/scraper/maintainability"><img src="https://api.codeclimate.com/v1/badges/fa6c05b23969964f4e65/maintainability" /></a>
   <a href="https://goreportcard.com/badge/github.com/chain-bot/scraper">
     <img src="https://goreportcard.com/badge/github.com/chain-bot/scraper" alt="Go Report Card">
   </a>
