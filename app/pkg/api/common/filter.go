@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/chain-bot/scraper/app/configs"
-	"github.com/chain-bot/scraper/app/pkg/models"
+	"github.com/chain-bot/prices/app/configs"
+	"github.com/chain-bot/prices/app/pkg/models"
 )
 
 func FilterSupportedAssets(symbols []*models.Symbol) []*models.Symbol {

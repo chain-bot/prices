@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"github.com/chain-bot/scraper/app/configs"
-	"github.com/chain-bot/scraper/app/pkg/models"
+	"github.com/chain-bot/prices/app/configs"
+	"github.com/chain-bot/prices/app/pkg/models"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/jmoiron/sqlx"
 	"time"

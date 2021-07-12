@@ -1,6 +1,6 @@
 package configs
 
 const (
-	PROJECT_DIR   = "scraper"
+	PROJECT_DIR   = "prices"
 	MIGRATION_DIR = "/app/internal/data/psql/migrations"
 )

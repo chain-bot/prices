@@ -2,9 +2,9 @@ package okex
 
 import (
 	"fmt"
-	"github.com/chain-bot/scraper/app/pkg/api/common"
-	"github.com/chain-bot/scraper/app/pkg/models"
-	"github.com/chain-bot/scraper/app/utils"
+	"github.com/chain-bot/prices/app/pkg/api/common"
+	"github.com/chain-bot/prices/app/pkg/models"
+	"github.com/chain-bot/prices/app/utils"
 	"strings"
 	"time"
 )

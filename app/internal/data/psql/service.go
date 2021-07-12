@@ -2,7 +2,7 @@ package psql
 
 import (
 	"fmt"
-	"github.com/chain-bot/scraper/app/configs"
+	"github.com/chain-bot/prices/app/configs"
 	"github.com/jmoiron/sqlx"
 )
 

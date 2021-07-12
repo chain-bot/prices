@@ -1,12 +1,12 @@
 package api
 
 import (
-	"github.com/chain-bot/scraper/app/pkg/api/binance"
-	"github.com/chain-bot/scraper/app/pkg/api/coinbasepro"
-	"github.com/chain-bot/scraper/app/pkg/api/ftx"
-	"github.com/chain-bot/scraper/app/pkg/api/kucoin"
-	"github.com/chain-bot/scraper/app/pkg/api/okex"
-	"github.com/chain-bot/scraper/app/pkg/models"
+	"github.com/chain-bot/prices/app/pkg/api/binance"
+	"github.com/chain-bot/prices/app/pkg/api/coinbasepro"
+	"github.com/chain-bot/prices/app/pkg/api/ftx"
+	"github.com/chain-bot/prices/app/pkg/api/kucoin"
+	"github.com/chain-bot/prices/app/pkg/api/okex"
+	"github.com/chain-bot/prices/app/pkg/models"
 	"go.uber.org/fx"
 )
 

@@ -25,7 +25,7 @@ services:
       - ${POSTGRESQL_PORT}:5432
     volumes:
       - ./.docker/psql_data:/var/lib/postgresql/data
-  scraper:
+  prices:
     build:
       context: ../../
       dockerfile: build/circleci/dockerfile

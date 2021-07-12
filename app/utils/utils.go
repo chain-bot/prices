@@ -2,7 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"github.com/chain-bot/scraper/app/pkg/models"
+	"github.com/chain-bot/prices/app/pkg/models"
 	"log"
 	"time"
 )

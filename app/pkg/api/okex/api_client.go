@@ -4,14 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/chain-bot/scraper/app/pkg/api/common"
+	"github.com/chain-bot/prices/app/pkg/api/common"
+	"github.com/hashicorp/go-retryablehttp"
 	"golang.org/x/time/rate"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/hashicorp/go-retryablehttp"
 )
 
 type ApiClient struct {

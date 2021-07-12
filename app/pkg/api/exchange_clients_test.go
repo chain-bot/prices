@@ -2,8 +2,8 @@ package api
 
 import (
 	"context"
-	"github.com/chain-bot/scraper/app/configs"
-	"github.com/chain-bot/scraper/app/pkg/models"
+	"github.com/chain-bot/prices/app/configs"
+	"github.com/chain-bot/prices/app/pkg/models"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/fx"
 	"testing"

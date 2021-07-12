@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/chain-bot/scraper/app/pkg/api/common"
+	"github.com/chain-bot/prices/app/pkg/api/common"
 	"golang.org/x/time/rate"
 	"io/ioutil"
 	"log"

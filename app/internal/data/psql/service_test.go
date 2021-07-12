@@ -1,7 +1,7 @@
 package psql
 
 import (
-	"github.com/chain-bot/scraper/app/configs"
+	"github.com/chain-bot/prices/app/configs"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/assert"
 	"log"

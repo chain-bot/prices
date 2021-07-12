@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	generated "github.com/chain-bot/scraper/app/internal/data/psql/generated"
-	"github.com/chain-bot/scraper/app/pkg/models"
+	generated "github.com/chain-bot/prices/app/internal/data/psql/generated"
+	"github.com/chain-bot/prices/app/pkg/models"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"time"

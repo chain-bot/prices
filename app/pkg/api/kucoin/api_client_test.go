@@ -1,7 +1,7 @@
 package kucoin
 
 import (
-	"github.com/chain-bot/scraper/app/pkg/models"
+	"github.com/chain-bot/prices/app/pkg/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

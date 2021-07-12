@@ -1,7 +1,7 @@
 package influxdb
 
 import (
-	"github.com/chain-bot/scraper/app/configs"
+	"github.com/chain-bot/prices/app/configs"
 	"github.com/docker/distribution/context"
 	"github.com/influxdata/influxdb-client-go/v2/domain"
 	"github.com/stretchr/testify/assert"

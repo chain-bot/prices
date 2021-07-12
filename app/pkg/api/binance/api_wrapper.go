@@ -2,8 +2,8 @@ package binance
 
 import (
 	"fmt"
-	"github.com/chain-bot/scraper/app/pkg/api/common"
-	"github.com/chain-bot/scraper/app/pkg/models"
+	"github.com/chain-bot/prices/app/pkg/api/common"
+	"github.com/chain-bot/prices/app/pkg/models"
 	"strings"
 	"time"
 )

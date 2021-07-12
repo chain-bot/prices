@@ -1,4 +1,4 @@
-module github.com/chain-bot/scraper
+module github.com/chain-bot/prices
 
 go 1.15
 

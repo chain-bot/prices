@@ -1,7 +1,7 @@
 package psql
 
 import (
-	"github.com/chain-bot/scraper/app/configs"
+	"github.com/chain-bot/prices/app/configs"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -33,6 +33,6 @@ func RunMigrations(
 		return 0, err
 	}
 	log.Println("Database migrated")
-	verion, _, err := m.Version()
-	return int(verion), err
+	version, _, err := m.Version()
+	return int(version), err
 }
