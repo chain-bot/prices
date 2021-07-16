@@ -17,8 +17,9 @@
 </p>
 
 Web-Scraper for crypto prices built in Go.
-1 Minute candle-stick data is scraped and stored in influxdb.
-Web-socket feeds pull live prices from supported exchanges (WIP).
+Web-socket feeds pull live prices from supported exchanges (WIP), 
+with a minutely cron job filling in any missing data.
+1 Minute candle-stick data is stored in influxdb.
 
 Supported Exchanges:
 - Binance
