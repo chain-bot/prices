@@ -43,7 +43,7 @@ jobs:
           command: |
             set -x
             ./cc-test-reporter before-build
-            docker exec -it circleci_prices_1 bash ./scripts/run-test-with-coverage.sh
+            docker exec -it circleci_prices_1 bash ./scripts/run-test-with-coverage.sh || exit $?
             docker cp circleci_prices_1:/prices/c.out .
             ./cc-test-reporter format-coverage -t gocov --prefix github.com/chain-bot/prices c.out
             ./cc-test-reporter after-build --prefix github.com/chain-bot/prices -r=$CC_TEST_REPORTER_ID --exit-code $?

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd app || exit
-go test -coverprofile ../c.out $(go list ./... | grep -v /psql/generated)
+go test -failfast -coverprofile ../c.out $(go list ./... | grep -v /psql/generated) || exit $?
 cd ../
 
 #source ./.env
