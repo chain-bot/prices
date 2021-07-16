@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   slack: circleci/slack@3.4.2
 jobs:
-  build:
+  setup:
     working_directory: ~/prices
     docker:
       - image: circleci/golang:1.16
@@ -19,8 +19,6 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Install Docker Compose
           command: |
@@ -36,11 +34,6 @@ jobs:
             # download test reporter as a static binary
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
-      - run:
-          name: Start Docker Compose
-          command: |
-            set -x
-            docker-compose --file ./build/circleci/docker-compose.yaml up -d --build
       # Save workspace for subsequent jobs (i.e. test)
       - persist_to_workspace:
           root: .
@@ -53,6 +46,13 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build App via Docker Compose
+          command: |
+            set -x
+            docker-compose --file ./build/circleci/docker-compose.yaml up -d --build
       - run:
           name: Run Tests
           command: |
@@ -82,7 +82,7 @@ jobs:
 workflows:
   build_and_test:
     jobs:
-      - build
+      - setup
       - test:
           requires:
-            - build
+            - setup
