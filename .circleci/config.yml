@@ -66,8 +66,6 @@ jobs:
             set -x
             ./cc-test-reporter format-coverage -t gocov --prefix github.com/chain-bot/prices c.out
             ./cc-test-reporter after-build --prefix github.com/chain-bot/prices -r=$CC_TEST_REPORTER_ID --exit-code $?
-            go tool cover -html=c.out -o=coverage/c.html
-            mv c.out coverage/c.out
       - run:
           name: Upload Artifacts
           command: |
