@@ -40,19 +40,41 @@ jobs:
           command: |
             set -x
             docker-compose --file ./build/circleci/docker-compose.yaml up -d --build
+  test:
+    working_directory: ~/prices
+    docker:
+      - image: circleci/golang:1.16
+    steps:
       - run:
-          name: Run Tests & Update Code Climate
+          name: Run Tests
           command: |
             set -x
             ./cc-test-reporter before-build
             docker exec -it circleci_prices_1 bash ./scripts/run-test-with-coverage.sh || exit $?
-            docker cp circleci_prices_1:/prices/c.out .
+      - run:
+          name: Update Code Climate
+          command: |
+            set -x
             ./cc-test-reporter format-coverage -t gocov --prefix github.com/chain-bot/prices c.out
             ./cc-test-reporter after-build --prefix github.com/chain-bot/prices -r=$CC_TEST_REPORTER_ID --exit-code $?
             go tool cover -html=c.out -o=coverage/c.html
             mv c.out coverage/c.out
+      - run:
+          name: Upload Artifacts
+          command: |
+            set -x
+            docker cp circleci_prices_1:/prices/c.out .
+            go tool cover -html=c.out -o=coverage/c.html
+            mv c.out coverage/c.out
       - slack/status:
           fail_only: true
-          mentions: "Zahin"
+          mentions: '@Zahin'
       - store_artifacts:
           path: ./coverage
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
