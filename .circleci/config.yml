@@ -59,6 +59,7 @@ jobs:
             set -x
             ./cc-test-reporter before-build
             docker exec -it circleci_prices_1 bash ./scripts/run-test-with-coverage.sh || exit $?
+            docker cp circleci_prices_1:/prices/c.out .
       - run:
           name: Update Code Climate
           command: |
@@ -71,12 +72,11 @@ jobs:
           name: Upload Artifacts
           command: |
             set -x
-            docker cp circleci_prices_1:/prices/c.out .
             go tool cover -html=c.out -o=coverage/c.html
             mv c.out coverage/c.out
       - slack/status:
           fail_only: true
-          mentions: '@Zahin'
+          mentions: 'zahin'
       - store_artifacts:
           path: ./coverage
 workflows:
