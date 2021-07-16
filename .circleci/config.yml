@@ -51,6 +51,8 @@ jobs:
     docker:
       - image: circleci/golang:1.16
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Run Tests
           command: |
