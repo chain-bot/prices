@@ -57,7 +57,7 @@ func TestExchangeClients(t *testing.T) {
 				assert.NoError(t, err, exchangeClient.GetExchangeIdentifier())
 				assert.NotEmpty(t, candleStickData, exchangeClient.GetExchangeIdentifier())
 				assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData), exchangeClient.GetExchangeIdentifier())
-				assert.Equal(t, startTime.String(), candleStickData[0].StartTime.UTC().String(), exchangeClient.GetExchangeIdentifier())
+				assert.Equal(t, startTime.String(), candleStickData[len(candleStickData)+1].StartTime.UTC().String(), exchangeClient.GetExchangeIdentifier())
 				assert.Equal(t, endTime.String(), candleStickData[len(candleStickData)-1].EndTime.UTC().String(), exchangeClient.GetExchangeIdentifier())
 			})
 		}
