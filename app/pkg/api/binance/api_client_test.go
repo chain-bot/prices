@@ -11,7 +11,7 @@ func TestBinanceClient(t *testing.T) {
 	exchangeClient := NewBinanceAPIClient()
 	pass := true
 
-	pass = t.Run("TestGetExchangeIdentifier", func(t *testing.T) {
+	pass = t.Run("Test GetExchangeIdentifier Pass", func(t *testing.T) {
 		assert.NotEqual(t, "", exchangeClient.GetExchangeIdentifier())
 	}) && pass
 	pass = t.Run("Test GetCandleStickData Pass", func(t *testing.T) {
@@ -45,14 +45,14 @@ func TestBinanceClient(t *testing.T) {
 		)
 		assert.Error(t, err)
 	}) && pass
-	pass = t.Run("TestGetExchangeInfo", func(t *testing.T) {
+	pass = t.Run("Test GetExchangeInfo Pass", func(t *testing.T) {
 		exchangeInfo, err := exchangeClient.getExchangeInfo()
 		assert.NoError(t, err)
 		assert.NotNil(t, exchangeInfo)
 		//fmt.Print(utils.PrettyJSON(exchangeInfo))
 	}) && pass
 	// Interface Methods
-	pass = t.Run("TestGetSupportedPairs", func(t *testing.T) {
+	pass = t.Run("Test GetSupportedPairs Pass", func(t *testing.T) {
 		pairs, err := exchangeClient.GetSupportedPairs()
 		assert.Nil(t, err)
 		assert.NotEmpty(t, pairs)
@@ -67,7 +67,7 @@ func TestBinanceClient(t *testing.T) {
 		assert.Contains(t, pairs, &expectedPair)
 	}) && pass
 	// Should get all prices from [start, end)
-	pass = t.Run("TestGetAllOHLCVMarketData", func(t *testing.T) {
+	pass = t.Run("Test GetAllOHLCVMarketData Pass", func(t *testing.T) {
 		expectedLength := 12000 * time.Minute
 		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 		endTime := startTime.Add(expectedLength)
