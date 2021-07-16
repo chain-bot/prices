@@ -40,6 +40,11 @@ jobs:
           command: |
             set -x
             docker-compose --file ./build/circleci/docker-compose.yaml up -d --build
+      # Save workspace for subsequent jobs (i.e. test)
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
   test:
     working_directory: ~/prices
     docker:
