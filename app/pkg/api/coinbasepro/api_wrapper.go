@@ -52,6 +52,12 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 		normalizedQuote := strings.ToUpper(quote)
 		base := product.BaseCurrency
 		normalizedBase := strings.ToUpper(base)
+		if _, ok := coinbaseProInstrumentFilter[normalizedBase]; ok {
+			continue
+		}
+		if _, ok := coinbaseProInstrumentFilter[normalizedQuote]; ok {
+			continue
+		}
 		newPair := &models.Symbol{
 			RawBase:         base,
 			NormalizedBase:  normalizedBase,

@@ -2,9 +2,6 @@ package coinbasepro
 
 import (
 	"context"
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/chain-bot/prices/app/pkg/api/common"
@@ -59,7 +56,7 @@ func (apiClient *ApiClient) getCandleStickData(
 	params.Add("granularity", strconv.Itoa(granularity))
 	path := fmt.Sprintf(getCandles, productID)
 	urlString := fmt.Sprintf("%s%s?%s", baseURL, path, params.Encode())
-	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
+	resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +71,7 @@ func (apiClient *ApiClient) getCandleStickData(
 
 func (apiClient *ApiClient) getProducts() (productsResponse ProductsResponse, err error) {
 	urlString := fmt.Sprintf("%s%s", baseURL, getExchangeProducts)
-	resp, err := apiClient.sendAPIKeyAuthenticatedGetRequest(urlString)
+	resp, err := apiClient.sendUnAuthenticatedGetRequest(urlString)
 	if err != nil {
 		return nil, err
 	}
@@ -87,8 +84,8 @@ func (apiClient *ApiClient) getProducts() (productsResponse ProductsResponse, er
 	return productsResponse, nil
 }
 
-func (apiClient *ApiClient) sendAPIKeyAuthenticatedGetRequest(
-	urlString string, headers ...header,
+func (apiClient *ApiClient) sendUnAuthenticatedGetRequest(
+	urlString string,
 ) (*http.Response, error) {
 	httpReq, err := http.NewRequest("GET", urlString, nil)
 	if err != nil {
@@ -99,20 +96,4 @@ func (apiClient *ApiClient) sendAPIKeyAuthenticatedGetRequest(
 		return nil, err
 	}
 	return apiClient.Do(retryableRequest)
-}
-
-// Credit to https://github.com/preichenberger/go-coinbasepro
-func generateSig(message, secret string) (string, error) {
-	key, err := base64.StdEncoding.DecodeString(secret)
-	if err != nil {
-		return "", err
-	}
-
-	signature := hmac.New(sha256.New, key)
-	_, err = signature.Write([]byte(message))
-	if err != nil {
-		return "", err
-	}
-
-	return base64.StdEncoding.EncodeToString(signature.Sum(nil)), nil
 }

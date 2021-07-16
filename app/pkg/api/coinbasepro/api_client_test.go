@@ -1,7 +1,9 @@
 package coinbasepro
 
 import (
+	"fmt"
 	"github.com/chain-bot/prices/app/pkg/models"
+	"github.com/chain-bot/prices/app/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -28,7 +30,7 @@ func TestCoinbaseProClient(t *testing.T) {
 		exchangeInfo, err := exchangeClient.getProducts()
 		assert.NoError(t, err)
 		assert.NotNil(t, exchangeInfo)
-		//fmt.Print(utils.PrettyJSON(exchangeInfo))
+		fmt.Print(utils.PrettyJSON(exchangeInfo))
 	}) && pass
 	// Interface Methods
 	pass = t.Run("TestGetSupportedPairs", func(t *testing.T) {
