@@ -13,7 +13,7 @@ const (
 )
 
 func DefaultCheckRetry(ctx context.Context, resp *http.Response, err error) (bool, error) {
-	if resp.StatusCode >= http.StatusBadRequest {
+	if resp.StatusCode >= http.StatusTooManyRequests {
 		if err != nil {
 			log.Printf("retry error: StatusCode %d Error %s\n", resp.StatusCode, err.Error())
 		} else {

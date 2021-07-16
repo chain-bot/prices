@@ -14,7 +14,7 @@ func TestBinanceClient(t *testing.T) {
 	pass = t.Run("TestGetExchangeIdentifier", func(t *testing.T) {
 		assert.NotEqual(t, "", exchangeClient.GetExchangeIdentifier())
 	}) && pass
-	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
+	pass = t.Run("Test GetCandleStickData Pass", func(t *testing.T) {
 		expectedLength := 480 * time.Minute
 		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 		endTime := startTime.Add(expectedLength - time.Minute)
@@ -33,6 +33,17 @@ func TestBinanceClient(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotEmpty(t, candleStickData)
 		assert.Equal(t, int(expectedLength.Minutes()), len(candleStickData))
+	}) && pass
+	pass = t.Run("Test getCandleStickData Fail", func(t *testing.T) {
+		expectedLength := 60 * time.Minute
+		startTime := time.Now().Add(-expectedLength)
+		_, err := exchangeClient.getCandleStickData(
+			"poopee",
+			time.Minute,
+			startTime,
+			time.Time{},
+		)
+		assert.Error(t, err)
 	}) && pass
 	pass = t.Run("TestGetExchangeInfo", func(t *testing.T) {
 		exchangeInfo, err := exchangeClient.getExchangeInfo()

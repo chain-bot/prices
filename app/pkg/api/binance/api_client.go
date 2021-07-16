@@ -69,7 +69,14 @@ func (apiClient *ApiClient) getCandleStickData(
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err = json.Unmarshal(body, &candleStickResponse); err != nil {
-		return nil, err
+		var errResponse ErrorResponse
+		newErr := json.Unmarshal(body, &errResponse)
+		if newErr != nil {
+			return nil, fmt.Errorf("err1=%s, err2=%s", err.Error(), newErr.Error())
+		} else {
+			return nil, fmt.Errorf("err1=%s, code=%d, msg=%s",
+				err.Error(), errResponse.Code, errResponse.Msg)
+		}
 	}
 	return candleStickResponse, nil
 }
