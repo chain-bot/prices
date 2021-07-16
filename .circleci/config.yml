@@ -53,6 +53,6 @@ jobs:
             mv c.out coverage/c.out
       - slack/status:
           fail_only: true
-          mentions: "zahin"
+          mentions: "Zahin"
       - store_artifacts:
           path: ./coverage
