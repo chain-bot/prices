@@ -3,12 +3,14 @@ package repository
 import (
 	"github.com/chain-bot/prices/app/configs"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
+	"github.com/influxdata/influxdb-client-go/v2/api"
 	"github.com/jmoiron/sqlx"
 )
 
 type RepositoryImpl struct {
 	db           *sqlx.DB
 	influxClient *influxdb2.Client
+	writeAPI     api.WriteAPI
 	influxOrg    string
 	ohlcvBucket  string
 }
@@ -21,6 +23,7 @@ func NewRepositoryImpl(
 	return &RepositoryImpl{
 		db:           db,
 		influxClient: influxClient,
+		writeAPI:     (*influxClient).WriteAPI(config.Org, config.Bucket),
 		influxOrg:    config.Org,
 		ohlcvBucket:  config.Bucket,
 	}

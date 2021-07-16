@@ -10,7 +10,6 @@ func (repo *RepositoryImpl) UpsertOHLCVData(
 	exchange string,
 	pair *models.Symbol,
 ) {
-	writeAPI := (*repo.influxClient).WriteAPI(repo.influxOrg, repo.ohlcvBucket)
 	tags := map[string]string{
 		"quote":    pair.NormalizedQuote,
 		"exchange": exchange,
@@ -29,6 +28,6 @@ func (repo *RepositoryImpl) UpsertOHLCVData(
 			tags,
 			fields,
 			ohlcv.StartTime)
-		writeAPI.WritePoint(p)
+		repo.writeAPI.WritePoint(p)
 	}
 }
