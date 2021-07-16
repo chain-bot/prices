@@ -8,9 +8,12 @@ import (
 )
 
 func TestOkexClient(t *testing.T) {
-	// TODO: Use DI instead of calling GetSecrets directly
 	exchangeClient := NewOkexAPIClient()
 	pass := true
+
+	pass = t.Run("TestGetExchangeIdentifier", func(t *testing.T) {
+		assert.NotEqual(t, "", exchangeClient.GetExchangeIdentifier())
+	}) && pass
 	// Get Candles from [start, end]
 	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
 		expectedLength := 50 * time.Minute
@@ -47,7 +50,6 @@ func TestOkexClient(t *testing.T) {
 		assert.GreaterOrEqual(t, len(pairs), 3)
 		assert.Contains(t, pairs, &expectedPair)
 	}) && pass
-
 	// Should get all prices from [start, end)
 	pass = t.Run("TestGetAllOHLCVMarketData", func(t *testing.T) {
 		expectedLength := 12000 * time.Minute

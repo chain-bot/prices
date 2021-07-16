@@ -10,8 +10,12 @@ import (
 func TestKucoinClient(t *testing.T) {
 	exchangeClient := NewKucoinAPIClient()
 	pass := true
+
+	pass = t.Run("TestGetExchangeIdentifier", func(t *testing.T) {
+		assert.NotEqual(t, "", exchangeClient.GetExchangeIdentifier())
+	}) && pass
 	// Get Candles from [start, end]
-	pass = t.Run("TestGetCandleStickData", func(t *testing.T) {
+	pass = t.Run("Test getKlines pass", func(t *testing.T) {
 		expectedLength := 480 * time.Minute
 		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 		endTime := startTime.Add(expectedLength)
@@ -24,14 +28,28 @@ func TestKucoinClient(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotEmpty(t, candleStickResponse.Data)
 	}) && pass
-	pass = t.Run("TestGetSymbols", func(t *testing.T) {
+	pass = t.Run("Test getKlines fail", func(t *testing.T) {
+		expectedLength := 480 * time.Minute
+		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+		endTime := startTime.Add(expectedLength)
+		candleStickResponse, err := exchangeClient.getKlines(
+			"not-a-real-symbol",
+			time.Minute,
+			startTime,
+			endTime,
+		)
+		assert.NoError(t, err)
+		assert.NotEmpty(t, candleStickResponse.Msg)
+		assert.NotEqual(t, 0, candleStickResponse.Code)
+	}) && pass
+	pass = t.Run("Test GetSymbols", func(t *testing.T) {
 		exchangeInfo, err := exchangeClient.getSymbols()
 		assert.NoError(t, err)
 		assert.NotNil(t, exchangeInfo)
 		//fmt.Print(utils.PrettyJSON(exchangeInfo))
 	}) && pass
 	// Interface Methods
-	pass = t.Run("TestGetSupportedPairs", func(t *testing.T) {
+	pass = t.Run("Test GetSupportedPairs", func(t *testing.T) {
 		pairs, err := exchangeClient.GetSupportedPairs()
 		assert.Nil(t, err)
 		assert.NotEmpty(t, pairs)
@@ -47,7 +65,7 @@ func TestKucoinClient(t *testing.T) {
 	}) && pass
 
 	// Should get all prices from [start, end)
-	pass = t.Run("TestGetAllOHLCVMarketData", func(t *testing.T) {
+	pass = t.Run("Test GetAllOHLCVMarketData", func(t *testing.T) {
 		expectedLength := 12000 * time.Minute
 		startTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 		endTime := startTime.Add(expectedLength)

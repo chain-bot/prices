@@ -10,6 +10,7 @@ import (
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 type CandleStickResponse struct {
 	Code string            `json:"code"`
+	Msg  string            `json:"msg"`
 	Data []CandleStickData `json:"data"`
 }
 type CandleStickData struct {

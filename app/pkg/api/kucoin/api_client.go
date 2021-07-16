@@ -63,6 +63,7 @@ func (apiClient *ApiClient) getKlines(
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
+	fmt.Println(body)
 	if err = json.Unmarshal(body, &candleStickResponse); err != nil {
 		return nil, err
 	}
