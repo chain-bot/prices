@@ -86,7 +86,8 @@ jobs:
           name: Build Docker Image
           command: |
             set -x
-            docker image build -t $DOCKER_HUB_ORG/$DOCKER_HUB_APP:$CIRCLE_BRANCH -f build/dockerfile .
+            ls
+            docker image build -t $DOCKER_HUB_ORG/$DOCKER_HUB_APP:$CIRCLE_BRANCH -f ./build/dockerfile .
       - run:
           name: Upload to Docker Hub
           command: |
