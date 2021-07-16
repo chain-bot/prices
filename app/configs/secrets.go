@@ -23,8 +23,10 @@ type InfluxDbCredentials struct {
 	Org      string
 	Bucket   string
 }
+type Environment string
 
 type Secrets struct {
+	Environment
 	DatabaseCredentials
 	InfluxDbCredentials
 }
@@ -40,6 +42,7 @@ func GetSecrets() (*Secrets, error) {
 		return nil, err
 	}
 	return &Secrets{
+		Environment: Environment(os.Getenv("ENV")),
 		DatabaseCredentials: DatabaseCredentials{
 			User:     os.Getenv("POSTGRES_USERNAME"),
 			Password: os.Getenv("POSTGRES_PASSWORD"),
@@ -57,4 +60,8 @@ func GetSecrets() (*Secrets, error) {
 			Bucket:   os.Getenv("INFLUXDB_BUCKET_CANDLE"),
 		},
 	}, nil
+}
+
+func (s *Secrets) IsLocal() bool {
+	return s.Environment == LocalEnv || s.Environment == NilEnv
 }
