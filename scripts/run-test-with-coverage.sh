@@ -2,6 +2,7 @@
 
 cd app || exit
 go test -coverprofile ../c.out $(go list ./... | grep -v /psql/generated) || exit $?
+echo $?
 cd ../
 
 #source ./.env
