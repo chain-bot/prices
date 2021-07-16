@@ -77,10 +77,34 @@ jobs:
           mentions: 'zahin'
       - store_artifacts:
           path: ./coverage
+  build_and_deploy:
+    working_directory: ~/prices
+    docker:
+      - image: circleci/golang:1.16
+    steps:
+      - run:
+          name: Build Docker Image
+          command: |
+            set -x
+            docker image build -t $DOCKER_HUB_ORG/$DOCKER_HUB_APP:$CIRCLE_BRANCH -f build/dockerfile .
+      - run:
+          name: Upload to Docker Hub
+          command: |
+            set -x
+            echo "$DOCKER_HUB_PASS" | docker login --username $DOCKER_HUB_USER --password-stdin
+            docker image push $DOCKER_HUB_ORG/$DOCKER_HUB_APP:$CIRCLE_BRANCH
+      - slack/status:
+          fail_only: false
 workflows:
-  build_and_test:
+  build_test_deploy:
     jobs:
       - setup
       - test:
           requires:
             - setup
+      - build_and_deploy:
+          filters:
+            branches:
+              only: master
+          requires:
+            - test
