@@ -42,7 +42,7 @@ func GetSecrets() (*Secrets, error) {
 		return nil, err
 	}
 	return &Secrets{
-		Environment: Environment(os.Getenv("ENV")),
+		Environment: Environment(os.Getenv("CHAINBOT_ENV")),
 		DatabaseCredentials: DatabaseCredentials{
 			User:     os.Getenv("POSTGRES_USERNAME"),
 			Password: os.Getenv("POSTGRES_PASSWORD"),

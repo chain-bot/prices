@@ -20,7 +20,8 @@ func GetMigrationDir() string {
 	return fmt.Sprintf("file://%s%s", GetProjectRoot(), MIGRATION_DIR)
 }
 func LoadEnv() {
-	if os.Getenv("CHAINBOT_ENV") != "" {
+	env := Environment(os.Getenv("CHAINBOT_ENV"))
+	if env == LocalEnv || env == NilEnv {
 		// Env variables already set
 		return
 	}

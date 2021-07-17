@@ -63,7 +63,6 @@ func (apiClient *ApiClient) getCandleStickData(
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err = json.Unmarshal(body, &candleStickResponse); err != nil {
-		log.Println(string(body))
 		return nil, err
 	}
 	return candleStickResponse, nil
@@ -78,7 +77,6 @@ func (apiClient *ApiClient) getProducts() (productsResponse ProductsResponse, er
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err = json.Unmarshal(body, &productsResponse); err != nil {
-		log.Println(string(body))
 		return nil, err
 	}
 	return productsResponse, nil
