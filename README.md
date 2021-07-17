@@ -1,8 +1,8 @@
 # Chainbot Prices 
 <p align="center">
 <img src="https://circleci.com/gh/chain-bot/prices.svg?style=shield"/>
-  <a href="https://codeclimate.com/github/chain-bot/prices/test_coverage"><img src="https://api.codeclimate.com/v1/badges/fa6c05b23969964f4e65/test_coverage" /></a>
-  <a href="https://codeclimate.com/github/chain-bot/prices/maintainability"><img src="https://api.codeclimate.com/v1/badges/fa6c05b23969964f4e65/maintainability" /></a>
+  <a href="https://codeclimate.com/github/chain-bot/prices/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b6f6faa418b36685696c/test_coverage" /></a>
+  <a href="https://codeclimate.com/github/chain-bot/prices/maintainability"><img src="https://api.codeclimate.com/v1/badges/b6f6faa418b36685696c/maintainability" /></a>
   <a href="https://goreportcard.com/badge/github.com/chain-bot/prices">
     <img src="https://goreportcard.com/badge/github.com/chain-bot/prices" alt="Go Report Card">
   </a>
