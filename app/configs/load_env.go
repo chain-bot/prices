@@ -21,7 +21,7 @@ func GetMigrationDir() string {
 }
 func LoadEnv() {
 	env := Environment(os.Getenv("CHAINBOT_ENV"))
-	if env == LocalEnv || env == NilEnv {
+	if env != LocalEnv && env != NilEnv {
 		// Env variables already set
 		return
 	}
