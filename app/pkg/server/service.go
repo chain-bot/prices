@@ -8,12 +8,13 @@ import (
 	"time"
 
 	"github.com/chain-bot/prices/app/configs"
+	"github.com/chain-bot/prices/app/pkg/server/routes"
 	"go.uber.org/fx"
 )
 
 func Run(
 	lc fx.Lifecycle,
-	routes *Routes,
+	routes *routes.Handler,
 	secrets *configs.Secrets,
 ) {
 	var httpSrv http.Server
@@ -30,12 +31,12 @@ func Run(
 }
 
 func listenAndServe(
-	routes *Routes,
+	routes *routes.Handler,
 	secrets *configs.Secrets,
 ) *http.Server {
 	mux := http.NewServeMux()
-	mux.Handle("/", http.HandlerFunc(routes.ping))
-	mux.Handle("/candles", http.HandlerFunc(routes.getCandles))
+	mux.Handle("/", http.HandlerFunc(routes.Ping))
+	mux.Handle("/candles", http.HandlerFunc(routes.GetCandles))
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", secrets.ServerConfig.Port),
 		Handler: mux,

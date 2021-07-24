@@ -11,6 +11,7 @@ type RepositoryImpl struct {
 	db           *sqlx.DB
 	influxClient *influxdb2.Client
 	writeAPI     api.WriteAPI
+	queryAPI     api.QueryAPI
 	influxOrg    string
 	ohlcvBucket  string
 }
@@ -24,6 +25,7 @@ func NewRepositoryImpl(
 		db:           db,
 		influxClient: influxClient,
 		writeAPI:     (*influxClient).WriteAPI(config.Org, config.Bucket),
+		queryAPI:     (*influxClient).QueryAPI(config.Org),
 		influxOrg:    config.Org,
 		ohlcvBucket:  config.Bucket,
 	}

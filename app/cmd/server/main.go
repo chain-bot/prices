@@ -9,6 +9,7 @@ import (
 	"github.com/chain-bot/prices/app/internal/data/psql"
 	"github.com/chain-bot/prices/app/internal/repository"
 	"github.com/chain-bot/prices/app/pkg/server"
+	"github.com/chain-bot/prices/app/pkg/server/routes"
 	_ "github.com/joho/godotenv/autoload"
 	"go.uber.org/fx"
 )
@@ -20,7 +21,7 @@ func main() {
 		fx.Provide(psql.NewDatabase),
 		fx.Provide(influxdb.NewInfluxDBClient),
 		fx.Provide(repository.NewRepository),
-		fx.Provide(server.NewServer),
+		fx.Provide(routes.NewHandler),
 		fx.Invoke(
 			psql.RunMigrations,
 			server.Run,
