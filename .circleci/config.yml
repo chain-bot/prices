@@ -49,6 +49,11 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
+          name: Temp print env
+          command: |
+            set -x
+            printenv
+      - run:
           name: Build App via Docker Compose
           command: |
             set -x
