@@ -2,6 +2,7 @@ package influxdb
 
 import (
 	"fmt"
+
 	"github.com/chain-bot/prices/app/configs"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 )
