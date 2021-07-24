@@ -46,24 +46,24 @@ func GetSecrets() (*Secrets, error) {
 		log.WithFields(log.Fields{
 			"err":             err.Error(),
 			"POSTGRESQL_PORT": os.Getenv("POSTGRESQL_PORT"),
-		}).Errorf("Error getting POSTGRESQL_PORT")
-		return nil, err
+		}).Errorf("error getting POSTGRESQL_PORT, setting default value")
+		postgresPort = 5432
 	}
 	influxDBPort, err := strconv.Atoi(os.Getenv("INFLUXDB_PORT"))
 	if err != nil {
 		log.WithFields(log.Fields{
 			"err":           err.Error(),
 			"INFLUXDB_PORT": os.Getenv("INFLUXDB_PORT"),
-		}).Errorf("Error getting INFLUXDB_PORT")
-		return nil, err
+		}).Errorf("error getting INFLUXDB_PORT, setting default value")
+		influxDBPort = 8086
 	}
 	serverPort, err := strconv.Atoi(os.Getenv("PRICES_API_PORT"))
 	if err != nil {
 		log.WithFields(log.Fields{
 			"err":             err.Error(),
 			"PRICES_API_PORT": os.Getenv("PRICES_API_PORT"),
-		}).Errorf("Error getting PRICES_API_PORT")
-		return nil, err
+		}).Errorf("error getting PRICES_API_PORT, setting default value")
+		serverPort = 8080
 	}
 	return &Secrets{
 		ServerConfig: ServerConfig{
