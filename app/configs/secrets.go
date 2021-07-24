@@ -1,9 +1,10 @@
 package configs
 
 import (
-	_ "github.com/joho/godotenv/autoload"
 	"os"
 	"strconv"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 type DatabaseCredentials struct {
@@ -23,10 +24,16 @@ type InfluxDbCredentials struct {
 	Org      string
 	Bucket   string
 }
+
+type ServerConfig struct {
+	Port int
+}
+
 type Environment string
 
 type Secrets struct {
 	Environment
+	ServerConfig
 	DatabaseCredentials
 	InfluxDbCredentials
 }
@@ -41,7 +48,14 @@ func GetSecrets() (*Secrets, error) {
 	if err != nil {
 		return nil, err
 	}
+	serverPort, err := strconv.Atoi(os.Getenv("PRICES_API_PORT"))
+	if err != nil {
+		return nil, err
+	}
 	return &Secrets{
+		ServerConfig: ServerConfig{
+			Port: serverPort,
+		},
 		Environment: Environment(os.Getenv("CHAINBOT_ENV")),
 		DatabaseCredentials: DatabaseCredentials{
 			User:     os.Getenv("POSTGRES_USERNAME"),

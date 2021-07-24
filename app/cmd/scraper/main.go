@@ -2,15 +2,16 @@ package main
 
 import (
 	"context"
+	"log"
+
 	"github.com/chain-bot/prices/app/configs"
 	"github.com/chain-bot/prices/app/internal/data/influxdb"
 	"github.com/chain-bot/prices/app/internal/data/psql"
 	"github.com/chain-bot/prices/app/internal/repository"
-	"github.com/chain-bot/prices/app/internal/scraper"
 	"github.com/chain-bot/prices/app/pkg/api"
+	scraper "github.com/chain-bot/prices/app/pkg/scraper"
 	_ "github.com/joho/godotenv/autoload"
 	"go.uber.org/fx"
-	"log"
 )
 
 func main() {
@@ -23,7 +24,7 @@ func main() {
 		fx.Provide(repository.NewRepository),
 		fx.Invoke(
 			psql.RunMigrations,
-			scraper.InitScrapper,
+			scraper.Run,
 		),
 	)
 	if err := fxApp.Start(context.Background()); err != nil {

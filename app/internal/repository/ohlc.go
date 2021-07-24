@@ -3,6 +3,8 @@ package repository
 import (
 	"github.com/chain-bot/prices/app/pkg/models"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
+	"github.com/volatiletech/null/v8"
+	"time"
 )
 
 func (repo *RepositoryImpl) UpsertOHLCVData(
@@ -30,4 +32,14 @@ func (repo *RepositoryImpl) UpsertOHLCVData(
 			ohlcv.StartTime)
 		repo.writeAPI.WritePoint(p)
 	}
+}
+
+func (repo *RepositoryImpl) GetOHLCVData(
+	base string,
+	quote null.String,
+	exchange null.String,
+	start time.Time,
+	end time.Time,
+) ([]models.OHLCVMarketData, error) {
+	return []models.OHLCVMarketData{}, nil
 }

@@ -9,6 +9,6 @@ COPY go.sum .
 RUN go mod download
 COPY app ./app
 # Build the Go app
-RUN go build -o ./.out ./app/cmd/main.go
+RUN go build -o ./.out ./app/cmd/scraper/main.go
 # Run the binary program produced by `go install`
 CMD ["./.out"]

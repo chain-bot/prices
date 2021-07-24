@@ -6,6 +6,7 @@ require (
 	github.com/docker/distribution v2.7.1+incompatible
 	github.com/friendsofgo/errors v0.9.2
 	github.com/golang-migrate/migrate/v4 v4.14.1
+	github.com/gorilla/schema v1.2.0 // indirect
 	github.com/hashicorp/go-retryablehttp v0.6.7
 	github.com/influxdata/influxdb-client-go/v2 v2.2.1
 	github.com/jmoiron/sqlx v1.2.0

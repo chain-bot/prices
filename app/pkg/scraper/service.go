@@ -2,6 +2,7 @@ package scraper
 
 import (
 	"context"
+
 	"github.com/chain-bot/prices/app/configs"
 	"github.com/chain-bot/prices/app/internal/repository"
 	"github.com/chain-bot/prices/app/pkg/api"
@@ -9,7 +10,7 @@ import (
 	"go.uber.org/fx"
 )
 
-func InitScrapper(
+func Run(
 	lc fx.Lifecycle,
 	repo repository.Repository,
 	clients api.ExchangeClients,

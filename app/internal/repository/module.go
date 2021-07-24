@@ -6,6 +6,7 @@ import (
 	"github.com/chain-bot/prices/app/pkg/models"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/jmoiron/sqlx"
+	"github.com/volatiletech/null/v8"
 	"time"
 )
 
@@ -26,6 +27,13 @@ type Repository interface {
 		exchange string,
 		pair *models.Symbol,
 	)
+	GetOHLCVData(
+		base string,
+		quote null.String,
+		exchange null.String,
+		start time.Time,
+		end time.Time,
+	) ([]models.OHLCVMarketData, error)
 }
 
 func NewRepository(
