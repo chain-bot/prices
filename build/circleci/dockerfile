@@ -32,3 +32,4 @@ RUN chmod +x ./cc-test-reporter
 COPY app ./app
 COPY scripts ./scripts
 RUN mkdir coverage
+RUN echo $PRICES_API_PORT
