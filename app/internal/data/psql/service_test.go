@@ -1,19 +1,19 @@
 package psql
 
 import (
+	"testing"
+
 	"github.com/chain-bot/prices/app/configs"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/assert"
-	"log"
-	"testing"
 )
 
 func TestDatabase(t *testing.T) {
 	configs.LoadEnv()
 	pass := true
-	secrets, _ := configs.GetSecrets()
+	secrets, err := configs.GetSecrets()
+	assert.NoError(t, err)
 	var db *sqlx.DB
-	var err error
 
 	pass = t.Run("TestNewDatabase", func(t *testing.T) {
 		// TODO: Use Uber fx
@@ -28,7 +28,6 @@ func TestDatabase(t *testing.T) {
 		version, err := RunMigrations(db, secrets)
 		assert.NoError(t, err)
 		assert.NotEqual(t, 0, version)
-		log.Printf("database version %d \n", version)
 	}) && pass
 	_, _ = db.Query("DROP DATABASE IF EXISTS ?", secrets.DBName)
 	assert.Equal(t, true, pass)

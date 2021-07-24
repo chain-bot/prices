@@ -30,7 +30,7 @@ Supported Exchanges:
 
 ## Getting Started
 ### Requirements
-- golang: `go version go1.16beta1 linux/amd64` (other versions not tested)
+- golang: `go version go1.16.6 linux/amd64` (other versions not tested)
 - docker & docker-compose
 ### Running the Application Via Docker
 ```bash
@@ -53,7 +53,8 @@ docker run --name prices --env-file ./.env --network="host"  prices
   ```
 - install project packages: `go get -u ./... -v`
 - run postgres & influxdb: ` docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up `
-- run the app : `go run app/cmd/main.go`  
+- run the scraper app : `go run app/cmd/scraper/main.go` 
+- run the prices api server : `go run app/cmd/server/main.go` 
 
 At this point you should see debug logs in the console of the scraper running, if this isn't the case please file an issue.
 

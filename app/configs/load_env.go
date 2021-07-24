@@ -2,10 +2,11 @@ package configs
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
-	log "github.com/sirupsen/logrus"
 	"os"
 	"regexp"
+
+	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 )
 
 // LoadEnv loads env vars from .env at root of repo
@@ -22,20 +23,20 @@ func GetMigrationDir() string {
 func LoadEnv() {
 	env := Environment(os.Getenv("CHAINBOT_ENV"))
 	if env != LocalEnv && env != NilEnv {
-		// Env variables already set
+		log.WithField("env", env).Debug("skipping .env file")
 		return
 	}
 	re := regexp.MustCompile(`^(.*` + PROJECT_DIR + `)`)
 	cwd, _ := os.Getwd()
 	rootPath := re.Find([]byte(cwd))
-
-	err := godotenv.Load(string(rootPath) + `/.env`)
+	filePath := fmt.Sprintf("%s/.env", string(rootPath))
+	err := godotenv.Load(filePath)
 	if err != nil {
 		log.WithFields(log.Fields{
-			"cause": err,
-			"cwd":   cwd,
-		}).Fatal("Problem loading .env file")
-
+			"cause":    err,
+			"cwd":      cwd,
+			"filePath": filePath,
+		}).Fatal("problem loading .env file")
 		os.Exit(-1)
 	}
 }

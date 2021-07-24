@@ -3,12 +3,13 @@ package scraper
 import (
 	"context"
 	"database/sql"
+	"sync"
+	"time"
+
 	"github.com/chain-bot/prices/app/configs"
 	"github.com/chain-bot/prices/app/internal/repository"
 	"github.com/chain-bot/prices/app/pkg/models"
-	"log"
-	"sync"
-	"time"
+	log "github.com/sirupsen/logrus"
 )
 
 // StartScraper Get Prices from last_sync.last_sync to time.now()
@@ -18,8 +19,8 @@ func StartScraper(
 	clients []models.ExchangeAPIClient,
 	secrets *configs.Secrets,
 ) error {
-	log.Println("Starting Scraper")
-	defer log.Println("Stopping Scraper")
+	log.Info("starting scraper")
+	defer log.Printf("stopping Scraper")
 	var waitGroup sync.WaitGroup
 
 	for index := range clients {
@@ -38,7 +39,10 @@ func StartScraper(
 			endTime := time.Now()
 			err := ScrapeExchange(ctx, repo, client, startTime, endTime)
 			if err != nil {
-				log.Printf("ERROR SCRAPING %s\n", client.GetExchangeIdentifier())
+				log.WithFields(log.Fields{
+					"err":    err.Error(),
+					"client": client.GetExchangeIdentifier(),
+				}).Errorf("scrape excahnge")
 			}
 		}(&waitGroup)
 	}

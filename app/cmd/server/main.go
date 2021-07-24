@@ -5,7 +5,11 @@ import (
 	"os"
 
 	"github.com/chain-bot/prices/app/configs"
+	"github.com/chain-bot/prices/app/internal/data/influxdb"
 	"github.com/chain-bot/prices/app/internal/data/psql"
+	"github.com/chain-bot/prices/app/internal/repository"
+	"github.com/chain-bot/prices/app/pkg/server"
+	"github.com/chain-bot/prices/app/pkg/server/routes"
 	_ "github.com/joho/godotenv/autoload"
 	log "github.com/sirupsen/logrus"
 	"go.uber.org/fx"
@@ -27,10 +31,17 @@ func main() {
 	fxApp := fx.New(
 		fx.Provide(configs.GetSecrets),
 		fx.Provide(psql.NewDatabase),
-		fx.Invoke(psql.RunMigrations),
+		fx.Provide(influxdb.NewInfluxDBClient),
+		fx.Provide(repository.NewRepository),
+		fx.Provide(routes.NewHandler),
+		fx.Invoke(
+			psql.RunMigrations,
+			server.Run,
+		),
 		fx.NopLogger,
 	)
 	if err := fxApp.Start(context.Background()); err != nil {
-		log.WithField("err", err.Error()).Fatalf("starting fx app for migrations")
+		log.WithField("err", err.Error()).Fatalf("starting fx app for api server")
 	}
+	<-fxApp.Done()
 }
