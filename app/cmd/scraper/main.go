@@ -39,6 +39,7 @@ func main() {
 			psql.RunMigrations,
 			scraper.Run,
 		),
+		fx.NopLogger,
 	)
 	if err := fxApp.Start(context.Background()); err != nil {
 		log.WithField("err", err.Error()).Fatalf("starting fx app for scraper")

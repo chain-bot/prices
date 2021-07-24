@@ -28,6 +28,7 @@ func main() {
 		fx.Provide(configs.GetSecrets),
 		fx.Provide(psql.NewDatabase),
 		fx.Invoke(psql.RunMigrations),
+		fx.NopLogger,
 	)
 	if err := fxApp.Start(context.Background()); err != nil {
 		log.WithField("err", err.Error()).Fatalf("starting fx app for migrations")
