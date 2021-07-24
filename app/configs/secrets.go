@@ -43,17 +43,26 @@ func GetSecrets() (*Secrets, error) {
 	LoadEnv()
 	postgresPort, err := strconv.Atoi(os.Getenv("POSTGRESQL_PORT"))
 	if err != nil {
-		log.WithField("err", err.Error()).Errorf("Error getting POSTGRESQL_PORT")
+		log.WithFields(log.Fields{
+			"err":             err.Error(),
+			"POSTGRESQL_PORT": os.Getenv("POSTGRESQL_PORT"),
+		}).Errorf("Error getting POSTGRESQL_PORT")
 		return nil, err
 	}
 	influxDBPort, err := strconv.Atoi(os.Getenv("INFLUXDB_PORT"))
 	if err != nil {
-		log.WithField("err", err.Error()).Errorf("Error getting INFLUXDB_PORT")
+		log.WithFields(log.Fields{
+			"err":           err.Error(),
+			"INFLUXDB_PORT": os.Getenv("INFLUXDB_PORT"),
+		}).Errorf("Error getting INFLUXDB_PORT")
 		return nil, err
 	}
 	serverPort, err := strconv.Atoi(os.Getenv("PRICES_API_PORT"))
 	if err != nil {
-		log.WithField("err", err.Error()).Errorf("Error getting PRICES_API_PORT")
+		log.WithFields(log.Fields{
+			"err":             err.Error(),
+			"PRICES_API_PORT": os.Getenv("PRICES_API_PORT"),
+		}).Errorf("Error getting PRICES_API_PORT")
 		return nil, err
 	}
 	return &Secrets{
