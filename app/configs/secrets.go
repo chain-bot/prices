@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	_ "github.com/joho/godotenv/autoload"
+	log "github.com/sirupsen/logrus"
 )
 
 type DatabaseCredentials struct {
@@ -42,14 +43,17 @@ func GetSecrets() (*Secrets, error) {
 	LoadEnv()
 	postgresPort, err := strconv.Atoi(os.Getenv("POSTGRESQL_PORT"))
 	if err != nil {
+		log.WithField("err", err.Error()).Errorf("Error getting POSTGRESQL_PORT")
 		return nil, err
 	}
 	influxDBPort, err := strconv.Atoi(os.Getenv("INFLUXDB_PORT"))
 	if err != nil {
+		log.WithField("err", err.Error()).Errorf("Error getting INFLUXDB_PORT")
 		return nil, err
 	}
 	serverPort, err := strconv.Atoi(os.Getenv("PRICES_API_PORT"))
 	if err != nil {
+		log.WithField("err", err.Error()).Errorf("Error getting PRICES_API_PORT")
 		return nil, err
 	}
 	return &Secrets{

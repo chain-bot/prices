@@ -23,7 +23,7 @@ func GetMigrationDir() string {
 func LoadEnv() {
 	env := Environment(os.Getenv("CHAINBOT_ENV"))
 	if env != LocalEnv && env != NilEnv {
-		// Env variables already set
+		log.WithField("env", env).Debug("skipping .env file")
 		return
 	}
 	re := regexp.MustCompile(`^(.*` + PROJECT_DIR + `)`)
