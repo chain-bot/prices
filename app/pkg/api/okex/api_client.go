@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/chain-bot/prices/app/pkg/api/common"
-	"github.com/hashicorp/go-retryablehttp"
-	"golang.org/x/time/rate"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
+
+	"github.com/chain-bot/prices/app/pkg/api/common"
+	"github.com/hashicorp/go-retryablehttp"
+	log "github.com/sirupsen/logrus"
+	"golang.org/x/time/rate"
 )
 
 type ApiClient struct {
@@ -30,7 +31,7 @@ func NewOkexAPIClient() *ApiClient {
 	}
 	apiClient.RequestLogHook = func(logger retryablehttp.Logger, req *http.Request, retry int) {
 		if err := apiClient.Limiter.Wait(context.Background()); err != nil {
-			log.Printf("ERROR WAITING FOR LIMIT: %s\n", err.Error())
+			log.WithField("err", err.Error()).Errorf("waiting for rate limit")
 			return
 		}
 	}

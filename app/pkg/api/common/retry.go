@@ -2,9 +2,10 @@ package common
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -15,9 +16,16 @@ const (
 func DefaultCheckRetry(ctx context.Context, resp *http.Response, err error) (bool, error) {
 	if resp.StatusCode >= http.StatusTooManyRequests {
 		if err != nil {
-			log.Printf("retry error: StatusCode %d Error %s\n", resp.StatusCode, err.Error())
+			log.WithFields(
+				log.Fields{
+					"err":        err.Error(),
+					"statusCode": resp.StatusCode,
+				}).Errorf("waitinf for rate limit")
 		} else {
-			log.Printf("retry error: StatusCode %d\n", resp.StatusCode)
+			log.WithFields(
+				log.Fields{
+					"statusCode": resp.StatusCode,
+				}).Errorf("waitinf for rate limit")
 		}
 		return true, err
 	}

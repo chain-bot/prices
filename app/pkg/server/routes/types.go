@@ -4,6 +4,7 @@ import (
 	"github.com/chain-bot/prices/app/internal/repository"
 	"github.com/chain-bot/prices/app/pkg/models"
 	"github.com/gorilla/schema"
+	"github.com/volatiletech/null/v8"
 )
 
 type Handler struct {
@@ -20,6 +21,6 @@ type CandleRequest struct {
 }
 
 type CandleResponse struct {
-	OHLCV []models.OHLCVMarketData `schema:"ohlcv,required"`
-	Error string                   `schema:"message"`
+	OHLCV []*models.OHLCVMarketData `schema:"ohlcv,required"`
+	Error null.String               `schema:"message"`
 }

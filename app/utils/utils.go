@@ -2,15 +2,16 @@ package utils
 
 import (
 	"encoding/json"
-	"github.com/chain-bot/prices/app/pkg/models"
-	"log"
 	"time"
+
+	"github.com/chain-bot/prices/app/pkg/models"
+	log "github.com/sirupsen/logrus"
 )
 
 func PrettyJSON(obj interface{}) string {
 	json, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
-		log.Fatalf(err.Error())
+		log.WithField("err", err.Error()).Fatalf("pretty json")
 	}
 	return string(json)
 }

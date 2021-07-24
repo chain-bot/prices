@@ -2,8 +2,9 @@ package routes
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func (h Handler) Ping(
@@ -12,6 +13,9 @@ func (h Handler) Ping(
 ) {
 	_, err := fmt.Fprintf(w, "pong")
 	if err != nil {
-		log.Printf("error handling ping, url=%s, err=%s", r.URL, err.Error())
+		log.WithFields(log.Fields{
+			"err": err.Error(),
+			"url": r.URL,
+		}).Errorf("handling ping")
 	}
 }

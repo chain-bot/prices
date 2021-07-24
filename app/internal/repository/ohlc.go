@@ -60,7 +60,6 @@ func (repo *RepositoryImpl) GetOHLCVData(
 		query = fmt.Sprintf("%s|> filter(fn: (r) => r[\"%s\"] == \"%s\")", query, key, value)
 	}
 	query = fmt.Sprintf("%s|> pivot( rowKey:[\"_time\"], columnKey: [\"_field\"],valueColumn: \"_value\")", query)
-	// log.Print(query)
 	result, err := repo.queryAPI.Query(ctx, query)
 	if err != nil {
 		return nil, err

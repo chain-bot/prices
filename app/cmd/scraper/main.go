@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
-	"log"
+	"os"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/chain-bot/prices/app/configs"
 	"github.com/chain-bot/prices/app/internal/data/influxdb"
@@ -14,8 +16,19 @@ import (
 	"go.uber.org/fx"
 )
 
+func init() {
+	// Log as JSON instead of the default ASCII formatter.
+	// TODO(Zahin): Enable if deploying to allow integration with splunk/logstash
+	// log.SetFormatter(&log.JSONFormatter{})
+
+	// Output to stdout instead of the default stderr
+	// Can be any io.Writer, see below for File example
+	log.SetOutput(os.Stdout)
+	// Only log the warning severity or above.
+	log.SetLevel(log.DebugLevel)
+}
+
 func main() {
-	// TODO: Find a Better Logging Framework and Pass in Via Uber fx
 	fxApp := fx.New(
 		api.GetAPIProviders(),
 		fx.Provide(configs.GetSecrets),
@@ -28,7 +41,7 @@ func main() {
 		),
 	)
 	if err := fxApp.Start(context.Background()); err != nil {
-		log.Printf("ERROR STARTING APP: %s", err)
+		log.WithField("err", err.Error()).Fatalf("starting fx app for scraper")
 	}
 	<-fxApp.Done()
 }

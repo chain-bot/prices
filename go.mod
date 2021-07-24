@@ -15,7 +15,7 @@ require (
 	github.com/lib/pq v1.9.0
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/robfig/cron v1.2.0
-	github.com/sirupsen/logrus v1.7.0
+	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.6.3
 	github.com/stretchr/testify v1.7.0
 	github.com/volatiletech/null v8.0.0+incompatible
