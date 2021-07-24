@@ -30,7 +30,7 @@ Supported Exchanges:
 
 ## Getting Started
 ### Requirements
-- golang: `go version go1.16beta1 linux/amd64` (other versions not tested)
+- golang: `go version go1.16.6 linux/amd64` (other versions not tested)
 - docker & docker-compose
 ### Running the Application Via Docker
 ```bash
