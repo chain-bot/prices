@@ -60,11 +60,11 @@ The project is bundeled as a docker image [here](https://hub.docker.com/reposito
 # External Dependencies (psql, influxdb)
 docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up -d
 # Build app docker image
-docker image build -t prices -f build/dockerfile . 
-docker run --name prices --env-file ./.env --network="host"  prices
-# For future runs:
-# docker start prices
-# docker restart prices   
+docker image build -t prices-server -f build/dockerfile-server . 
+docker image build -t prices-scraper -f build/dockerfile-scraper . 
+
+docker run -d --rm --env-file ./.env --network="host" prices-server 
+docker run -d --rm --env-file ./.env --network="host" prices-scraper 
 ```
 
 ## Repo Structure (TODO: Out of Date)
