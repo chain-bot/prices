@@ -13,13 +13,16 @@
   <a href="https://ko-fi.com/X8X71S1S7">
     <img src="https://img.shields.io/badge/donate-Ko--fi-pink" alt="Ko-Fi Donations">
   </a>
-  <img width=100% src="docs/images/prices-white.png">
+  <!-- <img width=100% src="docs/images/prices-white.png"> -->
 </p>
 
-Web-Scraper for crypto prices built in Go.
-Web-socket feeds pull live prices from supported exchanges (WIP), 
-with a minutely cron job filling in any missing data.
-1 Minute candle-stick data is stored in influxdb.
+** WANTED ** Cover Image
+
+
+Web-Scraper for crypto prices with a simple api.
+Web-socket feeds pull live prices from supported exchanges (WIP), and aggregate to minute candles. 
+Minutely cron job filling in any missing data via historic candle stick api's.
+Candle-stick data is stored in influxdb, and can be accessed via the api.
 
 Supported Exchanges:
 - Binance
@@ -29,22 +32,12 @@ Supported Exchanges:
 - OKEX
 
 ## Getting Started
-### Requirements
+### Building From Source
+#### Requirements
 - golang: `go version go1.16.6 linux/amd64` (other versions not tested)
 - docker & docker-compose
-### Running the Application Via Docker
-```bash
-# External Dependencies (psql, influxdb)
-docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up -d
-# Build app docker image
-docker image build -t prices -f build/dockerfile . 
-docker run --name prices --env-file ./.env --network="host"  prices
-# For future runs:
-# docker start prices
-# docker restart prices   
-```
 
-### Setting up Local Environment
+#### Setting Up a Local Dev Environment
 - clone: `git clone git@github.com:chain-bot/prices.git`
 - Create `.env` file via template `cp env_example.txt .env`
   - Variables with a value of `<...>` need to be filled in by the user
@@ -58,8 +51,23 @@ docker run --name prices --env-file ./.env --network="host"  prices
 
 At this point you should see debug logs in the console of the scraper running, if this isn't the case please file an issue.
 
+### Run Dockerhub Image
+The project is bundeled as a docker image [here](https://hub.docker.com/repository/docker/zahindev/chain-bot-prices). The api runs on port `8080`.
 
-## Repo Structure
+
+### Build and Run Local Docker Image
+```bash
+# External Dependencies (psql, influxdb)
+docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up -d
+# Build app docker image
+docker image build -t prices -f build/dockerfile . 
+docker run --name prices --env-file ./.env --network="host"  prices
+# For future runs:
+# docker start prices
+# docker restart prices   
+```
+
+## Repo Structure (TODO: Out of Date)
 ```markdown
 ├── app
 │   ├── cmd
@@ -103,6 +111,10 @@ docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up -d
     - ex. `func NewCoinbaseProAPIClient(...) ExchangeClientResult {...}`
 - Add wrapper method to `GetAPIProviders` (this makes it available to the app via uber.fx dependency injection)
 - Run the test file `app/pkg/api/exchange_client_test.go`
+
+## API
+- The runs on port 8080 by default
+- Routes are defined and registered in `pkg/server/`
 
 ## Tests
 - Run tests and update the `README.md` via the following script
