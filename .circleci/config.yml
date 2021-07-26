@@ -88,14 +88,15 @@ jobs:
           name: Build Docker Image
           command: |
             set -x
-            ls
-            docker image build -t $DOCKER_HUB_ORG/$DOCKER_HUB_APP:$CIRCLE_BRANCH -f ./build/dockerfile .
+            docker image build -t $DOCKER_HUB_ORG/prices-scraper:$CIRCLE_BRANCH -f ./build/dockerfile-scraper .
+            docker image build -t $DOCKER_HUB_ORG/prices-server:$CIRCLE_BRANCH -f ./build/dockerfile-server .
       - run:
           name: Upload to Docker Hub
           command: |
             set -x
             echo "$DOCKER_HUB_PASS" | docker login --username $DOCKER_HUB_USER --password-stdin
-            docker image push $DOCKER_HUB_ORG/$DOCKER_HUB_APP:$CIRCLE_BRANCH
+            docker image push $DOCKER_HUB_ORG/prices-scraper:$CIRCLE_BRANCH
+            docker image push $DOCKER_HUB_ORG/prices-server:$CIRCLE_BRANCH
       - slack/status:
           fail_only: false
 workflows:
