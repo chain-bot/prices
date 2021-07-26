@@ -52,7 +52,7 @@ Supported Exchanges:
 At this point you should see debug logs in the console of the scraper running, if this isn't the case please file an issue.
 
 ### Run Dockerhub Image
-The project is bundeled as a docker image [here](https://hub.docker.com/repository/docker/zahindev/chain-bot-prices). The api runs on port `8080`.
+The project is bundeled as two docker images: [prices-scraper](https://hub.docker.com/repository/docker/zahindev/prices-scraper) and [prices-server](https://hub.docker.com/repository/docker/zahindev/prices-server), with the server running on port `8080`.
 
 
 ### Build and Run Local Docker Image
