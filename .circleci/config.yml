@@ -88,8 +88,8 @@ jobs:
           name: Build Docker Image
           command: |
             set -x
-            docker image build -t $DOCKER_HUB_ORG/prices-scraper:$CIRCLE_BRANCH -f ./build/dockerfile-scraper .
-            docker image build -t $DOCKER_HUB_ORG/prices-server:$CIRCLE_BRANCH -f ./build/dockerfile-server .
+            docker image build -t $DOCKER_HUB_ORG/prices-scraper:$CIRCLE_BRANCH -f ./build/scraper.dockerfile .
+            docker image build -t $DOCKER_HUB_ORG/prices-server:$CIRCLE_BRANCH -f ./build/server.dockerfile .
       - run:
           name: Upload to Docker Hub
           command: |

@@ -60,8 +60,8 @@ The project is bundeled as two docker images: [prices-scraper](https://hub.docke
 # External Dependencies (psql, influxdb)
 docker-compose --file ./build/docker-compose.yaml  --env-file ../.env up -d
 # Build app docker image
-docker image build -t prices-server -f build/dockerfile-server . 
-docker image build -t prices-scraper -f build/dockerfile-scraper . 
+docker image build -t prices-server -f build/server.dockerfile . 
+docker image build -t prices-scraper -f build/scraper.dockerfile . 
 
 docker run -d --rm --env-file ./.env --network="host" prices-server 
 docker run -d --rm --env-file ./.env --network="host" prices-scraper 
