@@ -4,15 +4,14 @@ import (
 	"context"
 	"os"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/chain-bot/prices/app/configs"
 	"github.com/chain-bot/prices/app/internal/data/influxdb"
 	"github.com/chain-bot/prices/app/internal/data/psql"
 	"github.com/chain-bot/prices/app/internal/repository"
 	"github.com/chain-bot/prices/app/pkg/api"
-	scraper "github.com/chain-bot/prices/app/pkg/scraper"
+	"github.com/chain-bot/prices/app/pkg/scraper"
 	_ "github.com/joho/godotenv/autoload"
+	log "github.com/sirupsen/logrus"
 	"go.uber.org/fx"
 )
 
