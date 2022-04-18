@@ -33,7 +33,6 @@ func LoadEnv() {
 		log.WithFields(log.Fields{
 			"cause":    err,
 			"filePath": filePath,
-		}).Fatal("problem loading .env file")
-		os.Exit(-1)
+		}).Warning("problem loading .env file, defaulting to local")
 	}
 }
