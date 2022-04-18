@@ -6,7 +6,7 @@ jobs:
   setup:
     working_directory: ~/prices
     docker:
-      - image: circleci/golang:1.18
+      - image: circleci/golang:1.17
     steps:
       - checkout
       - restore_cache:
@@ -33,7 +33,7 @@ jobs:
   test:
     working_directory: ~/prices
     docker:
-      - image: circleci/golang:1.18
+      - image: circleci/golang:1.17
     steps:
       - attach_workspace:
           at: .
