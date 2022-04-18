@@ -6,7 +6,7 @@ jobs:
   setup:
     working_directory: ~/prices
     docker:
-      - image: circleci/golang:1.16
+      - image: circleci/golang:1.18
     steps:
       - checkout
       - restore_cache:
@@ -19,15 +19,15 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
-      - run:
-          name: Install Docker Compose
-          command: |
-            set -x
-            curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
-            # curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-            # chmod +x /usr/local/bin/docker-compose
+#      - run:
+#          name: Install Docker Compose
+#          command: |
+#            set -x
+#            curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+#            chmod +x ~/docker-compose
+#            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+#            # curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+#            # chmod +x /usr/local/bin/docker-compose
       - run:
           name: Setup Code Climate
           command: |
@@ -42,30 +42,39 @@ jobs:
   test:
     working_directory: ~/prices
     docker:
-      - image: circleci/golang:1.16
+      - image: circleci/golang:1.18
     steps:
       - attach_workspace:
           at: .
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build App via Docker Compose
-          command: |
-            set -x
-            docker-compose --file ./build/circleci/docker-compose.yaml up -d --build
+#      - setup_remote_docker:
+#          docker_layer_caching: true
+#      - run:
+#          name: Build App via Docker Compose
+#          command: |
+#            set -x
+#            docker-compose --file ./build/circleci/docker-compose.yaml up -d --build
+#      - run:
+#          name: Run Tests
+#          command: |
+#            set -x
+#            ./cc-test-reporter before-build
+#            docker exec -it circleci_prices_1 bash ./scripts/run-test-with-coverage.sh || exit $?
+#            docker cp circleci_prices_1:/prices/c.out .
       - run:
           name: Run Tests
           command: |
             set -x
             ./cc-test-reporter before-build
-            docker exec -it circleci_prices_1 bash ./scripts/run-test-with-coverage.sh || exit $?
-            docker cp circleci_prices_1:/prices/c.out .
-      - run:
-          name: Update Code Climate
-          command: |
-            set -x
+            ./scripts/run-test-with-coverage.sh || exit $?
+#            docker cp circleci_prices_1:/prices/c.out .
             ./cc-test-reporter format-coverage -t gocov --prefix github.com/chain-bot/prices c.out
             ./cc-test-reporter after-build --prefix github.com/chain-bot/prices -r=$CC_TEST_REPORTER_ID --exit-code $?
+#      - run:
+#          name: Update Code Climate
+#          command: |
+#            set -x
+#            ./cc-test-reporter format-coverage -t gocov --prefix github.com/chain-bot/prices c.out
+#            ./cc-test-reporter after-build --prefix github.com/chain-bot/prices -r=$CC_TEST_REPORTER_ID --exit-code $?
       - run:
           name: Upload Artifacts
           command: |
@@ -77,28 +86,28 @@ jobs:
           mentions: 'zahin'
       - store_artifacts:
           path: ./coverage
-  build_and_deploy:
-    working_directory: ~/prices
-    docker:
-      - image: circleci/golang:1.16
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Build Docker Image
-          command: |
-            set -x
-            docker image build -t $DOCKER_HUB_ORG/prices-scraper:$CIRCLE_BRANCH -f ./build/scraper.dockerfile .
-            docker image build -t $DOCKER_HUB_ORG/prices-server:$CIRCLE_BRANCH -f ./build/server.dockerfile .
-      - run:
-          name: Upload to Docker Hub
-          command: |
-            set -x
-            echo "$DOCKER_HUB_PASS" | docker login --username $DOCKER_HUB_USER --password-stdin
-            docker image push $DOCKER_HUB_ORG/prices-scraper:$CIRCLE_BRANCH
-            docker image push $DOCKER_HUB_ORG/prices-server:$CIRCLE_BRANCH
-      - slack/status:
-          fail_only: false
+#  build_and_deploy:
+#    working_directory: ~/prices
+#    docker:
+#      - image: circleci/golang:1.16
+#    steps:
+#      - checkout
+#      - setup_remote_docker
+#      - run:
+#          name: Build Docker Image
+#          command: |
+#            set -x
+#            docker image build -t $DOCKER_HUB_ORG/prices-scraper:$CIRCLE_BRANCH -f ./build/scraper.dockerfile .
+#            docker image build -t $DOCKER_HUB_ORG/prices-server:$CIRCLE_BRANCH -f ./build/server.dockerfile .
+#      - run:
+#          name: Upload to Docker Hub
+#          command: |
+#            set -x
+#            echo "$DOCKER_HUB_PASS" | docker login --username $DOCKER_HUB_USER --password-stdin
+#            docker image push $DOCKER_HUB_ORG/prices-scraper:$CIRCLE_BRANCH
+#            docker image push $DOCKER_HUB_ORG/prices-server:$CIRCLE_BRANCH
+#      - slack/status:
+#          fail_only: false
 workflows:
   build_test_deploy:
     jobs:
@@ -106,9 +115,9 @@ workflows:
       - test:
           requires:
             - setup
-      - build_and_deploy:
-          filters:
-            branches:
-              only: master
-          requires:
-            - test
+#      - build_and_deploy:
+#          filters:
+#            branches:
+#              only: master
+#          requires:
+#            - test

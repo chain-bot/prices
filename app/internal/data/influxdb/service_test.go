@@ -10,6 +10,9 @@ import (
 )
 
 func TestInfluxDB(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping testing in short mode")
+	}
 	configs.LoadEnv()
 	pass := true
 	pass = t.Run("TestNewInfluxDBClient", func(t *testing.T) {

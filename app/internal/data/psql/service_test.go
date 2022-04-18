@@ -9,6 +9,9 @@ import (
 )
 
 func TestDatabase(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping testing in short mode")
+	}
 	configs.LoadEnv()
 	pass := true
 	secrets, err := configs.GetSecrets()
