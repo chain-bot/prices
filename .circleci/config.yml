@@ -19,15 +19,6 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
-#      - run:
-#          name: Install Docker Compose
-#          command: |
-#            set -x
-#            curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-#            chmod +x ~/docker-compose
-#            sudo mv ~/docker-compose /usr/local/bin/docker-compose
-#            # curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-#            # chmod +x /usr/local/bin/docker-compose
       - run:
           name: Setup Code Climate
           command: |
@@ -46,35 +37,14 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-#      - setup_remote_docker:
-#          docker_layer_caching: true
-#      - run:
-#          name: Build App via Docker Compose
-#          command: |
-#            set -x
-#            docker-compose --file ./build/circleci/docker-compose.yaml up -d --build
-#      - run:
-#          name: Run Tests
-#          command: |
-#            set -x
-#            ./cc-test-reporter before-build
-#            docker exec -it circleci_prices_1 bash ./scripts/run-test-with-coverage.sh || exit $?
-#            docker cp circleci_prices_1:/prices/c.out .
       - run:
           name: Run Tests
           command: |
             set -x
             ./cc-test-reporter before-build
             ./scripts/run-test-with-coverage.sh || exit $?
-#            docker cp circleci_prices_1:/prices/c.out .
             ./cc-test-reporter format-coverage -t gocov --prefix github.com/chain-bot/prices c.out
             ./cc-test-reporter after-build --prefix github.com/chain-bot/prices -r=$CC_TEST_REPORTER_ID --exit-code $?
-#      - run:
-#          name: Update Code Climate
-#          command: |
-#            set -x
-#            ./cc-test-reporter format-coverage -t gocov --prefix github.com/chain-bot/prices c.out
-#            ./cc-test-reporter after-build --prefix github.com/chain-bot/prices -r=$CC_TEST_REPORTER_ID --exit-code $?
       - run:
           name: Upload Artifacts
           command: |
