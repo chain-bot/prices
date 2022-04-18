@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// Get CandleStick data from [startTime, endTime) with pagination
+// GetAllOHLCVMarketData get CandleStick data from [startTime, endTime) with pagination
 func (apiClient *ApiClient) GetAllOHLCVMarketData(
 	symbol models.Symbol,
 	interval time.Duration,
@@ -19,7 +19,7 @@ func (apiClient *ApiClient) GetAllOHLCVMarketData(
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
-	result := []*models.OHLCVMarketData{}
+	var result []*models.OHLCVMarketData
 	for startTime.Before(endTime) {
 		newEndTime := startTime.Add(maxLimit * interval)
 		if newEndTime.After(endTime) {
@@ -44,7 +44,7 @@ func (apiClient *ApiClient) GetSupportedPairs() ([]*models.Symbol, error) {
 	if err != nil {
 		return nil, err
 	}
-	result := []*models.Symbol{}
+	var result []*models.Symbol
 
 	for i := range products {
 		product := products[i]
@@ -79,7 +79,7 @@ func (apiClient *ApiClient) GetRawMarketData() ([]*models.RawMarketData, error) 
 // Helpers
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Get CandleStick data from [startTime, endTime]
+// GetOHLCVMarketData get CandleStick data from [startTime, endTime]
 func (apiClient *ApiClient) GetOHLCVMarketData(
 	symbol models.Symbol,
 	durationInterval time.Duration,
@@ -91,7 +91,7 @@ func (apiClient *ApiClient) GetOHLCVMarketData(
 	if err != nil {
 		return nil, err
 	}
-	result := []*models.OHLCVMarketData{}
+	var result []*models.OHLCVMarketData
 	for i := range candleStickData {
 		candle := candleStickData[i]
 		candleEnd := time.Unix(int64(candle.CloseTime), 0)

@@ -1,11 +1,9 @@
 package binance
 
 const (
-	BINANCE    = "BINANCE"
-	maxRetries = 3
-	maxLimit   = 1000
-	// calls per second
-	rateLimit = 10
+	BINANCE        = "BINANCE"
+	maxLimit       = 1000
+	callsPerMinute = 1200
 
 	baseUrl = "https://api.binance.com"
 	// Endpoints

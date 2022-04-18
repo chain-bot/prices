@@ -5,9 +5,7 @@ import (
 	"strconv"
 )
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#klinecandlestick-data
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CandleStickData https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#klinecandlestick-data
 type CandleStickData struct {
 	OpenTime                 float64
 	OpenPrice                float64
@@ -83,9 +81,7 @@ type ErrorResponse struct {
 	Msg  string `json:"msg"`
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ExchangeInfoResponse https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information
 type ExchangeInfoResponse struct {
 	Timezone   string    `json:"timezone"`
 	ServerTime int64     `json:"serverTime"`
@@ -114,5 +110,4 @@ type Interval string
 const (
 	Minute Interval = "1m"
 	Hour   Interval = "1h"
-	Day    Interval = "1D"
 )

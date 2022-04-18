@@ -10,7 +10,7 @@ import (
 	"github.com/volatiletech/null/v8"
 )
 
-func (repo *RepositoryImpl) UpsertOHLCVData(
+func (repo *impl) UpsertOHLCVData(
 	ohlcvMarketData []*models.OHLCVMarketData,
 	exchange string,
 	pair *models.Symbol,
@@ -37,7 +37,7 @@ func (repo *RepositoryImpl) UpsertOHLCVData(
 	}
 }
 
-func (repo *RepositoryImpl) GetOHLCVData(
+func (repo *impl) GetOHLCVData(
 	ctx context.Context,
 	base string,
 	quote null.String,
@@ -64,7 +64,7 @@ func (repo *RepositoryImpl) GetOHLCVData(
 	if err != nil {
 		return nil, err
 	}
-	res := []*models.OHLCVMarketData{}
+	var res []*models.OHLCVMarketData
 	for result.Next() {
 		startTime := result.Record().Start()
 		endTime := startTime.Add(time.Minute)

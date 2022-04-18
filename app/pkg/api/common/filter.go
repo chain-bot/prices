@@ -6,7 +6,7 @@ import (
 )
 
 func FilterSupportedAssets(symbols []*models.Symbol) []*models.Symbol {
-	result := []*models.Symbol{}
+	var result []*models.Symbol
 	supportedAssets := configs.GetSupportedAssets()
 	for index := range symbols {
 		pair := symbols[index]

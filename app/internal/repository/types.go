@@ -7,7 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type RepositoryImpl struct {
+type impl struct {
 	db           *sqlx.DB
 	influxClient *influxdb2.Client
 	writeAPI     api.WriteAPI
@@ -20,8 +20,8 @@ func NewRepositoryImpl(
 	config *configs.Secrets,
 	db *sqlx.DB,
 	influxClient *influxdb2.Client,
-) *RepositoryImpl {
-	return &RepositoryImpl{
+) *impl {
+	return &impl{
 		db:           db,
 		influxClient: influxClient,
 		writeAPI:     (*influxClient).WriteAPI(config.Org, config.Bucket),

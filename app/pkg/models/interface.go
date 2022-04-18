@@ -4,7 +4,8 @@ import (
 	"time"
 )
 
-// TODO(Zahin): Get a List of Supported Symbols
+// ExchangeAPIClient
+//TODO(Zahin): Get a List of Supported Symbols
 type ExchangeAPIClient interface {
 	GetExchangeIdentifier() string
 	GetSupportedPairs() ([]*Symbol, error)

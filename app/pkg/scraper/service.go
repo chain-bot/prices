@@ -6,7 +6,7 @@ import (
 	"github.com/chain-bot/prices/app/configs"
 	"github.com/chain-bot/prices/app/internal/repository"
 	"github.com/chain-bot/prices/app/pkg/api"
-	cron "github.com/robfig/cron"
+	"github.com/robfig/cron"
 	"go.uber.org/fx"
 )
 

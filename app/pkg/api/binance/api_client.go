@@ -24,7 +24,7 @@ type ApiClient struct {
 
 func NewBinanceAPIClient() *ApiClient {
 	// 1200 callsPerMinute:(60*1000)/1200
-	rateLimiter := rate.NewLimiter(rate.Every(time.Minute/1200), 1)
+	rateLimiter := rate.NewLimiter(rate.Every(time.Minute/callsPerMinute), 1)
 	httpClient := retryablehttp.NewClient()
 	httpClient.CheckRetry = common.DefaultCheckRetry
 	httpClient.RetryWaitMin = common.DefaultRetryMin

@@ -24,7 +24,7 @@ func (h Handler) GetCandles(
 		res.Error = null.StringFrom(fmt.Sprintf("invalid Query, err=%s", err.Error()))
 		log.WithField("err", err.Error()).Errorf("decode")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(res)
+		_ = json.NewEncoder(w).Encode(res)
 		return
 	}
 	endTime := time.Unix(int64(candleRequest.End), 0)
@@ -33,14 +33,14 @@ func (h Handler) GetCandles(
 		res.Error = null.StringFrom(fmt.Sprintf("invalid Query, err=end before start"))
 		log.Printf("end before start")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(res)
+		_ = json.NewEncoder(w).Encode(res)
 		return
 	}
 	if endTime.Sub(startTime) > time.Hour*24 {
 		res.Error = null.StringFrom(fmt.Sprintf("invalid Query, err=time window greater than 1 day"))
 		log.Printf("time window greater than 1 day")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(res)
+		_ = json.NewEncoder(w).Encode(res)
 		return
 	}
 
@@ -56,10 +56,10 @@ func (h Handler) GetCandles(
 		res.Error = null.StringFrom(fmt.Sprintf("internal server error"))
 		log.WithField("err", err.Error()).Errorf("GetOHLCVData")
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(res)
+		_ = json.NewEncoder(w).Encode(res)
 		return
 	}
 	res.OHLCV = ohlcv
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(res)
+	_ = json.NewEncoder(w).Encode(res)
 }

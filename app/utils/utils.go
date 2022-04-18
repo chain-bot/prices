@@ -9,11 +9,11 @@ import (
 )
 
 func PrettyJSON(obj interface{}) string {
-	json, err := json.MarshalIndent(obj, "", "  ")
+	jsonBytes, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		log.WithField("err", err.Error()).Fatalf("pretty json")
 	}
-	return string(json)
+	return string(jsonBytes)
 }
 
 func UnixMillis(t time.Time) int64 {

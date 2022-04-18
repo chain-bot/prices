@@ -25,8 +25,7 @@ func Run(
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
-			shutdown(&httpSrv)
-			return nil
+			return shutdown(&httpSrv)
 		},
 	})
 }

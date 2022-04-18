@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func (repo *RepositoryImpl) GetLastSync(
+func (repo *impl) GetLastSync(
 	ctx context.Context,
 	exchange string,
 	pair *models.Symbol,
@@ -26,7 +26,7 @@ func (repo *RepositoryImpl) GetLastSync(
 	}, nil
 }
 
-func (repo *RepositoryImpl) UpsertLastSync(
+func (repo *impl) UpsertLastSync(
 	ctx context.Context,
 	exchange string,
 	pair *models.Symbol,
